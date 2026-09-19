@@ -6,6 +6,7 @@
 ![Electron Version](https://img.shields.io/badge/Electron-v33-blue.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20x64-indigo.svg)
 ![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20Local-success.svg)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-yellow.svg)](https://buymeacoffee.com/coriosmwraw)
 
 ---
 
@@ -16,6 +17,7 @@ La mayoría de las plataformas en línea para crear currículums permiten diseñ
 **OpenCV Studio** nació como un proyecto de código abierto para estudiantes universitarios y profesionistas que necesitan:
 - ✅ **100% Gratuito y Libre de por vida** (Licencia MIT).
 - ✅ **Completamente Offline**: Tus datos nunca salen de tu computadora. Privacidad total.
+- ✅ **Extractor Inteligente de CV Existente**: Pega el texto de tu currículum actual (de PDF, Word o LinkedIn) y el sistema estructurará tus datos automáticamente sin tener que reescribir todo desde cero.
 - ✅ **Vista Previa en Tiempo Real**: Editas en el panel izquierdo y ves los cambios al instante en el lienzo de impresión.
 - ✅ **Optimizado para ATS**: Puntuación algorítmica y recomendaciones para superar filtros automáticos de contratación.
 - ✅ **4 Plantillas Profesionales**: Tech Developer, Data Analyst con KPIs, ATS Minimalista y Ejecutivo Moderno.
@@ -83,6 +85,18 @@ npm run build
 - **Lógica y Reactividad**: JavaScript Vanilla (ES6+) modular y reactivo sin frameworks pesados
 - **Compresión Gráfica**: HTML5 Canvas API
 - **Iconografía**: [Font Awesome 6 (SVG/Webfonts)](https://fontawesome.com/)
+
+---
+
+## ☕ Apoya el Proyecto (Invítame un café)
+
+**OpenCV Studio** es y será siempre **100% gratuito, offline y de código abierto**. Si esta aplicación te sirvió para ahorrar dinero, mejorar tu currículum o conseguir empleo, puedes apoyar el desarrollo y mantenimiento del proyecto de forma voluntaria:
+
+- 💛 **Digital Internacional:** [buymeacoffee.com/coriosmwraw](https://buymeacoffee.com/coriosmwraw) *(Aportación segura con tarjeta o PayPal)*
+- 🏦 **Transferencia Directa SPEI (México - Sin comisiones):**
+  - **Banco:** Nu México (Nu)
+  - **CLABE Interbancaria:** `638180010128388591`
+  - **Beneficiario:** César Alberto López Martínez
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "opencv-studio",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Herramienta de escritorio para crear currículums profesionales 100% libre y sin suscripciones",
   "main": "main.js",
   "scripts": {

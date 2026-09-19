@@ -33,20 +33,28 @@
     </div>
 
     <div class="topbar-actions">
+      <button class="app-btn app-btn-outline" onclick="openCvExtractorModal()" title="Importar o extraer datos desde tu CV existente en texto o archivo">
+        📥 Extraer de CV
+      </button>
+
       <button class="app-btn app-btn-outline" onclick="openATSAnalyzer()">
         ✨ Analizar ATS
       </button>
 
       <button class="app-btn app-btn-outline" onclick="exportJSON()" title="Guardar respaldo en archivo JSON">
-        💾 Respaldar (JSON)
+        💾 Respaldar
       </button>
 
       <button class="app-btn app-btn-outline" onclick="importJSON()" title="Cargar respaldo desde archivo JSON">
-        📂 Cargar (JSON)
+        📂 Cargar
       </button>
 
       <button class="app-btn app-btn-primary" onclick="exportToPDF()">
         🖨️ Exportar a PDF
+      </button>
+
+      <button class="app-btn app-btn-coffee" onclick="openSupportModal()" title="Apoyar el proyecto OpenCV Studio">
+        ☕ Invítame un café
       </button>
     </div>
   </header>
@@ -398,9 +406,139 @@
     </div>
   </div>
 
+  <!-- MODAL 4: Invítame un Café / Apoyo al Proyecto -->
+  <div class="modal-backdrop" id="supportModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">☕ Apoya el Proyecto OpenCV Studio</h3>
+        <button class="modal-close" onclick="closeModal('supportModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="donation-container">
+          <div class="donation-hero">
+            <div class="donation-hero-icon">☕</div>
+            <div class="donation-hero-text">
+              <h4>100% Libre, Offline y Gratuito de por vida</h4>
+              <p>
+                OpenCV Studio nació para que tú y tus compañeros nunca tengan que pagar suscripciones abusivas por crear y descargar su CV. Si esta herramienta te ayudó a conseguir empleo o te ahorró tiempo, ¡tu apoyo voluntario permite seguir manteniéndola y mejorándola!
+              </p>
+            </div>
+          </div>
+
+          <!-- Opción 1: Buy Me a Coffee -->
+          <div class="donation-option-card">
+            <div class="donation-option-header">
+              <span class="donation-option-title">💛 Donación Digital Internacional</span>
+              <span style="font-size:11px; color:#94a3b8;">Tarjeta / PayPal</span>
+            </div>
+            <p style="font-size:12px; color:#cbd5e1; margin:0;">
+              Invítame un café directamente a través de Buy Me a Coffee de forma rápida y segura:
+            </p>
+            <button class="bmc-action-btn" onclick="openBuyMeACoffee()">
+              <span>☕ Donar un café en BuyMeACoffee.com</span>
+              <span style="font-size:13px; font-weight:bold;">↗</span>
+            </button>
+          </div>
+
+          <!-- Opción 2: Transferencia SPEI México (Nu) -->
+          <div class="donation-option-card">
+            <div class="donation-option-header">
+              <span class="donation-option-title">🏦 Transferencia Directa SPEI (México)</span>
+              <span style="font-size:11px; color:#a7f3d0; background:#065f46; padding:2px 7px; border-radius:4px;">Sin comisiones</span>
+            </div>
+            <p style="font-size:12px; color:#cbd5e1; margin:0;">
+              Si estás en México, puedes aportar mediante transferencia directa desde cualquier aplicación bancaria:
+            </p>
+            <div style="font-size:11.5px; color:#94a3b8; display:flex; flex-direction:column; gap:3px;">
+              <div><strong>Banco:</strong> Nu México (Nu)</div>
+              <div><strong>Beneficiario:</strong> César Alberto López Martínez</div>
+            </div>
+            <div class="clabe-display-box">
+              <span class="clabe-number" id="clabeText">638180010128388591</span>
+              <button class="btn-copy-clabe" id="btnCopyClabe" onclick="copyClabeToClipboard()">
+                <span>📋 Copiar CLABE</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="app-btn app-btn-outline" onclick="closeModal('supportModal')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: Extractor Inteligente de CVs Existentes -->
+  <div class="modal-backdrop" id="cvExtractorModal">
+    <div class="modal-dialog" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3 class="modal-title">📥 Extraer Información de CV Existente</h3>
+        <button class="modal-close" onclick="closeModal('cvExtractorModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:12.5px; color:#94a3b8; margin:0;">
+          ¿Ya tienes tu currículum en PDF, Word o LinkedIn? No empieces desde cero: pega el texto o carga tu archivo y nuestro analizador inteligente organizará tu información en un nuevo perfil de OpenCV Studio.
+        </p>
+
+        <!-- Selección de Archivo o Pegado -->
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+          <label style="font-size:12px; font-weight:600; color:#e2e8f0;">Pega el texto copiado de tu CV:</label>
+          <div>
+            <input type="file" id="cvTextFileInput" accept=".txt,.json,.md" style="display:none;" onchange="handleCvFileSelect(event)">
+            <button class="app-btn app-btn-outline" style="font-size:11.5px; padding:4px 9px;" onclick="document.getElementById('cvTextFileInput').click()">
+              📁 Cargar Archivo (.txt / .json)
+            </button>
+          </div>
+        </div>
+
+        <textarea id="rawCvInput" class="extractor-paste-box" placeholder="Selecciona todo el texto de tu CV actual (Ctrl+A y luego Ctrl+C en tu PDF o Word) y pégalo aquí con Ctrl+V..."></textarea>
+
+        <div style="display:flex; gap:10px;">
+          <button class="app-btn app-btn-primary" style="flex:1; justify-content:center;" onclick="analyzePastedCvText()">
+            ⚡ Analizar y Detectar Campos
+          </button>
+          <button class="app-btn app-btn-outline" onclick="document.getElementById('rawCvInput').value = ''; document.getElementById('extractorPreviewSection').style.display = 'none';">
+            Limpiar
+          </button>
+        </div>
+
+        <!-- Sección de Vista Previa de Detección -->
+        <div id="extractorPreviewSection" style="display:none; flex-direction:column; gap:10px; margin-top:6px;">
+          <h4 style="font-size:12.5px; color:#38bdf8; margin:0;">✨ Resumen de Información Detectada:</h4>
+          
+          <div class="extractor-preview-box" id="extractorPreviewBox"></div>
+
+          <div class="form-row" style="margin-top:4px;">
+            <div class="form-group">
+              <label class="form-label">Nombre del Perfil a Crear</label>
+              <input type="text" id="extractedProfileName" class="form-input" placeholder="Nombre para este perfil">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Plantilla Deseada</label>
+              <select id="extractedProfileTemplate" class="form-select">
+                <option value="tech">Tech & Desarrollador</option>
+                <option value="data">Industrial & Data Analyst</option>
+                <option value="ats">ATS Minimalista Clásico</option>
+                <option value="modern">Moderna Ejecutiva</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="app-btn app-btn-primary" style="width:100%; justify-content:center; padding:10px;" onclick="confirmExtractedProfile()">
+            ✅ Crear y Abrir este Perfil en el Editor
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="app-btn app-btn-outline" onclick="closeModal('cvExtractorModal')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Scripts de la Aplicación -->
   <script src="src/data/sampleProfiles.js"></script>
   <script src="src/data/bulletBank.js"></script>
+  <script src="src/cvParser.js"></script>
   <script src="src/storage.js"></script>
   <script src="src/atsAnalyzer.js"></script>
   

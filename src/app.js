@@ -811,3 +811,175 @@ async function importJSON() {
     input.click();
   }
 }
+
+// -------------------------------------------------------------
+// MÓDULO: INVÍTAME UN CAFÉ / APOYO AL PROYECTO
+// -------------------------------------------------------------
+
+function openSupportModal() {
+  document.getElementById('supportModal').classList.add('active');
+}
+
+function openBuyMeACoffee() {
+  const url = 'https://buymeacoffee.com/coriosmwraw';
+  if (window.electronAPI && window.electronAPI.openExternal) {
+    window.electronAPI.openExternal(url);
+  } else {
+    window.open(url, '_blank');
+  }
+}
+
+async function copyClabeToClipboard() {
+  const clabe = '638180010128388591';
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(clabe);
+    } else {
+      const el = document.createElement('textarea');
+      el.value = clabe;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    }
+  } catch (err) {
+    const el = document.createElement('textarea');
+    el.value = clabe;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+  }
+
+  const btn = document.getElementById('btnCopyClabe');
+  if (btn) {
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span>✓ ¡CLABE Copiada!</span>';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.classList.remove('copied');
+    }, 2500);
+  }
+}
+
+// -------------------------------------------------------------
+// MÓDULO: EXTRACTOR INTELIGENTE DE CV EXISTENTE
+// -------------------------------------------------------------
+
+let pendingExtractedProfile = null;
+
+function openCvExtractorModal() {
+  document.getElementById('cvExtractorModal').classList.add('active');
+  document.getElementById('rawCvInput').value = '';
+  document.getElementById('extractorPreviewSection').style.display = 'none';
+  pendingExtractedProfile = null;
+}
+
+function handleCvFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const content = e.target.result;
+    document.getElementById('rawCvInput').value = content;
+    analyzePastedCvText();
+  };
+  reader.readAsText(file);
+}
+
+function analyzePastedCvText() {
+  const rawText = document.getElementById('rawCvInput').value.trim();
+  if (!rawText) {
+    alert('Por favor pega el texto de tu currículum o carga un archivo para analizar.');
+    return;
+  }
+
+  try {
+    const parsed = window.cvParser.parseCVText(rawText);
+    pendingExtractedProfile = parsed;
+
+    const previewBox = document.getElementById('extractorPreviewBox');
+    previewBox.innerHTML = '';
+
+    const tagsContainer = document.createElement('div');
+    tagsContainer.className = 'preview-tag-list';
+
+    if (parsed.personal.fullName) {
+      tagsContainer.innerHTML += `<span class="preview-tag">👤 <strong>Nombre:</strong> ${escapeHtml(parsed.personal.fullName)}</span>`;
+    }
+    if (parsed.personal.headline) {
+      tagsContainer.innerHTML += `<span class="preview-tag">💼 <strong>Titular:</strong> ${escapeHtml(parsed.personal.headline)}</span>`;
+    }
+    if (parsed.personal.email) {
+      tagsContainer.innerHTML += `<span class="preview-tag">📧 <strong>Email:</strong> ${escapeHtml(parsed.personal.email)}</span>`;
+    }
+    if (parsed.personal.phone) {
+      tagsContainer.innerHTML += `<span class="preview-tag">📱 <strong>Teléfono:</strong> ${escapeHtml(parsed.personal.phone)}</span>`;
+    }
+    if (parsed.personal.location) {
+      tagsContainer.innerHTML += `<span class="preview-tag">📍 <strong>Ubicación:</strong> ${escapeHtml(parsed.personal.location)}</span>`;
+    }
+    if (parsed.personal.linkedin) {
+      tagsContainer.innerHTML += `<span class="preview-tag">🔗 <strong>LinkedIn:</strong> Detectado</span>`;
+    }
+    if (parsed.personal.github) {
+      tagsContainer.innerHTML += `<span class="preview-tag">🐙 <strong>GitHub:</strong> Detectado</span>`;
+    }
+
+    const expCount = parsed.experience?.length || 0;
+    tagsContainer.innerHTML += `<span class="preview-tag">🏢 <strong>Experiencias:</strong> ${expCount} detectada(s)</span>`;
+
+    const eduCount = parsed.education?.length || 0;
+    tagsContainer.innerHTML += `<span class="preview-tag">🎓 <strong>Educación:</strong> ${eduCount} detectada(s)</span>`;
+
+    const skillsCount = parsed.skills?.[0]?.items?.length || 0;
+    tagsContainer.innerHTML += `<span class="preview-tag">🛠️ <strong>Habilidades:</strong> ${skillsCount} extraída(s)</span>`;
+
+    const langCount = parsed.languages?.length || 0;
+    tagsContainer.innerHTML += `<span class="preview-tag">🌐 <strong>Idiomas:</strong> ${langCount} detectado(s)</span>`;
+
+    previewBox.appendChild(tagsContainer);
+
+    if (parsed.experience && parsed.experience.length > 0) {
+      const expList = document.createElement('div');
+      expList.style.fontSize = '11.5px';
+      expList.style.color = '#94a3b8';
+      expList.style.marginTop = '6px';
+      expList.innerHTML = '<strong>Puestos encontrados:</strong> ' + parsed.experience.map(e => `${escapeHtml(e.role)} en ${escapeHtml(e.company)} (${escapeHtml(e.period)})`).join(' • ');
+      previewBox.appendChild(expList);
+    }
+
+    document.getElementById('extractedProfileName').value = parsed.personal.fullName 
+      ? `CV - ${parsed.personal.fullName}` 
+      : 'CV Importado ' + new Date().toLocaleDateString('es-MX');
+
+    document.getElementById('extractorPreviewSection').style.display = 'flex';
+  } catch (err) {
+    alert('Error al analizar el currículum: ' + err.message);
+  }
+}
+
+function confirmExtractedProfile() {
+  if (!pendingExtractedProfile) {
+    alert('No hay datos analizados para guardar.');
+    return;
+  }
+
+  const profileName = document.getElementById('extractedProfileName').value.trim() || 'Nuevo CV Importado';
+  const template = document.getElementById('extractedProfileTemplate').value || 'tech';
+
+  pendingExtractedProfile.name = profileName;
+
+  const newProfile = storage.createProfile(profileName, template, pendingExtractedProfile);
+  initProfileSelector();
+  storage.setActiveProfile(newProfile.id);
+  document.getElementById('profileSelect').value = newProfile.id;
+  loadCurrentProfile();
+  updatePreview();
+
+  closeModal('cvExtractorModal');
+  alert(`¡Perfil "${profileName}" creado con éxito a partir de tu CV! Ya puedes personalizarlo o exportarlo a PDF.`);
+}
+

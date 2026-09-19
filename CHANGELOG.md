@@ -2,6 +2,26 @@
 
 Todas las versiones notables de este proyecto se documentan en este archivo.
 
+## [1.2.0] - 2026-09-19
+
+### 🚀 Novedades y Características Principales
+- **📥 Extractor Inteligente de CVs Existentes (`cvParser.js`)**:
+  - Motor de análisis heurístico de texto para procesar currículums en texto plano copiados desde PDFs, documentos de Word o perfiles de LinkedIn.
+  - Reconocimiento estructurado de datos de contacto (email, teléfono, ubicación, LinkedIn, GitHub y sitios web).
+  - Segmentación automática de secciones (Resumen, Experiencia Laboral, Formación Académica, Habilidades e Idiomas).
+  - Extracción detallada de puestos, empresas, períodos y viñetas de logros.
+  - Soporte de importación directa para formatos JSON Resume y respaldos de OpenCV Studio.
+  - Vista previa interactiva de entidades detectadas antes de generar el nuevo perfil.
+- **☕ Módulo de Donaciones Comunitarias ("Invítame un café")**:
+  - Integración de enlace seguro a **Buy Me a Coffee** ([buymeacoffee.com/coriosmwraw](https://buymeacoffee.com/coriosmwraw)) para donaciones internacionales con tarjeta o PayPal.
+  - Integración de opción de transferencia bancaria directa (SPEI) en México con cuenta **Nu México** (CLABE: `638180010128388591`) a nombre de **César Alberto López Martínez**.
+  - Botón de copiado de CLABE en 1 clic con confirmación visual interactiva.
+- **🎨 Botón Destacado en Barra Superior**:
+  - Añadido botón de café con diseño ámbar de alto contraste y modal de soporte amigable.
+  - Añadido botón de acceso rápido para extracción de CVs existentes.
+
+---
+
 ## [1.1.0] - 2026-09-19
 
 ### 🚀 Novedades y Mejoras Principales

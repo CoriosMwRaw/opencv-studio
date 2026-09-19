@@ -59,16 +59,26 @@ class CVStorage {
     }
   }
 
-  createProfile(name, templateId = 'tech') {
+  createProfile(name, templateId = 'tech', customData = null) {
     const profiles = this.getAllProfiles();
     const newId = 'prof_' + Date.now();
     const base = sampleProfiles['perfil_en_blanco'] || sampleProfiles['estudiante_sistemas'];
-    const newProfile = JSON.parse(JSON.stringify(base));
-    
+    let newProfile = JSON.parse(JSON.stringify(base));
+
+    if (customData) {
+      newProfile = {
+        ...newProfile,
+        ...customData,
+        personal: { ...newProfile.personal, ...(customData.personal || {}) },
+        settings: { ...(newProfile.settings || {}), template: templateId, colorTheme: customData.colorTheme || 'navy' }
+      };
+    } else {
+      newProfile.personal.fullName = name.trim().toUpperCase();
+      newProfile.settings.template = templateId;
+    }
+
     newProfile.id = newId;
     newProfile.name = name.trim();
-    newProfile.personal.fullName = name.trim().toUpperCase();
-    newProfile.settings.template = templateId;
 
     profiles[newId] = newProfile;
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(profiles));
