@@ -6,6 +6,9 @@ const storage = new CVStorage();
 let currentProfile = null;
 let currentZoom = 1.0;
 let activeTargetBulletInput = null;
+let activeTargetBulletExpIndex = null;
+let currentBulletBankFilterText = '';
+let currentBulletBankCategory = 'all';
 
 function escapeHtml(str) {
   if (!str) return '';
@@ -55,6 +58,16 @@ function loadCurrentProfile() {
 
   if (!currentProfile.settings) {
     currentProfile.settings = { template: 'tech', colorTheme: 'navy', showPhoto: true, showKpis: true };
+  }
+
+  // Normalizar experiencia para garantizar que exp.bullets siempre exista
+  if (Array.isArray(currentProfile.experience)) {
+    currentProfile.experience.forEach(exp => {
+      if (!Array.isArray(exp.bullets)) {
+        exp.bullets = Array.isArray(exp.achievements) ? [...exp.achievements] : [];
+      }
+      exp.achievements = exp.bullets;
+    });
   }
 
   // 1. Datos Personales
@@ -276,11 +289,20 @@ function updateExpBullets(idx, text) {
   persistAndRefresh();
 }
 
-function deleteExperience(idx) {
-  if (confirm('¿Deseas eliminar este puesto laboral de tu currículum?')) {
+async function deleteExperience(idx) {
+  const exp = currentProfile.experience[idx];
+  const roleName = exp ? exp.role : 'puesto laboral';
+  const ok = await showAppConfirm('Eliminar Puesto Laboral', `¿Deseas eliminar "${roleName}" de tu currículum?`, {
+    type: 'danger',
+    icon: '🗑️',
+    confirmText: 'Sí, Eliminar',
+    cancelText: 'Cancelar'
+  });
+  if (ok) {
     currentProfile.experience.splice(idx, 1);
     persistAndRefresh();
     renderExperienceEditor();
+    showToastNotification('Puesto laboral eliminado', 'info');
   }
 }
 
@@ -346,11 +368,20 @@ function updateProjField(idx, field, value) {
   persistAndRefresh();
 }
 
-function deleteProject(idx) {
-  if (confirm('¿Deseas eliminar este proyecto?')) {
+async function deleteProject(idx) {
+  const pr = currentProfile.projects[idx];
+  const prTitle = pr ? pr.title : 'proyecto';
+  const ok = await showAppConfirm('Eliminar Proyecto', `¿Deseas eliminar "${prTitle}" de tu currículum?`, {
+    type: 'danger',
+    icon: '🗑️',
+    confirmText: 'Sí, Eliminar',
+    cancelText: 'Cancelar'
+  });
+  if (ok) {
     currentProfile.projects.splice(idx, 1);
     persistAndRefresh();
     renderProjectsEditor();
+    showToastNotification('Proyecto eliminado', 'info');
   }
 }
 
@@ -416,11 +447,20 @@ function updateEduField(idx, field, value) {
   persistAndRefresh();
 }
 
-function deleteEducation(idx) {
-  if (confirm('¿Deseas eliminar este registro educativo?')) {
+async function deleteEducation(idx) {
+  const ed = currentProfile.education[idx];
+  const edName = ed ? ed.degree : 'registro educativo';
+  const ok = await showAppConfirm('Eliminar Formación Educativa', `¿Deseas eliminar "${edName}" de tu currículum?`, {
+    type: 'danger',
+    icon: '🗑️',
+    confirmText: 'Sí, Eliminar',
+    cancelText: 'Cancelar'
+  });
+  if (ok) {
     currentProfile.education.splice(idx, 1);
     persistAndRefresh();
     renderEducationEditor();
+    showToastNotification('Registro educativo eliminado', 'info');
   }
 }
 
@@ -471,10 +511,21 @@ function updateKpi(idx, field, val) {
   persistAndRefresh();
 }
 
-function deleteKpi(idx) {
-  currentProfile.kpis.splice(idx, 1);
-  persistAndRefresh();
-  renderKpisEditor();
+async function deleteKpi(idx) {
+  const kpi = currentProfile.kpis[idx];
+  const label = kpi ? `${kpi.number || ''} ${kpi.label || ''}`.trim() : 'métrica';
+  const ok = await showAppConfirm('Eliminar Métrica', `¿Deseas eliminar la métrica "${label}" de tu currículum?`, {
+    type: 'danger',
+    icon: '🗑️',
+    confirmText: 'Sí, Eliminar',
+    cancelText: 'Cancelar'
+  });
+  if (ok) {
+    currentProfile.kpis.splice(idx, 1);
+    persistAndRefresh();
+    renderKpisEditor();
+    showToastNotification('Métrica eliminada', 'info');
+  }
 }
 
 // Certificaciones
@@ -511,10 +562,21 @@ function updateCert(idx, field, val) {
   persistAndRefresh();
 }
 
-function deleteCert(idx) {
-  currentProfile.certifications.splice(idx, 1);
-  persistAndRefresh();
-  renderCertificationsEditor();
+async function deleteCert(idx) {
+  const cert = currentProfile.certifications[idx];
+  const certTitle = cert ? cert.title : 'certificación';
+  const ok = await showAppConfirm('Eliminar Certificación', `¿Deseas eliminar "${certTitle}" de tu currículum?`, {
+    type: 'danger',
+    icon: '🗑️',
+    confirmText: 'Sí, Eliminar',
+    cancelText: 'Cancelar'
+  });
+  if (ok) {
+    currentProfile.certifications.splice(idx, 1);
+    persistAndRefresh();
+    renderCertificationsEditor();
+    showToastNotification('Certificación eliminada', 'info');
+  }
 }
 
 // -------------------------------------------------------------
@@ -529,7 +591,12 @@ function handlePhotoUpload(e) {
   if (!file) return;
 
   if (!file.type.startsWith('image/')) {
-    alert('Por favor selecciona un archivo de imagen válido (JPG, PNG, WEBP).');
+    showAppDialog({
+      title: 'Formato no compatible',
+      message: 'Por favor selecciona un archivo de imagen válido (JPG, PNG o WEBP).',
+      type: 'warning',
+      icon: '🖼️'
+    });
     return;
   }
 
@@ -565,6 +632,7 @@ function handlePhotoUpload(e) {
       currentProfile.settings.showPhoto = true;
       document.getElementById('opt_showPhoto').checked = true;
       persistAndRefresh();
+      showToastNotification('Fotografía actualizada', 'success', 'Imagen optimizada y agregada a tu currículum.');
     };
     img.src = evt.target.result;
   };
@@ -631,26 +699,30 @@ function createNewProfileFromModal() {
   const name = input.value.trim();
 
   if (!name) {
-    alert('Por favor escribe un nombre para el nuevo perfil.');
+    showToastNotification('Nombre requerido', 'warning', 'Por favor ingresa un nombre para identificar el nuevo perfil.');
     input.focus();
     return;
   }
 
-  storage.createProfile(name, templateSelect.value);
+  const newProfile = storage.createProfile(name, templateSelect.value);
   input.value = '';
   initProfileSelector();
+  storage.setActiveProfile(newProfile.id);
+  document.getElementById('profileSelect').value = newProfile.id;
   loadCurrentProfile();
   updatePreview();
   closeModal('profileManagerModal');
+  showToastNotification('Perfil creado con éxito', 'success', `Se ha inicializado el perfil "${name}".`);
 }
 
 function duplicateProfileFromModal(id) {
   storage.setActiveProfile(id);
-  storage.duplicateActiveProfile();
+  const dup = storage.duplicateActiveProfile();
   initProfileSelector();
   loadCurrentProfile();
   updatePreview();
   renderProfileManagerUI();
+  showToastNotification('Perfil duplicado', 'success', `Copia creada: "${dup?.name || 'Perfil duplicado'}".`);
 }
 
 async function deleteProfileFromModal(id) {
@@ -666,6 +738,7 @@ async function deleteProfileFromModal(id) {
     loadCurrentProfile();
     updatePreview();
     renderProfileManagerUI();
+    showToastNotification('Perfil eliminado', 'info', 'El perfil ha sido removido del sistema.');
   }
 }
 
@@ -675,47 +748,179 @@ async function deleteProfileFromModal(id) {
 
 function openBulletBankForExp(idx) {
   activeTargetBulletInput = idx;
-  const modal = document.getElementById('bulletBankModal');
+  activeTargetBulletExpIndex = idx;
+  const header = document.getElementById('bulletBankTargetHeader');
+  const exp = currentProfile && currentProfile.experience && currentProfile.experience[idx];
+  if (header) {
+    if (exp) {
+      header.innerHTML = `Insertando logro en: <strong style="color:#ffffff;">${escapeHtml(exp.role || 'Puesto #' + (idx + 1))}</strong> en <span style="color:#60a5fa;">${escapeHtml(exp.company || 'Empresa')}</span>`;
+    } else {
+      header.textContent = 'Selecciona una frase para tu puesto laboral';
+    }
+  }
+
+  const searchInput = document.getElementById('bulletBankSearch');
+  if (searchInput) {
+    searchInput.value = '';
+    currentBulletBankFilterText = '';
+  }
+  const catSelect = document.getElementById('bulletBankCategoryFilter');
+  if (catSelect) {
+    catSelect.value = 'all';
+    currentBulletBankCategory = 'all';
+  }
+
+  renderBulletBankList();
+  document.getElementById('bulletBankModal').classList.add('active');
+}
+
+function filterBulletBank(text) {
+  currentBulletBankFilterText = (text || '').trim().toLowerCase();
+  renderBulletBankList();
+}
+
+function filterBulletBankCategory(cat) {
+  currentBulletBankCategory = cat || 'all';
+  renderBulletBankList();
+}
+
+function renderBulletBankList() {
   const content = document.getElementById('bulletBankContent');
+  if (!content) return;
   content.innerHTML = '';
 
-  Object.entries(bulletBank).forEach(([k, cat]) => {
-    if (k === 'verbos') return;
-    const catBox = document.createElement('div');
-    catBox.innerHTML = `<h4 style="color:#60a5fa; margin: 10px 0 6px 0; font-size:13px;">${cat.category}</h4>`;
-    const list = document.createElement('ul');
-    list.style.listStyle = 'none';
-    list.style.display = 'flex';
-    list.style.flexDirection = 'column';
-    list.style.gap = '6px';
+  const q = currentBulletBankFilterText;
+  const selectedCat = currentBulletBankCategory;
+  let totalMatches = 0;
 
-    cat.items.forEach(phrase => {
-      const li = document.createElement('li');
-      li.style.background = '#1e293b';
-      li.style.padding = '8px 12px';
-      li.style.borderRadius = '6px';
-      li.style.cursor = 'pointer';
-      li.style.fontSize = '12px';
-      li.style.border = '1px solid #334155';
-      li.textContent = phrase;
-      li.onclick = () => insertBulletToActiveExp(phrase);
-      list.appendChild(li);
+  // Renderizar categorías de frases
+  if (typeof bulletBank !== 'undefined') {
+    Object.entries(bulletBank).forEach(([catKey, catData]) => {
+      if (catKey === 'verbos') return;
+      if (selectedCat !== 'all' && selectedCat !== catKey) return;
+
+      const items = Array.isArray(catData.items) ? catData.items : [];
+      const matchedPhrases = items.filter(phrase => {
+        if (!q) return true;
+        return phrase.toLowerCase().includes(q) || (catData.category && catData.category.toLowerCase().includes(q));
+      });
+
+      if (matchedPhrases.length === 0) return;
+      totalMatches += matchedPhrases.length;
+
+      const catBox = document.createElement('div');
+      catBox.style.marginBottom = '8px';
+      catBox.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h4 style="color:#60a5fa; font-size:13px; font-weight:700; margin:0; display:flex; align-items:center; gap:6px;">
+            <span>📌</span> ${escapeHtml(catData.category)}
+          </h4>
+          <span style="font-size:11px; color:#64748b; background:#1e293b; padding:2px 8px; border-radius:10px; border:1px solid #334155;">
+            ${matchedPhrases.length} frases
+          </span>
+        </div>
+      `;
+
+      const list = document.createElement('div');
+      list.style.display = 'flex';
+      list.style.flexDirection = 'column';
+      list.style.gap = '8px';
+
+      matchedPhrases.forEach(phrase => {
+        const item = document.createElement('div');
+        item.className = 'bullet-bank-item';
+
+        const highlightedText = escapeHtml(phrase).replace(/\[([^\]]+)\]/g, '<span class="highlight-param">[$1]</span>');
+
+        item.innerHTML = `
+          <div class="bullet-bank-text">
+            <span style="color:#38bdf8; margin-right:6px; font-weight:bold;">•</span>${highlightedText}
+          </div>
+          <button class="bullet-bank-add-btn" title="Insertar en mi CV">
+            ➕ Usar frase
+          </button>
+        `;
+
+        item.addEventListener('click', () => insertBulletToActiveExp(phrase));
+        list.appendChild(item);
+      });
+
+      catBox.appendChild(list);
+      content.appendChild(catBox);
     });
 
-    catBox.appendChild(list);
-    content.appendChild(catBox);
-  });
+    // Renderizar verbos de acción
+    if (selectedCat === 'all' || selectedCat === 'verbos') {
+      const verbs = bulletBank.verbos || [];
+      const matchedVerbs = verbs.filter(v => !q || v.toLowerCase().includes(q));
 
-  modal.classList.add('active');
+      if (matchedVerbs.length > 0) {
+        totalMatches += matchedVerbs.length;
+        const verbsBox = document.createElement('div');
+        verbsBox.style.marginTop = '10px';
+        verbsBox.style.padding = '12px 14px';
+        verbsBox.style.background = '#0f172a';
+        verbsBox.style.border = '1px solid #334155';
+        verbsBox.style.borderRadius = '8px';
+
+        verbsBox.innerHTML = `
+          <div style="font-size:12.5px; font-weight:700; color:#38bdf8; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <span>⚡</span> Verbos de Acción Recomendados para ATS (clic para iniciar una frase):
+          </div>
+          <div id="verbsChipContainer" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+        `;
+
+        const chipCont = verbsBox.querySelector('#verbsChipContainer');
+        matchedVerbs.forEach(verb => {
+          const chip = document.createElement('span');
+          chip.className = 'verb-chip';
+          chip.innerHTML = `<strong>+</strong> ${escapeHtml(verb)}`;
+          chip.title = `Iniciar logro con "${verb}"`;
+          chip.addEventListener('click', () => {
+            insertBulletToActiveExp(`${verb} [acción realizada], logrando [resultado medible o beneficio obtenido].`);
+          });
+          chipCont.appendChild(chip);
+        });
+
+        content.appendChild(verbsBox);
+      }
+    }
+  }
+
+  if (totalMatches === 0) {
+    content.innerHTML = `
+      <div style="text-align:center; padding:36px 16px; color:#94a3b8;">
+        <div style="font-size:32px; margin-bottom:10px;">🔍</div>
+        <div style="font-size:14px; font-weight:600; color:#cbd5e1;">No encontramos frases que coincidan con "${escapeHtml(q)}"</div>
+        <div style="font-size:12px; margin-top:6px;">Prueba buscando términos generales como <em>"diseñé"</em>, <em>"SQL"</em>, <em>"mantenimiento"</em> o <em>"scrum"</em>.</div>
+      </div>
+    `;
+  }
 }
 
 function insertBulletToActiveExp(phrase) {
-  if (activeTargetBulletInput !== null && currentProfile.experience[activeTargetBulletInput]) {
-    currentProfile.experience[activeTargetBulletInput].bullets.push(phrase);
-    persistAndRefresh();
-    renderExperienceEditor();
-    closeModal('bulletBankModal');
+  const targetIdx = activeTargetBulletExpIndex !== null ? activeTargetBulletExpIndex : activeTargetBulletInput;
+  if (targetIdx === null) return;
+  if (!currentProfile || !currentProfile.experience || !currentProfile.experience[targetIdx]) return;
+
+  const exp = currentProfile.experience[targetIdx];
+  if (!Array.isArray(exp.bullets)) {
+    exp.bullets = Array.isArray(exp.achievements) ? [...exp.achievements] : [];
   }
+  exp.bullets.push(phrase);
+  exp.achievements = exp.bullets;
+
+  // Sincronizar el textarea del DOM inmediatamente si existe
+  const textarea = document.getElementById(`exp_bullets_${targetIdx}`);
+  if (textarea) {
+    textarea.value = exp.bullets.join('\n');
+  }
+
+  persistAndRefresh();
+  closeModal('bulletBankModal');
+
+  // Notificación ejecutiva elegante
+  showToastNotification('Frase añadida al CV', 'success', `Se integró el logro en "${exp.role || 'Puesto'}".`);
 }
 
 function openATSAnalyzer() {
@@ -806,7 +1011,9 @@ async function exportJSON() {
 
   if (window.electronAPI && window.electronAPI.saveJsonDialog) {
     const res = await window.electronAPI.saveJsonDialog(data, filename);
-    if (res.success) alert('Respaldo JSON guardado correctamente.');
+    if (res.success) {
+      showToastNotification('Respaldo JSON guardado', 'success', 'Archivo exportado exitosamente a tu equipo.');
+    }
   } else {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -815,6 +1022,7 @@ async function exportJSON() {
     a.download = filename;
     a.click();
     URL.revokeObjectURL(url);
+    showToastNotification('Respaldo JSON descargado', 'success', `Se descargó "${filename}".`);
   }
 }
 
@@ -826,7 +1034,7 @@ async function importJSON() {
       initProfileSelector();
       loadCurrentProfile();
       updatePreview();
-      alert('Perfil importado con éxito.');
+      showToastNotification('Perfil importado con éxito', 'success', 'Los datos del CV fueron restaurados.');
     }
   } else {
     const input = document.createElement('input');
@@ -843,9 +1051,14 @@ async function importJSON() {
             initProfileSelector();
             loadCurrentProfile();
             updatePreview();
-            alert('Perfil importado con éxito.');
+            showToastNotification('Perfil importado con éxito', 'success', 'Los datos del CV fueron restaurados.');
           } catch (err) {
-            alert('Error al leer el archivo JSON: ' + err.message);
+            showAppDialog({
+              title: 'Error de archivo',
+              message: 'El archivo JSON no tiene un formato válido: ' + err.message,
+              type: 'danger',
+              icon: '❌'
+            });
           }
         };
         reader.readAsText(file);
@@ -904,6 +1117,8 @@ async function copyClabeToClipboard() {
       btn.classList.remove('copied');
     }, 2500);
   }
+
+  showToastNotification('CLABE Copiada', 'success', '638180010128388591 lista para transferencias SPEI.');
 }
 
 // -------------------------------------------------------------
@@ -1025,7 +1240,12 @@ async function handleCvFileSelect(event) {
       }
       return;
     } else {
-      alert('Para procesar archivos PDF, por favor utiliza la versión de escritorio de OpenCV Studio o copia y pega el texto del PDF en el recuadro inferior.');
+      showAppDialog({
+        title: 'Extracción de PDF',
+        message: 'Para procesar archivos PDF directamente, por favor utiliza la versión de escritorio de OpenCV Studio o copia y pega el contenido del PDF en el área de texto.',
+        type: 'info',
+        icon: '📄'
+      });
       return;
     }
   }
@@ -1044,7 +1264,12 @@ async function handleCvFileSelect(event) {
 function analyzePastedCvText() {
   const rawText = document.getElementById('rawCvInput').value.trim();
   if (!rawText) {
-    alert('Por favor pega el texto de tu currículum o carga un archivo para analizar.');
+    showAppDialog({
+      title: 'Texto no proporcionado',
+      message: 'Por favor pega el texto de tu currículum o selecciona un archivo para que el motor inteligente pueda analizarlo.',
+      type: 'warning',
+      icon: '📝'
+    });
     return;
   }
 
@@ -1114,7 +1339,12 @@ function analyzePastedCvText() {
 
     document.getElementById('extractorPreviewSection').style.display = 'flex';
   } catch (err) {
-    alert('Error al analizar el currículum: ' + err.message);
+    showAppDialog({
+      title: 'Error en el análisis',
+      message: 'Ocurrió un error inesperado al procesar el texto: ' + err.message,
+      type: 'danger',
+      icon: '❌'
+    });
   }
 }
 
@@ -1276,6 +1506,52 @@ function showAppConfirm(title, message, options = {}) {
   });
 }
 
+// Sistema de Notificaciones Flotantes (Toasts Ejecutivos)
+function showToastNotification(title, type = 'success', subtitle = '', duration = 3200) {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  toast.className = `app-toast ${type}`;
+
+  let iconChar = '✓';
+  if (type === 'info') iconChar = 'ℹ️';
+  else if (type === 'warning') iconChar = '⚠️';
+  else if (type === 'danger') iconChar = '✕';
+
+  toast.innerHTML = `
+    <div class="toast-icon">${iconChar}</div>
+    <div class="toast-content">
+      <div class="toast-title">${escapeHtml(title)}</div>
+      ${subtitle ? `<div class="toast-body">${escapeHtml(subtitle)}</div>` : ''}
+    </div>
+    <button class="toast-close" style="background:none; border:none; color:#64748b; font-size:14px; cursor:pointer; padding:0 4px;" title="Cerrar">✕</button>
+  `;
+
+  const closeBtn = toast.querySelector('.toast-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      toast.style.transition = 'all 0.25s ease';
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(16px) scale(0.95)';
+      setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+      }, 250);
+    });
+  }
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.transition = 'all 0.3s ease';
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(16px) scale(0.95)';
+    setTimeout(() => {
+      if (toast.parentElement) toast.remove();
+    }, 300);
+  }, duration);
+}
+
 // Reemplazo del alert nativo del navegador por diálogo ejecutivo
 window.alert = function(msg) {
   showAppDialog({
@@ -1286,4 +1562,5 @@ window.alert = function(msg) {
     confirmText: 'Entendido'
   });
 };
+
 

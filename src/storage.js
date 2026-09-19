@@ -77,6 +77,13 @@ class CVStorage {
       newProfile.settings.template = templateId;
     }
 
+    if (Array.isArray(newProfile.experience)) {
+      newProfile.experience = newProfile.experience.map(e => {
+        const b = Array.isArray(e.bullets) && e.bullets.length > 0 ? e.bullets : (Array.isArray(e.achievements) ? e.achievements : []);
+        return { ...e, bullets: b, achievements: b };
+      });
+    }
+
     newProfile.id = newId;
     newProfile.name = name.trim();
 
@@ -104,7 +111,14 @@ class CVStorage {
     const profiles = this.getAllProfiles();
     const keys = Object.keys(profiles);
     if (keys.length <= 1) {
-      alert('Debes conservar al menos un perfil en la aplicación.');
+      if (typeof showAppDialog === 'function') {
+        showAppDialog({
+          title: 'Acción no permitida',
+          message: 'Debes conservar al menos un perfil en OpenCV Studio para continuar editando.',
+          type: 'warning',
+          icon: '⚠️'
+        });
+      }
       return false;
     }
     delete profiles[profileId];

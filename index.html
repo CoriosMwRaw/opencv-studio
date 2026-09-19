@@ -319,16 +319,35 @@
 
   <!-- MODAL 1: Banco de Frases -->
   <div class="modal-backdrop" id="bulletBankModal">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="max-width: 680px; max-height: 86vh;">
       <div class="modal-header">
-        <h3 class="modal-title">💡 Banco de Frases de Impacto & Verbos de Acción</h3>
+        <div>
+          <h3 class="modal-title">💡 Banco de Frases de Impacto & Verbos de Acción</h3>
+          <div id="bulletBankTargetHeader" style="font-size:12px; color:#38bdf8; margin-top:3px; font-weight:500;">
+            Seleccionando frase para tu experiencia
+          </div>
+        </div>
         <button class="modal-close" onclick="closeModal('bulletBankModal')">✕</button>
       </div>
-      <div class="modal-body">
-        <p style="font-size:12.5px; color:#94a3b8;">
-          Haz clic en cualquier frase para insertarla directamente en la experiencia laboral seleccionada.
+      <div class="modal-body" style="gap: 12px;">
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <input type="text" id="bulletBankSearch" placeholder="🔍 Buscar frases clave (ej. SQL, automatización, dashboards, Scrum, Kaizen)..." class="form-input" style="flex:1; min-width:240px; font-size:12.5px;" oninput="filterBulletBank(this.value)">
+          <select id="bulletBankCategoryFilter" class="form-select" style="width:auto; font-size:12px;" onchange="filterBulletBankCategory(this.value)">
+            <option value="all">Todas las categorías</option>
+            <option value="desarrollo">Desarrollo de Software</option>
+            <option value="datos">Análisis de Datos & BI</option>
+            <option value="mantenimiento">Mantenimiento Industrial</option>
+            <option value="redes">Redes & Soporte TI</option>
+            <option value="estudiantes">Proyectos Universitarios</option>
+            <option value="verbos">⚡ Verbos de Acción ATS</option>
+          </select>
+        </div>
+
+        <p style="font-size:12px; color:#94a3b8; margin:0;">
+          Haz clic en cualquier frase o verbo para insertarlo directamente en los logros de este puesto de trabajo.
         </p>
-        <div id="bulletBankContent"></div>
+
+        <div id="bulletBankContent" style="display:flex; flex-direction:column; gap:14px;"></div>
       </div>
       <div class="modal-footer">
         <button class="app-btn app-btn-outline" onclick="closeModal('bulletBankModal')">Cerrar</button>
@@ -581,6 +600,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Contenedor Global de Notificaciones Toast Flotantes -->
+  <div id="toastContainer" class="toast-container"></div>
 
   <!-- Scripts de la Aplicación -->
   <script src="src/data/sampleProfiles.js"></script>

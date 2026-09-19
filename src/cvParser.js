@@ -240,15 +240,18 @@ window.cvParser = (function() {
           company: company || 'Empresa',
           period: period,
           location: 'México',
+          bullets: [],
           achievements: []
         };
       } else if (currentEntry && isBullet) {
         const clean = line.replace(/^[»•\-\*\d\.\)]+\s*/, '').trim();
         if (clean.length > 5) {
+          currentEntry.bullets.push(clean);
           currentEntry.achievements.push(clean);
         }
-      } else if (currentEntry && currentEntry.achievements.length > 0) {
+      } else if (currentEntry && currentEntry.bullets && currentEntry.bullets.length > 0) {
         // Línea de continuación del bullet previo
+        currentEntry.bullets[currentEntry.bullets.length - 1] += ' ' + line;
         currentEntry.achievements[currentEntry.achievements.length - 1] += ' ' + line;
       }
     }
@@ -261,9 +264,12 @@ window.cvParser = (function() {
   }
 
   function finalizeExperienceEntry(entry) {
-    if (entry.achievements.length === 0) {
-      entry.achievements = ['Desempeño de funciones especializadas y cumplimiento de objetivos del área.'];
+    const list = (entry.bullets && entry.bullets.length > 0) ? entry.bullets : (entry.achievements || []);
+    if (list.length === 0) {
+      list.push('Desempeño de funciones especializadas y cumplimiento de objetivos del área.');
     }
+    entry.bullets = list;
+    entry.achievements = list;
     return entry;
   }
 
@@ -551,18 +557,25 @@ window.cvParser = (function() {
         showPhoto: true
       },
       summary: summary,
-      experience: experience.length > 0 ? experience : [
+      experience: (experience.length > 0 ? experience : [
         {
           role: headline || 'Puesto o Especialidad',
           company: 'Empresa Principal',
           period: '2022 - Actualidad',
           location: contact.location || 'México',
+          bullets: [
+            'Gestión de actividades operativas y entrega de proyectos con altos estándares de calidad.',
+            'Optimización de procesos internos y colaboración con equipos multidisciplinarios.'
+          ],
           achievements: [
             'Gestión de actividades operativas y entrega de proyectos con altos estándares de calidad.',
             'Optimización de procesos internos y colaboración con equipos multidisciplinarios.'
           ]
         }
-      ],
+      ]).map(e => {
+        const b = Array.isArray(e.bullets) && e.bullets.length > 0 ? e.bullets : (Array.isArray(e.achievements) ? e.achievements : []);
+        return { ...e, bullets: b, achievements: b };
+      }),
       education: education.length > 0 ? education : [
         {
           degree: 'Formación Profesional / Universitaria',
@@ -579,7 +592,14 @@ window.cvParser = (function() {
         }
       ],
       languages: languages,
-      projects: projects,
+      projects: (projects || []).map(pr => ({
+        id: 'proj_' + Math.random().toString(36).substr(2, 9),
+        title: pr.title || pr.name || 'Proyecto Técnico',
+        name: pr.name || pr.title || 'Proyecto Técnico',
+        tech: pr.tech || 'Tecnologías aplicadas',
+        link: pr.link || '',
+        description: pr.description || (Array.isArray(pr.bullets) ? pr.bullets.join(' ') : '') || 'Diseño y ejecución de solución técnica especializada.'
+      })),
       kpis: [
         { label: 'Proyectos Entregados', value: '10+', subtext: 'A tiempo' },
         { label: 'Eficacia Operativa', value: '98%', subtext: 'Calidad' }
