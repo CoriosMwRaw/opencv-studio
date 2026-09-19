@@ -1559,3 +1559,75 @@ body {
   color: #38bdf8;
 }
 
+/* ==========================================================================
+   MODAL DE DIÁLOGOS Y NOTIFICACIONES PROFESIONALES (REEMPLAZO DE ALERT)
+   ========================================================================== */
+.app-dialog-box {
+  animation: dialogScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes dialogScaleIn {
+  0% {
+    transform: scale(0.92) translateY(12px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.dialog-icon-wrapper {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-weight: 700;
+}
+
+.dialog-icon-wrapper.success {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.22) 0%, rgba(16, 185, 129, 0.04) 70%);
+  border: 2px solid #10b981;
+  color: #34d399;
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+}
+
+.dialog-icon-wrapper.info {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.22) 0%, rgba(56, 189, 248, 0.04) 70%);
+  border: 2px solid #38bdf8;
+  color: #38bdf8;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+}
+
+.dialog-icon-wrapper.warning {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(245, 158, 11, 0.04) 70%);
+  border: 2px solid #f59e0b;
+  color: #fbbf24;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);
+}
+
+.dialog-icon-wrapper.danger {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.22) 0%, rgba(239, 68, 68, 0.04) 70%);
+  border: 2px solid #ef4444;
+  color: #f87171;
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.25);
+}
+
+.dialog-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  font-size: 11.5px;
+  font-weight: 500;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+

@@ -653,8 +653,14 @@ function duplicateProfileFromModal(id) {
   renderProfileManagerUI();
 }
 
-function deleteProfileFromModal(id) {
-  if (confirm('¿Confirmas eliminar este perfil?')) {
+async function deleteProfileFromModal(id) {
+  const confirmed = await showAppConfirm('Eliminar Perfil', '¿Estás seguro de que deseas eliminar este perfil? Esta acción no se puede deshacer.', {
+    type: 'danger',
+    icon: '🗑️',
+    confirmText: 'Sí, Eliminar',
+    cancelText: 'Cancelar'
+  });
+  if (confirmed) {
     storage.deleteProfile(id);
     initProfileSelector();
     loadCurrentProfile();
@@ -769,9 +775,22 @@ async function exportToPDF() {
     try {
       const res = await window.electronAPI.exportPdf({ defaultName: defaultFileName, pageSize: 'Letter' });
       if (res.success) {
-        alert(`¡PDF generado exitosamente!\nGuardado en: ${res.filePath}`);
+        showAppDialog({
+          title: '¡PDF Exportado con Éxito!',
+          subtitle: 'Tu currículum ha sido generado con alta fidelidad y guardado en tu equipo.',
+          details: `<span style="color:#94a3b8;">Ubicación:</span><br><code style="word-break:break-all; color:#38bdf8; font-size:11.5px;">${escapeHtml(res.filePath)}</code>`,
+          confirmText: '¡Excelente!',
+          type: 'success',
+          icon: '📄'
+        });
       } else if (!res.canceled) {
-        alert('Error al exportar PDF: ' + (res.error || 'Desconocido'));
+        showAppDialog({
+          title: 'Error al exportar PDF',
+          message: res.error || 'No se pudo completar la exportación del PDF.',
+          confirmText: 'Cerrar',
+          type: 'danger',
+          icon: '✕'
+        });
       }
     } catch (e) {
       console.error(e);
@@ -1101,7 +1120,13 @@ function analyzePastedCvText() {
 
 function confirmExtractedProfile() {
   if (!pendingExtractedProfile) {
-    alert('No hay datos analizados para guardar.');
+    showAppDialog({
+      title: 'Sin datos detectados',
+      message: 'No hay datos analizados para guardar. Por favor sube un archivo o pega el texto de tu currículum primero.',
+      confirmText: 'Entendido',
+      type: 'warning',
+      icon: '⚠️'
+    });
     return;
   }
 
@@ -1118,6 +1143,147 @@ function confirmExtractedProfile() {
   updatePreview();
 
   closeModal('cvExtractorModal');
-  alert(`¡Perfil "${profileName}" creado con éxito a partir de tu CV! Ya puedes personalizarlo o exportarlo a PDF.`);
+
+  // Diálogo Ejecutivo y Profesional de Éxito
+  showAppDialog({
+    title: '¡Currículum Importado con Éxito!',
+    subtitle: 'Tu perfil ha sido estructurado y cargado en el editor de OpenCV Studio.',
+    profileName: profileName,
+    candidateName: newProfile.personal?.fullName || '',
+    headline: newProfile.personal?.headline || '',
+    template: template,
+    confirmText: '✨ Comenzar a Personalizar mi CV',
+    type: 'success',
+    icon: '✓'
+  });
 }
+
+// -------------------------------------------------------------
+// SISTEMA DE DIÁLOGOS Y NOTIFICACIONES PROFESIONALES
+// -------------------------------------------------------------
+
+let currentDialogResolver = null;
+
+function showAppDialog(options = {}) {
+  return new Promise((resolve) => {
+    currentDialogResolver = resolve;
+    const modal = document.getElementById('appDialogModal');
+    const iconWrapper = document.getElementById('appDialogIconWrapper');
+    const iconEl = document.getElementById('appDialogIcon');
+    const titleEl = document.getElementById('appDialogTitle');
+    const msgEl = document.getElementById('appDialogMessage');
+    const detailsCard = document.getElementById('appDialogDetailsCard');
+    const detailsContent = document.getElementById('appDialogDetailsContent');
+    const cancelBtn = document.getElementById('appDialogCancelBtn');
+    const confirmBtn = document.getElementById('appDialogConfirmBtn');
+
+    if (!modal) {
+      resolve(true);
+      return;
+    }
+
+    const type = options.type || 'info'; // 'success' | 'info' | 'warning' | 'danger'
+    if (iconWrapper) iconWrapper.className = `dialog-icon-wrapper ${type}`;
+
+    if (iconEl) {
+      if (options.icon) {
+        iconEl.innerText = options.icon;
+      } else if (type === 'success') {
+        iconEl.innerText = '✓';
+      } else if (type === 'warning') {
+        iconEl.innerText = '⚠️';
+      } else if (type === 'danger') {
+        iconEl.innerText = '🗑️';
+      } else {
+        iconEl.innerText = 'ℹ️';
+      }
+    }
+
+    if (titleEl) titleEl.innerText = options.title || 'Aviso';
+    if (msgEl) msgEl.innerHTML = options.message || options.subtitle || '';
+
+    // Tarjeta de detalles enriquecidos
+    if (detailsCard && detailsContent) {
+      if (options.profileName || options.candidateName || options.headline || options.template || options.details) {
+        detailsCard.style.display = 'block';
+        let detailsHtml = '';
+
+        if (options.profileName) {
+          detailsHtml += `<div style="margin-bottom:6px;"><span style="color:#94a3b8;">Perfil creado:</span> <strong style="color:#f8fafc;">${escapeHtml(options.profileName)}</strong></div>`;
+        }
+        if (options.candidateName) {
+          detailsHtml += `<div style="margin-bottom:6px;"><span style="color:#94a3b8;">Candidato:</span> <span style="color:#38bdf8; font-weight:600;">${escapeHtml(options.candidateName)}</span></div>`;
+        }
+        if (options.headline) {
+          detailsHtml += `<div style="margin-bottom:6px;"><span style="color:#94a3b8;">Titular:</span> <span style="color:#cbd5e1;">${escapeHtml(options.headline)}</span></div>`;
+        }
+        if (options.template) {
+          const tNames = {
+            tech: 'Tech & Desarrollador',
+            data: 'Industrial & Data Analyst',
+            ats: 'ATS Minimalista Clásico',
+            modern: 'Moderna Ejecutiva'
+          };
+          detailsHtml += `<div><span style="color:#94a3b8;">Plantilla activa:</span> <span class="dialog-chip">🎨 ${tNames[options.template] || options.template}</span></div>`;
+        }
+        if (options.details) {
+          detailsHtml += `<div style="color:#cbd5e1; margin-top:4px;">${options.details}</div>`;
+        }
+        detailsContent.innerHTML = detailsHtml;
+      } else {
+        detailsCard.style.display = 'none';
+        detailsContent.innerHTML = '';
+      }
+    }
+
+    // Botones de acción
+    if (cancelBtn) {
+      if (options.showCancel) {
+        cancelBtn.style.display = 'inline-flex';
+        cancelBtn.innerText = options.cancelText || 'Cancelar';
+      } else {
+        cancelBtn.style.display = 'none';
+      }
+    }
+
+    if (confirmBtn) {
+      confirmBtn.innerText = options.confirmText || 'Aceptar';
+      setTimeout(() => confirmBtn.focus(), 100);
+    }
+
+    modal.classList.add('active');
+  });
+}
+
+function closeAppDialog(result = true) {
+  const modal = document.getElementById('appDialogModal');
+  if (modal) modal.classList.remove('active');
+  if (currentDialogResolver) {
+    currentDialogResolver(result);
+    currentDialogResolver = null;
+  }
+}
+
+function showAppConfirm(title, message, options = {}) {
+  return showAppDialog({
+    title,
+    message,
+    type: options.type || 'warning',
+    icon: options.icon || '❓',
+    showCancel: true,
+    confirmText: options.confirmText || 'Aceptar',
+    cancelText: options.cancelText || 'Cancelar'
+  });
+}
+
+// Reemplazo del alert nativo del navegador por diálogo ejecutivo
+window.alert = function(msg) {
+  showAppDialog({
+    title: 'OpenCV Studio',
+    message: String(msg),
+    type: 'info',
+    icon: 'ℹ️',
+    confirmText: 'Entendido'
+  });
+};
 

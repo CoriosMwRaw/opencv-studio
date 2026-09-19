@@ -551,6 +551,37 @@
     </div>
   </div>
 
+  <!-- MODAL 6: Diálogo Profesional & Confirmaciones del Sistema (Reemplazo moderno de alert/confirm) -->
+  <div class="modal-backdrop" id="appDialogModal" style="z-index: 10000;">
+    <div class="modal-dialog app-dialog-box" style="max-width: 480px; text-align: center; padding: 26px 22px 20px 22px; border-radius: 16px; background: #0f172a; border: 1px solid rgba(56, 189, 248, 0.28); box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.85), 0 0 35px rgba(56, 189, 248, 0.15);">
+      <div id="appDialogIconWrapper" class="dialog-icon-wrapper success">
+        <span id="appDialogIcon" style="font-size: 32px;">✓</span>
+      </div>
+      
+      <h3 id="appDialogTitle" class="dialog-title" style="margin: 16px 0 6px 0; font-size: 19px; font-weight: 700; color: #ffffff;">
+        ¡Acción Completada!
+      </h3>
+      
+      <p id="appDialogMessage" class="dialog-message" style="font-size: 13.5px; color: #94a3b8; line-height: 1.5; margin: 0 0 16px 0;">
+        Mensaje del sistema
+      </p>
+
+      <!-- Tarjeta de Detalles Enriquecidos (para perfiles creados o resúmenes) -->
+      <div id="appDialogDetailsCard" style="display: none; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.15); border-radius: 10px; padding: 12px 16px; text-align: left; margin-bottom: 20px; font-size: 12.5px;">
+        <div id="appDialogDetailsContent"></div>
+      </div>
+
+      <div class="dialog-actions" style="display: flex; justify-content: center; gap: 10px; width: 100%;">
+        <button id="appDialogCancelBtn" class="app-btn app-btn-outline" style="display: none; padding: 10px 20px; font-size: 13px;" onclick="closeAppDialog(false)">
+          Cancelar
+        </button>
+        <button id="appDialogConfirmBtn" class="app-btn app-btn-primary" style="flex: 1; max-width: 280px; justify-content: center; padding: 11px 22px; font-size: 13.5px; font-weight: 600; border-radius: 8px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);" onclick="closeAppDialog(true)">
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Scripts de la Aplicación -->
   <script src="src/data/sampleProfiles.js"></script>
   <script src="src/data/bulletBank.js"></script>
