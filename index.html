@@ -33,31 +33,36 @@
     </div>
 
     <div class="topbar-actions">
-      <button class="app-btn app-btn-outline" onclick="openCvExtractorModal()" title="Importar o extraer datos desde tu CV existente en texto o archivo">
+      <button class="app-btn app-btn-outline" onclick="openCvExtractorModal()" title="Importar o extraer datos desde tu CV existente en texto o archivo" data-i18n="topbar.extract">
         📥 Extraer de CV
       </button>
 
-      <button class="app-btn app-btn-outline" onclick="openATSAnalyzer()">
+      <button class="app-btn app-btn-outline" onclick="openATSAnalyzer()" data-i18n="topbar.ats">
         ✨ Analizar ATS
       </button>
 
-      <button class="app-btn app-btn-outline" onclick="exportJSON()" title="Guardar respaldo en archivo JSON">
+      <button class="app-btn app-btn-outline" onclick="exportJSON()" title="Guardar respaldo en archivo JSON" data-i18n="topbar.backup">
         💾 Respaldar
       </button>
 
-      <button class="app-btn app-btn-outline" onclick="importJSON()" title="Cargar respaldo desde archivo JSON">
+      <button class="app-btn app-btn-outline" onclick="importJSON()" title="Cargar respaldo desde archivo JSON" data-i18n="topbar.load">
         📂 Cargar
       </button>
 
-      <button class="app-btn app-btn-primary" onclick="exportToPDF()">
+      <button class="app-btn app-btn-primary" onclick="exportToPDF()" data-i18n="topbar.pdf">
         🖨️ Exportar a PDF
       </button>
+
+      <div class="lang-selector-box" title="Idioma de la aplicación y plantillas / Language">
+        <button id="btnLangEs" class="lang-btn active" onclick="switchLanguage('es')">ES</button>
+        <button id="btnLangEn" class="lang-btn" onclick="switchLanguage('en')">EN</button>
+      </div>
 
       <button class="app-btn app-btn-outline app-btn-icon" id="btnToggleFullScreen" onclick="toggleFullScreenMode()" title="Alternar Pantalla Completa (F11)">
         ⛶
       </button>
 
-      <button class="app-btn app-btn-coffee" onclick="openSupportModal()" title="Apoyar el proyecto OpenCV Studio">
+      <button class="app-btn app-btn-coffee" onclick="openSupportModal()" title="Apoyar el proyecto OpenCV Studio" data-i18n="topbar.coffee">
         ☕ Invítame un café
       </button>
     </div>
@@ -69,11 +74,11 @@
     <!-- Panel Izquierdo: Formulario Editor -->
     <aside class="editor-pane">
       <div class="editor-header">
-        <span class="editor-title">📝 Editor de Información</span>
+        <span class="editor-title" data-i18n="editor.title">📝 Editor de Contenido</span>
         <div class="editor-tools-bar">
-          <button class="btn-link-mini" onclick="expandAllAccordions()">▼ Expandir</button>
+          <button class="btn-link-mini" onclick="expandAllAccordions()" data-i18n="editor.expandAll">▼ Expandir</button>
           <span style="color:#475569;">|</span>
-          <button class="btn-link-mini" onclick="collapseAllAccordions()">▲ Colapsar</button>
+          <button class="btn-link-mini" onclick="collapseAllAccordions()" data-i18n="editor.collapseAll">▲ Colapsar</button>
         </div>
       </div>
 
@@ -84,7 +89,7 @@
           <div class="acc-header">
             <div class="acc-title-left">
               <span class="acc-icon">👤</span>
-              <span>Datos Personales y Contacto</span>
+              <span data-i18n="acc.personal">Datos Personales y Contacto</span>
             </div>
             <span class="acc-arrow">▼</span>
           </div>
@@ -148,7 +153,7 @@
           <div class="acc-header">
             <div class="acc-title-left">
               <span class="acc-icon">📄</span>
-              <span>Perfil Profesional / Resumen</span>
+              <span data-i18n="acc.summary">Perfil / Resumen Profesional</span>
             </div>
             <span class="acc-arrow">▼</span>
           </div>
@@ -165,7 +170,7 @@
           <div class="acc-header">
             <div class="acc-title-left">
               <span class="acc-icon">📊</span>
-              <span>Métricas de Impacto / KPIs</span>
+              <span data-i18n="acc.kpis">Métricas de Impacto (KPIs Rápidos)</span>
             </div>
             <span class="acc-arrow">▼</span>
           </div>
@@ -186,7 +191,7 @@
           <div class="acc-header">
             <div class="acc-title-left">
               <span class="acc-icon">💼</span>
-              <span>Experiencia Laboral</span>
+              <span data-i18n="acc.experience">Experiencia Laboral</span>
             </div>
             <span class="acc-arrow">▼</span>
           </div>
@@ -201,7 +206,7 @@
           <div class="acc-header">
             <div class="acc-title-left">
               <span class="acc-icon">🚀</span>
-              <span>Proyectos Destacados</span>
+              <span data-i18n="acc.projects">Proyectos Técnicos Destacados</span>
             </div>
             <span class="acc-arrow">▼</span>
           </div>
@@ -216,7 +221,7 @@
           <div class="acc-header">
             <div class="acc-title-left">
               <span class="acc-icon">🎓</span>
-              <span>Educación y Formación</span>
+              <span data-i18n="acc.education">Formación Educativa</span>
             </div>
             <span class="acc-arrow">▼</span>
           </div>
@@ -231,7 +236,7 @@
           <div class="acc-header">
             <div class="acc-title-left">
               <span class="acc-icon">🛠️</span>
-              <span>Stack Técnico & Habilidades</span>
+              <span data-i18n="acc.skills">Habilidades Técnicas & Stack</span>
             </div>
             <span class="acc-arrow">▼</span>
           </div>
@@ -263,7 +268,7 @@
           <div class="acc-header">
             <div class="acc-title-left">
               <span class="acc-icon">📜</span>
-              <span>Certificaciones y Cursos</span>
+              <span data-i18n="acc.certifications">Certificaciones & Cursos</span>
             </div>
             <span class="acc-arrow">▼</span>
           </div>
@@ -292,12 +297,20 @@
         </div>
 
         <div class="toolbar-group">
-          <label style="font-size:12px; color:#cbd5e1; font-weight:600;">Color:</label>
+          <label style="font-size:12px; color:#cbd5e1; font-weight:600;" data-i18n="settings.theme">Color:</label>
           <select id="select_theme" class="form-select" style="padding: 4px 8px; font-size: 12.5px;">
             <option value="navy">Azul Ejecutivo / Tech</option>
             <option value="teal">Esmeralda Data / BI</option>
             <option value="indigo">Índigo Moderno</option>
             <option value="graphite">Grafito Minimalista</option>
+          </select>
+        </div>
+
+        <div class="toolbar-group">
+          <label style="font-size:12px; color:#cbd5e1; font-weight:600;" data-i18n="settings.lang">Idioma CV:</label>
+          <select id="select_cv_lang" class="form-select" style="padding: 4px 8px; font-size: 12.5px;">
+            <option value="es">🇲🇽 Español</option>
+            <option value="en">🇺🇸 English (ATS)</option>
           </select>
         </div>
 
@@ -326,7 +339,7 @@
     <div class="modal-dialog" style="max-width: 680px; max-height: 86vh;">
       <div class="modal-header">
         <div>
-          <h3 class="modal-title">💡 Banco de Frases de Impacto & Verbos de Acción</h3>
+          <h3 class="modal-title" data-i18n="bank.modalTitle">💡 Banco de Frases de Impacto & Verbos de Acción</h3>
           <div id="bulletBankTargetHeader" style="font-size:12px; color:#38bdf8; margin-top:3px; font-weight:500;">
             Seleccionando frase para tu experiencia
           </div>
@@ -363,7 +376,7 @@
   <div class="modal-backdrop" id="atsModal">
     <div class="modal-dialog">
       <div class="modal-header">
-        <h3 class="modal-title">✨ Diagnóstico de Compatibilidad ATS</h3>
+        <h3 class="modal-title" data-i18n="ats.title">✨ Diagnóstico de Compatibilidad ATS</h3>
         <button class="modal-close" onclick="closeModal('atsModal')">✕</button>
       </div>
       <div class="modal-body">
@@ -393,7 +406,7 @@
   <div class="modal-backdrop" id="profileManagerModal">
     <div class="modal-dialog">
       <div class="modal-header">
-        <h3 class="modal-title">⚙️ Administrar Perfiles de Currículum</h3>
+        <h3 class="modal-title" data-i18n="profiles.title">⚙️ Administrar Perfiles de Currículum</h3>
         <button class="modal-close" onclick="closeModal('profileManagerModal')">✕</button>
       </div>
       <div class="modal-body">
@@ -437,7 +450,7 @@
   <div class="modal-backdrop" id="supportModal">
     <div class="modal-dialog">
       <div class="modal-header">
-        <h3 class="modal-title">☕ Apoya el Proyecto OpenCV Studio</h3>
+        <h3 class="modal-title" data-i18n="coffee.title">☕ Apoya el Proyecto OpenCV Studio</h3>
         <button class="modal-close" onclick="closeModal('supportModal')">✕</button>
       </div>
       <div class="modal-body">
@@ -609,6 +622,7 @@
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- Scripts de la Aplicación -->
+  <script src="src/i18n.js"></script>
   <script src="src/data/sampleProfiles.js"></script>
   <script src="src/data/bulletBank.js"></script>
   <script src="src/cvParser.js"></script>

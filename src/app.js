@@ -30,6 +30,9 @@ const templates = {
 
 // Inicialización de la aplicación
 document.addEventListener('DOMContentLoaded', () => {
+  if (typeof applyTranslations === 'function') {
+    applyTranslations(currentLanguage);
+  }
   initProfileSelector();
   loadCurrentProfile();
   setupEventListeners();
@@ -57,7 +60,14 @@ function loadCurrentProfile() {
   currentProfile = storage.getActiveProfile();
 
   if (!currentProfile.settings) {
-    currentProfile.settings = { template: 'tech', colorTheme: 'navy', showPhoto: true, showKpis: true };
+    currentProfile.settings = { template: 'tech', colorTheme: 'navy', showPhoto: true, showKpis: true, cvLanguage: currentLanguage };
+  }
+  if (!currentProfile.settings.cvLanguage) {
+    currentProfile.settings.cvLanguage = (typeof currentLanguage !== 'undefined' ? currentLanguage : 'es');
+  }
+  const cvLangSelect = document.getElementById('select_cv_lang');
+  if (cvLangSelect) {
+    cvLangSelect.value = currentProfile.settings.cvLanguage;
   }
 
   // Normalizar experiencia para garantizar que exp.bullets siempre exista
@@ -141,7 +151,7 @@ function setupEventListeners() {
     persistAndRefresh();
   });
 
-  // Selectores de plantilla y tema
+  // Selectores de plantilla, tema e idioma
   document.getElementById('select_template').addEventListener('change', (e) => {
     currentProfile.settings.template = e.target.value;
     persistAndRefresh();
@@ -151,6 +161,13 @@ function setupEventListeners() {
     currentProfile.settings.colorTheme = e.target.value;
     persistAndRefresh();
   });
+
+  const cvLangEl = document.getElementById('select_cv_lang');
+  if (cvLangEl) {
+    cvLangEl.addEventListener('change', (e) => {
+      changeCvLanguage(e.target.value);
+    });
+  }
 
   // Carga de Foto
   document.getElementById('photoFileInput').addEventListener('change', handlePhotoUpload);
@@ -802,11 +819,14 @@ function renderBulletBankList() {
 
   const q = currentBulletBankFilterText;
   const selectedCat = currentBulletBankCategory;
+  const lang = (currentProfile?.settings?.cvLanguage) || (typeof currentLanguage !== 'undefined' ? currentLanguage : 'es');
+  const activeBank = (typeof getBulletBank === 'function') ? getBulletBank(lang) : bulletBank;
+  const isEn = lang === 'en';
   let totalMatches = 0;
 
   // Renderizar categorías de frases
-  if (typeof bulletBank !== 'undefined') {
-    Object.entries(bulletBank).forEach(([catKey, catData]) => {
+  if (activeBank) {
+    Object.entries(activeBank).forEach(([catKey, catData]) => {
       if (catKey === 'verbos') return;
       if (selectedCat !== 'all' && selectedCat !== catKey) return;
 
@@ -862,7 +882,7 @@ function renderBulletBankList() {
 
     // Renderizar verbos de acción
     if (selectedCat === 'all' || selectedCat === 'verbos') {
-      const verbs = bulletBank.verbos || [];
+      const verbs = activeBank.verbos || [];
       const matchedVerbs = verbs.filter(v => !q || v.toLowerCase().includes(q));
 
       if (matchedVerbs.length > 0) {
@@ -876,7 +896,7 @@ function renderBulletBankList() {
 
         verbsBox.innerHTML = `
           <div style="font-size:12.5px; font-weight:700; color:#38bdf8; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-            <span>⚡</span> Verbos de Acción Recomendados para ATS (clic para iniciar una frase):
+            <span>⚡</span> ${isEn ? 'Recommended Action Verbs for ATS (click to start phrase):' : 'Verbos de Acción Recomendados para ATS (clic para iniciar frase):'}
           </div>
           <div id="verbsChipContainer" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
         `;
@@ -886,9 +906,12 @@ function renderBulletBankList() {
           const chip = document.createElement('span');
           chip.className = 'verb-chip';
           chip.innerHTML = `<strong>+</strong> ${escapeHtml(verb)}`;
-          chip.title = `Iniciar logro con "${verb}"`;
+          chip.title = `${isEn ? 'Start achievement with' : 'Iniciar logro con'} "${verb}"`;
           chip.addEventListener('click', () => {
-            insertBulletToActiveExp(`${verb} [acción realizada], logrando [resultado medible o beneficio obtenido].`);
+            const templateVerb = isEn
+              ? `${verb} [action executed], achieving [quantifiable metric or outcome].`
+              : `${verb} [acción realizada], logrando [resultado medible o beneficio obtenido].`;
+            insertBulletToActiveExp(templateVerb);
           });
           chipCont.appendChild(chip);
         });
@@ -936,7 +959,8 @@ function insertBulletToActiveExp(phrase) {
 
 function openATSAnalyzer() {
   const modal = document.getElementById('atsModal');
-  const result = ATSAnalyzer.analyze(currentProfile);
+  const lang = currentProfile?.settings?.cvLanguage || (typeof currentLanguage !== 'undefined' ? currentLanguage : 'es');
+  const result = ATSAnalyzer.analyze(currentProfile, lang);
 
   document.getElementById('atsScoreText').textContent = `${result.score}%`;
   document.getElementById('atsScoreBadge').textContent = result.rating;
@@ -1608,3 +1632,45 @@ window.alert = function(msg) {
 };
 
 
+
+
+// ==========================================================================
+// CONTROL DE IDIOMAS (ESPAÑOL / INGLÉS)
+// ==========================================================================
+
+function switchLanguage(lang) {
+  if (typeof setLanguage === 'function') {
+    setLanguage(lang);
+  }
+  if (currentProfile && currentProfile.settings) {
+    currentProfile.settings.cvLanguage = lang;
+    const select = document.getElementById('select_cv_lang');
+    if (select) select.value = lang;
+    persistAndRefresh();
+  }
+  renderExperienceEditor();
+  renderProjectsEditor();
+  renderEducationEditor();
+  renderKpisEditor();
+  renderCertificationsEditor();
+
+  const isEn = lang === 'en';
+  showToastNotification(
+    isEn ? 'Language: English' : 'Idioma: Español',
+    'success',
+    isEn ? 'Interface, ATS analyzer & resume headings set to English.' : 'Interfaz, analizador ATS y encabezados de CV en Español.'
+  );
+}
+
+function changeCvLanguage(lang) {
+  if (!currentProfile) return;
+  if (!currentProfile.settings) currentProfile.settings = {};
+  currentProfile.settings.cvLanguage = lang;
+  persistAndRefresh();
+  const isEn = lang === 'en';
+  showToastNotification(
+    isEn ? 'Resume Headings: English' : 'Encabezados de CV: Español',
+    'info',
+    isEn ? 'Templates will render standard English ATS headings.' : 'Las plantillas mostrarán encabezados en Español.'
+  );
+}

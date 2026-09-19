@@ -4,6 +4,17 @@ const DataTemplate = {
   name: 'Industrial & Data Analyst (Operaciones / BI)',
   description: 'Destaca indicadores de desempeño, métricas de confiabilidad (MTTR/MTBF), optimización de costos y automatización.',
   render(data) {
+    const lang = data.settings?.cvLanguage || (typeof currentLanguage !== 'undefined' ? currentLanguage : 'es');
+    const isEn = lang === 'en';
+    const L = (typeof getCVLabels === 'function') ? getCVLabels(lang) : {};
+
+    const summaryTitle = L.summary || (isEn ? 'Professional Summary' : 'Resumen Profesional');
+    const expTitle = L.experience || (isEn ? 'Professional Experience' : 'Experiencia Laboral');
+    const projTitle = L.projects || (isEn ? 'Key Projects' : 'Proyectos de Optimización');
+    const eduTitle = L.education || (isEn ? 'Education' : 'Formación Académica');
+    const certTitle = L.certifications || (isEn ? 'Certifications' : 'Certificaciones');
+    const skillsTitle = L.skills || (isEn ? 'Core Competencies & Tools' : 'Habilidades Clave & Herramientas');
+
     const p = data.personal || {};
     const photoHtml = (data.settings && data.settings.showPhoto && p.photoUrl)
       ? `<div class="cv-photo-wrapper"><img src="${p.photoUrl}" class="cv-photo-img" alt="Foto"></div>`
@@ -47,8 +58,8 @@ const DataTemplate = {
           <div class="data-header-content">
             ${photoHtml}
             <div>
-              <h1 class="cv-name">${p.fullName || 'TU NOMBRE'}</h1>
-              <div class="cv-headline">${p.headline || 'ANALISTA DE DATOS & OPERACIONES'}</div>
+              <h1 class="cv-name">${p.fullName || (isEn ? 'YOUR NAME' : 'TU NOMBRE')}</h1>
+              <div class="cv-headline">${p.headline || (isEn ? 'DATA ANALYST & OPERATIONS' : 'ANALISTA DE DATOS & OPERACIONES')}</div>
               <div class="contact-inline">
                 ${p.phone ? `<span>📞 ${p.phone}</span>` : ''}
                 ${p.email ? `<span>✉️ ${p.email}</span>` : ''}
@@ -61,69 +72,64 @@ const DataTemplate = {
 
         ${kpisHtml}
 
-        <div class="data-body-container">
-          <div class="data-main-col">
+        <div class="data-body-grid">
+          <main class="data-main">
             ${data.summary ? `
-              <section class="data-section">
-                <h3 class="data-title">Perfil Ejecutivo & Operativo</h3>
-                <p class="data-summary-text">${data.summary}</p>
+              <section class="data-sec">
+                <h3 class="data-sec-title">${summaryTitle}</h3>
+                <p class="summary-text">${data.summary}</p>
               </section>
             ` : ''}
 
-            <section class="data-section">
-              <h3 class="data-title">Experiencia en Planta & Proyectos</h3>
+            <section class="data-sec">
+              <h3 class="data-sec-title">${expTitle}</h3>
               ${expHtml}
             </section>
 
             ${(data.projects || []).length ? `
-              <section class="data-section">
-                <h3 class="data-title">Sistemas & Herramientas Desarrolladas</h3>
-                <div class="projects-grid">
-                  ${data.projects.map(pr => `
-                    <div class="project-card">
-                      <div class="project-card-header">
-                        <strong class="project-title">${pr.title}</strong>
-                        <span class="project-tech">${pr.tech}</span>
-                      </div>
-                      <p class="project-desc">${pr.description}</p>
-                    </div>
-                  `).join('')}
-                </div>
-              </section>
-            ` : ''}
-          </div>
-
-          <div class="data-side-col">
-            <section class="data-section">
-              <h3 class="data-title">Competencias Técnicas</h3>
-              <div class="skill-badges-container">
-                ${allSkills.map(sk => `<span class="tag-pill highlight">${sk}</span>`).join('')}
-              </div>
-            </section>
-
-            <section class="data-section">
-              <h3 class="data-title">Formación Académica</h3>
-              ${(data.education || []).map(ed => `
-                <div class="edu-item">
-                  <div class="edu-degree">${ed.degree}</div>
-                  <div class="edu-school">${ed.school}</div>
-                  <div class="edu-meta">${ed.period}</div>
-                </div>
-              `).join('')}
-            </section>
-
-            ${(data.certifications || []).length ? `
-              <section class="data-section">
-                <h3 class="data-title">Certificaciones</h3>
-                ${data.certifications.map(c => `
-                  <div class="cert-item">
-                    <div class="cert-title">${c.title}</div>
-                    <div class="cert-meta">${c.issuer} (${c.year})</div>
+              <section class="data-sec">
+                <h3 class="data-sec-title">${projTitle}</h3>
+                ${data.projects.map(pr => `
+                  <div class="proj-industrial-item">
+                    <strong>${pr.title}</strong> ${pr.tech ? `<small>(${pr.tech})</small>` : ''}
+                    <p>${pr.description}</p>
                   </div>
                 `).join('')}
               </section>
             ` : ''}
-          </div>
+          </main>
+
+          <aside class="data-aside">
+            <div class="data-sec">
+              <h3 class="data-sec-title">${skillsTitle}</h3>
+              <div class="data-chips">
+                ${allSkills.map(sk => `<span class="data-chip">${sk}</span>`).join('')}
+              </div>
+            </div>
+
+            <div class="data-sec">
+              <h3 class="data-sec-title">${eduTitle}</h3>
+              ${(data.education || []).map(ed => `
+                <div class="data-edu-item">
+                  <strong>${ed.degree}</strong>
+                  <div>${ed.school}</div>
+                  <small>${ed.period} ${ed.details ? `• ${ed.details}` : ''}</small>
+                </div>
+              `).join('')}
+            </div>
+
+            ${(data.certifications || []).length ? `
+              <div class="data-sec">
+                <h3 class="data-sec-title">${certTitle}</h3>
+                ${data.certifications.map(c => `
+                  <div class="data-edu-item">
+                    <strong>${c.title}</strong>
+                    <div>${c.issuer} (${c.year})</div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+          </aside>
         </div>
       </div>
     `;

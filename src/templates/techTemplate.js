@@ -4,6 +4,21 @@ const TechTemplate = {
   name: 'Tech & Desarrollador (Sistemas / Software)',
   description: 'Optimizada para desarrolladores, programadores e ingenieros de software, destacando proyectos, GitHub y stack técnico.',
   render(data) {
+    const lang = data.settings?.cvLanguage || (typeof currentLanguage !== 'undefined' ? currentLanguage : 'es');
+    const isEn = lang === 'en';
+    const L = (typeof getCVLabels === 'function') ? getCVLabels(lang) : {};
+
+    const stackTitle = L.techStack || (isEn ? 'Technical Stack' : 'Stack Técnico');
+    const langLabel = L.languages || (isEn ? 'Languages' : 'Lenguajes');
+    const dbLabel = L.databases || (isEn ? 'Databases' : 'Bases de Datos');
+    const toolsLabel = L.tools || (isEn ? 'Tools & Frameworks' : 'Herramientas & BI');
+    const softLabel = L.softSkills || (isEn ? 'Core Competencies' : 'Habilidades Blandas');
+    const eduTitle = L.education || (isEn ? 'Education' : 'Educación');
+    const certTitle = L.certifications || (isEn ? 'Certifications' : 'Certificaciones');
+    const summaryTitle = L.summary || (isEn ? 'Professional Summary' : 'Perfil Profesional');
+    const expTitle = L.experience || (isEn ? 'Professional Experience' : 'Experiencia Laboral');
+    const projTitle = L.projects || (isEn ? 'Featured Projects' : 'Proyectos Clave');
+
     const p = data.personal || {};
     const photoHtml = (data.settings && data.settings.showPhoto && p.photoUrl)
       ? `<div class="cv-photo-wrapper"><img src="${p.photoUrl}" class="cv-photo-img" alt="Foto"></div>`
@@ -69,8 +84,8 @@ const TechTemplate = {
         <header class="cv-header">
           ${photoHtml}
           <div class="header-main">
-            <h1 class="cv-name">${p.fullName || 'TU NOMBRE'}</h1>
-            <div class="cv-headline">${p.headline || 'TITULAR PROFESIONAL'}</div>
+            <h1 class="cv-name">${p.fullName || (isEn ? 'YOUR FULL NAME' : 'TU NOMBRE')}</h1>
+            <div class="cv-headline">${p.headline || (isEn ? 'PROFESSIONAL TITLE' : 'TITULAR PROFESIONAL')}</div>
             ${badgesHtml ? `<div class="header-badges">${badgesHtml}</div>` : ''}
           </div>
         </header>
@@ -88,43 +103,43 @@ const TechTemplate = {
         <div class="cv-layout">
           <aside class="sidebar">
             <div class="sec-group">
-              <h3 class="sec-title">Stack Técnico</h3>
-              ${(s.languages || []).length ? `<div class="side-group-title">Lenguajes</div><div class="skill-badges-container">${renderTags(s.languages, true)}</div>` : ''}
-              ${(s.databases || []).length ? `<div class="side-group-title">Bases de Datos</div><div class="skill-badges-container">${renderTags(s.databases, true)}</div>` : ''}
-              ${(s.tools || []).length ? `<div class="side-group-title">Herramientas & BI</div><div class="skill-badges-container">${renderTags(s.tools)}</div>` : ''}
-              ${(s.softSkills || []).length ? `<div class="side-group-title">Habilidades Blandas</div><div class="skill-badges-container">${renderTags(s.softSkills)}</div>` : ''}
+              <h3 class="sec-title">${stackTitle}</h3>
+              ${(s.languages || []).length ? `<div class="side-group-title">${langLabel}</div><div class="skill-badges-container">${renderTags(s.languages, true)}</div>` : ''}
+              ${(s.databases || []).length ? `<div class="side-group-title">${dbLabel}</div><div class="skill-badges-container">${renderTags(s.databases, true)}</div>` : ''}
+              ${(s.tools || []).length ? `<div class="side-group-title">${toolsLabel}</div><div class="skill-badges-container">${renderTags(s.tools)}</div>` : ''}
+              ${(s.softSkills || []).length ? `<div class="side-group-title">${softLabel}</div><div class="skill-badges-container">${renderTags(s.softSkills)}</div>` : ''}
             </div>
 
             <div class="sec-group">
-              <h3 class="sec-title">Educación</h3>
+              <h3 class="sec-title">${eduTitle}</h3>
               ${eduHtml}
             </div>
 
-            ${certsHtml ? `
+            ${(data.certifications || []).length ? `
               <div class="sec-group">
-                <h3 class="sec-title">Certificaciones</h3>
+                <h3 class="sec-title">${certTitle}</h3>
                 ${certsHtml}
               </div>
             ` : ''}
           </aside>
 
-          <main class="main-content">
+          <main class="main-col">
             ${data.summary ? `
-              <section class="cv-section">
-                <h3 class="sec-title">Perfil Profesional</h3>
-                <div class="summary-box">${data.summary}</div>
+              <section class="main-sec">
+                <h3 class="main-sec-title">${summaryTitle}</h3>
+                <p class="summary-text">${data.summary}</p>
               </section>
             ` : ''}
 
-            <section class="cv-section">
-              <h3 class="sec-title">Experiencia Laboral</h3>
-              <div class="timeline">${expHtml}</div>
+            <section class="main-sec">
+              <h3 class="main-sec-title">${expTitle}</h3>
+              ${expHtml}
             </section>
 
-            ${projectsHtml ? `
-              <section class="cv-section">
-                <h3 class="sec-title">Proyectos Destacados</h3>
-                <div class="projects-grid">${projectsHtml}</div>
+            ${(data.projects || []).length ? `
+              <section class="main-sec">
+                <h3 class="main-sec-title">${projTitle}</h3>
+                ${projectsHtml}
               </section>
             ` : ''}
           </main>
