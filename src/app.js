@@ -892,23 +892,89 @@ async function copyClabeToClipboard() {
 // -------------------------------------------------------------
 
 let pendingExtractedProfile = null;
+let pdfStatusUnsubscribe = null;
+
+function setExtractorStatus(message, icon = '🔄', progress = null, isError = false) {
+  const alertEl = document.getElementById('extractorStatusAlert');
+  const msgEl = document.getElementById('extractorStatusMsg');
+  const iconEl = document.getElementById('extractorStatusIcon');
+  const barCont = document.getElementById('extractorProgressBarContainer');
+  const barEl = document.getElementById('extractorProgressBar');
+
+  if (!alertEl || !msgEl) return;
+
+  if (!message) {
+    alertEl.style.display = 'none';
+    return;
+  }
+
+  alertEl.style.display = 'flex';
+  msgEl.innerText = message;
+  if (iconEl) iconEl.innerText = icon;
+
+  if (isError) {
+    alertEl.style.background = 'rgba(239, 68, 68, 0.12)';
+    alertEl.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+    alertEl.style.color = '#f87171';
+  } else {
+    alertEl.style.background = 'rgba(56, 189, 248, 0.12)';
+    alertEl.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+    alertEl.style.color = '#38bdf8';
+  }
+
+  if (barCont && barEl) {
+    if (progress !== null && progress >= 0) {
+      barCont.style.display = 'block';
+      barEl.style.width = Math.min(100, Math.max(0, progress)) + '%';
+    } else {
+      barCont.style.display = 'none';
+    }
+  }
+}
 
 function openCvExtractorModal() {
   document.getElementById('cvExtractorModal').classList.add('active');
   document.getElementById('rawCvInput').value = '';
   document.getElementById('extractorPreviewSection').style.display = 'none';
+  setExtractorStatus('');
   pendingExtractedProfile = null;
+
+  // Registrar listener de progreso si no está suscrito
+  if (window.electronAPI && window.electronAPI.onPdfExtractionStatus && !pdfStatusUnsubscribe) {
+    pdfStatusUnsubscribe = window.electronAPI.onPdfExtractionStatus((data) => {
+      if (data.status === 'ocr_progress') {
+        setExtractorStatus(data.message, '⚡', data.progress);
+      } else if (data.status === 'done') {
+        setExtractorStatus(data.message, '✓', 100);
+      } else {
+        setExtractorStatus(data.message, '🔍');
+      }
+    });
+  }
 }
 
 async function extractDirectlyFromPdfDialog() {
   if (window.electronAPI && window.electronAPI.selectAndExtractPdf) {
-    const res = await window.electronAPI.selectAndExtractPdf();
-    if (res.canceled) return;
-    if (res.success && res.text) {
-      document.getElementById('rawCvInput').value = res.text;
-      analyzePastedCvText();
-    } else {
-      alert('Error al leer el archivo PDF: ' + (res.error || 'No se pudo extraer texto del PDF.'));
+    setExtractorStatus('Abriendo selector de archivos...', '📂');
+    try {
+      const res = await window.electronAPI.selectAndExtractPdf();
+      if (res.canceled) {
+        setExtractorStatus('');
+        return;
+      }
+      if (res.success && res.text) {
+        document.getElementById('rawCvInput').value = res.text;
+        if (res.method === 'ocr') {
+          setExtractorStatus('⚡ Documento vectorial/escaneado procesado con OCR offline con éxito.', '✓');
+        } else {
+          setExtractorStatus('✓ Texto digital extraído al instante.', '✓');
+        }
+        analyzePastedCvText();
+      } else {
+        setExtractorStatus('Error al leer el archivo PDF: ' + (res.error || 'Archivo ilegible.'), '❌', null, true);
+      }
+    } catch (err) {
+      setExtractorStatus('Error inesperado: ' + err.message, '❌', null, true);
     }
   } else {
     document.getElementById('cvTextFileInput').click();
@@ -921,12 +987,22 @@ async function handleCvFileSelect(event) {
 
   if (file.name.toLowerCase().endsWith('.pdf')) {
     if (window.electronAPI && window.electronAPI.extractPdfText && file.path) {
-      const res = await window.electronAPI.extractPdfText(file.path);
-      if (res.success && res.text) {
-        document.getElementById('rawCvInput').value = res.text;
-        analyzePastedCvText();
-      } else {
-        alert('Error al extraer texto del PDF: ' + (res.error || 'Archivo ilegible.'));
+      setExtractorStatus(`Leyendo ${file.name}...`, '🔍');
+      try {
+        const res = await window.electronAPI.extractPdfText(file.path);
+        if (res.success && res.text) {
+          document.getElementById('rawCvInput').value = res.text;
+          if (res.method === 'ocr') {
+            setExtractorStatus('⚡ Documento escaneado procesado con OCR offline con éxito.', '✓');
+          } else {
+            setExtractorStatus('✓ Texto extraído al instante.', '✓');
+          }
+          analyzePastedCvText();
+        } else {
+          setExtractorStatus('Error al extraer texto del PDF: ' + (res.error || 'Archivo ilegible.'), '❌', null, true);
+        }
+      } catch (err) {
+        setExtractorStatus('Error: ' + err.message, '❌', null, true);
       }
       return;
     } else {
@@ -935,10 +1011,12 @@ async function handleCvFileSelect(event) {
     }
   }
 
+  setExtractorStatus(`Cargando ${file.name}...`, '📄');
   const reader = new FileReader();
   reader.onload = (e) => {
     const content = e.target.result;
     document.getElementById('rawCvInput').value = content;
+    setExtractorStatus('✓ Archivo cargado correctamente.', '✓');
     analyzePastedCvText();
   };
   reader.readAsText(file);
@@ -989,8 +1067,13 @@ function analyzePastedCvText() {
     const eduCount = parsed.education?.length || 0;
     tagsContainer.innerHTML += `<span class="preview-tag">🎓 <strong>Educación:</strong> ${eduCount} detectada(s)</span>`;
 
-    const skillsCount = parsed.skills?.[0]?.items?.length || 0;
+    const skillsCount = (parsed.skills || []).reduce((acc, cat) => acc + (cat.items?.length || 0), 0);
     tagsContainer.innerHTML += `<span class="preview-tag">🛠️ <strong>Habilidades:</strong> ${skillsCount} extraída(s)</span>`;
+
+    const projCount = parsed.projects?.length || 0;
+    if (projCount > 0) {
+      tagsContainer.innerHTML += `<span class="preview-tag">🚀 <strong>Proyectos:</strong> ${projCount} detectado(s)</span>`;
+    }
 
     const langCount = parsed.languages?.length || 0;
     tagsContainer.innerHTML += `<span class="preview-tag">🌐 <strong>Idiomas:</strong> ${langCount} detectado(s)</span>`;

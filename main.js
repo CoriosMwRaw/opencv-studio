@@ -125,14 +125,110 @@ ipcMain.handle('load-json-dialog', async () => {
   }
 });
 
+// Función auxiliar: Extracción híbrida de PDF (Texto digital + OCR offline de respaldo con Tesseract.js)
+async function extractPdfTextWithOcrFallback(filePath) {
+  const { PDFParse } = require('pdf-parse');
+  const buffer = fs.readFileSync(filePath);
+  const parser = new PDFParse(new Uint8Array(buffer));
+  const res = await parser.getText();
+  let text = (res.text || res || '').trim();
+
+  // Limpiar separadores de página residuales como "-- 1 of 3 --"
+  const strippedText = text.replace(/--\s*\d+\s*of\s*\d+\s*--/gi, '').trim();
+
+  // Si tiene texto digital real (al menos 30 caracteres válidos), retornamos directo al instante
+  if (strippedText.length >= 30) {
+    return { success: true, text: text, filePath, method: 'direct' };
+  }
+
+  // Si el texto digital está vacío o aplanado, activamos OCR inteligente
+  console.log(`[OCR] PDF sin capa de texto digital (${strippedText.length} caracteres). Aplicando OCR con Tesseract.js...`);
+  
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send('pdf-extraction-status', {
+      status: 'rendering',
+      message: 'PDF aplanado o escaneado detectado. Renderizando páginas para OCR...'
+    });
+  }
+
+  try {
+    const screenshots = await parser.getScreenshot({ scale: 2.0 });
+    if (!screenshots || !screenshots.pages || screenshots.pages.length === 0) {
+      return { success: true, text: text, filePath, method: 'direct' };
+    }
+
+    const tesseract = require('tesseract.js');
+    const tessdataPath = path.join(__dirname, 'assets', 'tessdata');
+
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('pdf-extraction-status', {
+        status: 'starting_ocr',
+        totalPages: screenshots.pages.length,
+        message: `Iniciando motor OCR offline en español para ${screenshots.pages.length} página(s)...`
+      });
+    }
+
+    const worker = await tesseract.createWorker('spa', 1, {
+      langPath: tessdataPath,
+      gzip: false,
+      logger: m => {
+        if (m.status === 'recognizing text' && mainWindow && !mainWindow.isDestroyed()) {
+          const pct = Math.round((m.progress || 0) * 100);
+          mainWindow.webContents.send('pdf-extraction-status', {
+            status: 'ocr_progress',
+            progress: pct,
+            message: `Escaneando texto óptico: ${pct}%...`
+          });
+        }
+      }
+    });
+
+    let ocrResultText = '';
+    for (let i = 0; i < screenshots.pages.length; i++) {
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.webContents.send('pdf-extraction-status', {
+          status: 'page',
+          page: i + 1,
+          totalPages: screenshots.pages.length,
+          message: `Escaneando página ${i + 1} de ${screenshots.pages.length}...`
+        });
+      }
+      const pageRes = await worker.recognize(screenshots.pages[i].data);
+      ocrResultText += `\n--- PÁGINA ${i + 1} ---\n` + (pageRes.data.text || '');
+    }
+
+    await worker.terminate();
+
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('pdf-extraction-status', {
+        status: 'done',
+        method: 'ocr',
+        message: '¡Escaneo OCR completado con éxito!'
+      });
+    }
+
+    return {
+      success: true,
+      text: ocrResultText.trim(),
+      filePath,
+      method: 'ocr'
+    };
+  } catch (ocrErr) {
+    console.error('Error durante el OCR fallback:', ocrErr);
+    return {
+      success: true,
+      text: text,
+      filePath,
+      method: 'direct',
+      warning: 'OCR no completado: ' + ocrErr.message
+    };
+  }
+}
+
 // IPC: Extraer texto de un archivo PDF específico
 ipcMain.handle('extract-pdf-text', async (event, filePath) => {
   try {
-    const { PDFParse } = require('pdf-parse');
-    const buffer = fs.readFileSync(filePath);
-    const parser = new PDFParse(new Uint8Array(buffer));
-    const res = await parser.getText();
-    return { success: true, text: res.text || res };
+    return await extractPdfTextWithOcrFallback(filePath);
   } catch (err) {
     console.error('Error al extraer PDF:', err);
     return { success: false, error: err.message };
@@ -150,11 +246,7 @@ ipcMain.handle('select-and-extract-pdf', async () => {
 
     if (!filePaths || filePaths.length === 0) return { success: false, canceled: true };
 
-    const { PDFParse } = require('pdf-parse');
-    const buffer = fs.readFileSync(filePaths[0]);
-    const parser = new PDFParse(new Uint8Array(buffer));
-    const res = await parser.getText();
-    return { success: true, text: res.text || res, filePath: filePaths[0] };
+    return await extractPdfTextWithOcrFallback(filePaths[0]);
   } catch (err) {
     console.error('Error en select-and-extract-pdf:', err);
     return { success: false, error: err.message };
