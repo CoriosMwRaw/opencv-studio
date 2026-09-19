@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <defs>
+    <linearGradient id="c1_bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+    <linearGradient id="c1_cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="c1_blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <filter id="c1_glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <!-- Hexágono exterior -->
+  <polygon points="32,4 58,19 58,45 32,60 6,45 6,19" fill="url(#c1_bg)" stroke="url(#c1_cyan)" stroke-width="2.5"/>
+  <polygon points="32,9 53,21 53,43 32,55 11,43 11,21" stroke="rgba(56,189,248,0.25)" stroke-width="1.2"/>
+  <!-- Hoja CV en el centro -->
+  <path d="M22 17C22 15.8954 22.8954 15 24 15H36L44 23V47C44 48.1046 43.1046 49 42 49H24C22.8954 49 22 48.1046 22 47V17Z" fill="#ffffff"/>
+  <path d="M36 15V22C36 22.5523 36.4477 23 37 23H44L36 15Z" fill="#94a3b8"/>
+  <!-- Líneas de datos -->
+  <rect x="26" y="27" width="14" height="2.5" rx="1.2" fill="#2563eb"/>
+  <rect x="26" y="32" width="11" height="2" rx="1" fill="#64748b"/>
+  <rect x="26" y="36.5" width="13" height="2" rx="1" fill="#94a3b8"/>
+  <!-- Nodo de apertura óptica cyan (OpenCV) -->
+  <circle cx="41" cy="41" r="7" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+  <circle cx="41" cy="41" r="3.5" fill="#38bdf8" filter="url(#c1_glow)"/>
+</svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <defs>
+    <linearGradient id="c4_bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#022c22"/>
+    </linearGradient>
+    <linearGradient id="c4_doc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="c4_teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <filter id="c4_glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <!-- Base redondeada squircle -->
+  <rect x="5" y="5" width="54" height="54" rx="14" fill="url(#c4_bg)" stroke="url(#c4_teal)" stroke-width="2.2"/>
+  <!-- Hoja de perfil 1 (fondo isométrica) -->
+  <rect x="18" y="14" width="28" height="36" rx="4" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.2"/>
+  <!-- Hoja principal -->
+  <path d="M14 18C14 16.3431 15.3431 15 17 15H33L42 24V47C42 48.6569 40.6569 50 39 50H17C15.3431 50 14 48.6569 14 47V18Z" fill="url(#c4_doc)"/>
+  <path d="M33 15V23C33 23.5523 33.4477 24 34 24H42L33 15Z" fill="#10b981"/>
+  <!-- Foto de perfil avatar miniatura -->
+  <circle cx="21" cy="24" r="3.5" fill="#38bdf8"/>
+  <rect x="27" y="22" width="11" height="2" rx="1" fill="#0f172a"/>
+  <rect x="27" y="25" width="8" height="1.5" rx="0.75" fill="#64748b"/>
+  <!-- Barras de habilidades -->
+  <rect x="18" y="32" width="18" height="2" rx="1" fill="#10b981"/>
+  <rect x="18" y="36" width="14" height="2" rx="1" fill="#06b6d4"/>
+  <rect x="18" y="40" width="16" height="2" rx="1" fill="#3b82f6"/>
+  <!-- Checkmark de compatibilidad ATS en esquina -->
+  <circle cx="43" cy="43" r="7" fill="#10b981" filter="url(#c4_glow)"/>
+  <path d="M40 43L42 45L46 41" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <defs>
+    <linearGradient id="c2_shield" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="c2_gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="40%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#eab308"/>
+    </linearGradient>
+    <linearGradient id="c2_cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <filter id="c2_glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <!-- Escudo -->
+  <path d="M32 5L54 13V31C54 44.5 44.5 56 32 60C19.5 56 10 44.5 10 31V13L32 5Z" fill="url(#c2_shield)" stroke="url(#c2_cyan)" stroke-width="2.5"/>
+  <path d="M32 9L50 16V31C50 42 42.5 52 32 55.5C21.5 52 14 42 14 31V16L32 9Z" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <!-- Líneas de currículum -->
+  <rect x="20" y="22" width="24" height="3" rx="1.5" fill="#38bdf8"/>
+  <rect x="20" y="28" width="16" height="2.5" rx="1.2" fill="#94a3b8"/>
+  <rect x="20" y="33.5" width="18" height="2.5" rx="1.2" fill="#64748b"/>
+  <!-- Rayo de Impacto Dorado Centrado -->
+  <path d="M37 17L26 33H33L29 48L42 30H34L37 17Z" fill="url(#c2_gold)" filter="url(#c2_glow)"/>
+</svg>
