@@ -53,12 +53,36 @@ body {
 
 .brand-logo {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   color: #ffffff;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  user-select: none;
+}
+
+.brand-logo-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.45));
+  transition: transform 0.2s ease;
+}
+
+.brand-logo:hover .brand-logo-img {
+  transform: scale(1.05) rotate(-2deg);
+}
+
+.brand-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.brand-highlight {
+  color: #38bdf8;
+  font-weight: 800;
 }
 
 .brand-badge {
@@ -197,10 +221,14 @@ body {
 .editor-scroll {
   flex-grow: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 16px 18px 40px 18px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Acordeón de Secciones */
@@ -287,11 +315,15 @@ body {
   text-decoration: underline;
 }
 
-/* Inputs y Formularios */
+/* Inputs y Formularios — Con prevención estricta de desbordamiento */
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .form-label {
@@ -301,9 +333,18 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .form-input, .form-textarea, .form-select {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   background: #1e293b;
   border: 1px solid #475569;
   color: #ffffff;
@@ -323,12 +364,16 @@ body {
 .form-textarea {
   min-height: 75px;
   line-height: 1.45;
+  resize: vertical;
 }
 
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 10px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .form-row-3 {
@@ -382,6 +427,10 @@ body {
   flex-direction: column;
   gap: 10px;
   margin-bottom: 10px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .item-box-header {
@@ -389,6 +438,8 @@ body {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  gap: 8px;
+  width: 100%;
 }
 
 .item-box-title {
@@ -398,12 +449,21 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
 }
 
 .item-box-body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .item-box.collapsed .item-box-body {

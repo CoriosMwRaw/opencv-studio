@@ -253,7 +253,7 @@ function renderExperienceEditor() {
     const defaultRole = t('exp.newRole', lang);
     const roleLabel = t('exp.role', lang);
     const companyLabel = t('exp.company', lang);
-    const periodLabel = t('exp.period', lang) + (isEn ? ' (e.g. Aug 2023 - Present)' : ' (ej. Ago 2023 - Presente)');
+    const periodLabel = t('exp.period', lang);
     const locationLabel = t('exp.location', lang);
     const bulletsLabel = t('exp.bullets', lang);
     const phraseBankBtn = t('btn.phraseBank', lang);
@@ -1708,7 +1708,7 @@ function switchLanguage(lang) {
   showToastNotification(
     isEn ? 'Language: English' : 'Idioma: Español',
     'success',
-    isEn ? 'Interface, ATS analyzer & resume headings set to English.' : 'Interfaz, analizador ATS y encabezados de CV en Español.'
+    isEn ? 'Interface and resume headings set to English.' : 'Interfaz y encabezados de CV en Español.'
   );
 }
 

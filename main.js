@@ -12,6 +12,7 @@ function createWindow() {
     minHeight: 700,
     title: 'OpenCV Studio - Creador de CV Profesional y Libre',
     backgroundColor: '#0f172a',
+    icon: path.join(__dirname, 'assets', 'icon.png'),
     show: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
