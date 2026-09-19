@@ -123,3 +123,10 @@ const ATSTemplate = {
     `;
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.ATSTemplate = ATSTemplate;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = ATSTemplate;
+}

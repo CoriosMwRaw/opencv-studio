@@ -22,13 +22,13 @@
     <div class="brand-section">
       <div class="brand-logo">
         <span>⚡ OpenCV Studio</span>
-        <span class="brand-badge">100% Libre & Offline</span>
+        <span class="brand-badge" data-i18n="topbar.badge">100% Libre & Offline</span>
       </div>
 
       <div class="profile-selector-box">
-        <label for="profileSelect" style="font-size: 11px; color: var(--text-muted);">Perfil:</label>
+        <label for="profileSelect" style="font-size: 11px; color: var(--text-muted);" data-i18n="topbar.profile">Perfil:</label>
         <select id="profileSelect" class="profile-select"></select>
-        <button class="app-btn app-btn-outline" style="padding: 2px 7px; font-size: 11px;" onclick="openProfileManager()" title="Administrar Perfiles">⚙️</button>
+        <button class="app-btn app-btn-outline" style="padding: 2px 7px; font-size: 11px;" onclick="openProfileManager()" title="Administrar Perfiles" data-i18n-title="topbar.profileMgr">⚙️</button>
       </div>
     </div>
 
@@ -58,7 +58,7 @@
         <button id="btnLangEn" class="lang-btn" onclick="switchLanguage('en')">EN</button>
       </div>
 
-      <button class="app-btn app-btn-outline app-btn-icon" id="btnToggleFullScreen" onclick="toggleFullScreenMode()" title="Alternar Pantalla Completa (F11)">
+      <button class="app-btn app-btn-outline app-btn-icon" id="btnToggleFullScreen" onclick="toggleFullScreenMode()" title="Alternar Pantalla Completa (F11)" data-i18n-title="topbar.fullscreen">
         ⛶
       </button>
 
@@ -95,54 +95,54 @@
           </div>
           <div class="acc-body">
             <div class="form-group">
-              <label class="form-label">Nombre Completo</label>
-              <input type="text" id="in_fullName" class="form-input" placeholder="Nombre completo">
+              <label class="form-label" data-i18n="field.fullName">Nombre Completo</label>
+              <input type="text" id="in_fullName" class="form-input" placeholder="Nombre completo" data-i18n-placeholder="field.fullNamePlaceholder">
             </div>
 
             <div class="form-group">
-              <label class="form-label">Titular Profesional / Especialidad</label>
-              <input type="text" id="in_headline" class="form-input" placeholder="ej. Ingeniero de Software Junior">
+              <label class="form-label" data-i18n="field.headline">Titular Profesional / Especialidad</label>
+              <input type="text" id="in_headline" class="form-input" placeholder="ej. Ingeniero de Software Junior" data-i18n-placeholder="field.headlinePlaceholder">
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label">Teléfono / WhatsApp</label>
-                <input type="text" id="in_phone" class="form-input" placeholder="ej. (55) 1234 5678">
+                <label class="form-label" data-i18n="field.phone">Teléfono / WhatsApp</label>
+                <input type="text" id="in_phone" class="form-input" placeholder="ej. (55) 1234 5678" data-i18n-placeholder="field.phonePlaceholder">
               </div>
               <div class="form-group">
-                <label class="form-label">Correo Electrónico</label>
-                <input type="email" id="in_email" class="form-input" placeholder="ej. correo@ejemplo.com">
+                <label class="form-label" data-i18n="field.email">Correo Electrónico</label>
+                <input type="email" id="in_email" class="form-input" placeholder="ej. correo@ejemplo.com" data-i18n-placeholder="field.emailPlaceholder">
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label">Ubicación (Ciudad, Estado)</label>
-                <input type="text" id="in_location" class="form-input" placeholder="ej. Guadalajara, Jal., México">
+                <label class="form-label" data-i18n="field.location">Ubicación (Ciudad, Estado / País)</label>
+                <input type="text" id="in_location" class="form-input" placeholder="ej. Guadalajara, Jal., México" data-i18n-placeholder="field.locationPlaceholder">
               </div>
               <div class="form-group">
-                <label class="form-label">LinkedIn (URL o usuario)</label>
-                <input type="text" id="in_linkedin" class="form-input" placeholder="https://linkedin.com/in/...">
+                <label class="form-label" data-i18n="field.linkedin">LinkedIn (URL o usuario)</label>
+                <input type="text" id="in_linkedin" class="form-input" placeholder="https://linkedin.com/in/..." data-i18n-placeholder="field.linkedinPlaceholder">
               </div>
             </div>
 
             <div class="form-group">
-              <label class="form-label">GitHub / Portafolio Web</label>
-              <input type="text" id="in_github" class="form-input" placeholder="https://github.com/...">
+              <label class="form-label" data-i18n="field.github">GitHub / Portafolio Web</label>
+              <input type="text" id="in_github" class="form-input" placeholder="https://github.com/..." data-i18n-placeholder="field.githubPlaceholder">
             </div>
 
             <div class="form-group">
-              <label class="form-label">Insignias / Destacados Rápidos (uno por línea)</label>
-              <textarea id="in_badges" class="form-textarea" rows="3" placeholder="ej. 🎓 7mo Semestre de Ingeniería en Sistemas&#10;💻 Desarrollo Web Fullstack & APIs&#10;🚀 Proyectos de Alto Impacto"></textarea>
+              <label class="form-label" data-i18n="field.badges">Insignias / Destacados Rápidos (uno por línea)</label>
+              <textarea id="in_badges" class="form-textarea" rows="3" placeholder="ej. 🎓 7mo Semestre de Ingeniería en Sistemas&#10;💻 Desarrollo Web Fullstack & APIs&#10;🚀 Proyectos de Alto Impacto" data-i18n-placeholder="field.badgesPlaceholder"></textarea>
             </div>
 
             <div class="photo-uploader-card">
               <div style="display:flex; align-items:center; gap:8px;">
-                <button class="app-btn app-btn-outline" onclick="triggerPhotoUpload()">📷 Subir / Cambiar Foto</button>
-                <span style="font-size:11px; color:#94a3b8;">(Auto-comprimida a 320px)</span>
+                <button class="app-btn app-btn-outline" onclick="triggerPhotoUpload()" data-i18n="field.uploadPhoto">📷 Subir / Cambiar Foto</button>
+                <span style="font-size:11px; color:#94a3b8;" data-i18n="field.photoCompressed">(Auto-comprimida a 320px)</span>
               </div>
               <label style="font-size:12px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;">
-                <input type="checkbox" id="opt_showPhoto"> Mostrar Foto en CV
+                <input type="checkbox" id="opt_showPhoto"> <span data-i18n="field.showPhoto">Mostrar Foto en CV</span>
               </label>
             </div>
           </div>
@@ -159,8 +159,8 @@
           </div>
           <div class="acc-body">
             <div class="form-group">
-              <label class="form-label">Resumen Ejecutivo (35 - 85 palabras)</label>
-              <textarea id="in_summary" class="form-textarea" rows="4" placeholder="Escribe un breve resumen de tu trayectoria y competencias clave..."></textarea>
+              <label class="form-label" data-i18n="field.summary">Resumen Ejecutivo (35 - 85 palabras recomendadas para ATS)</label>
+              <textarea id="in_summary" class="form-textarea" rows="4" placeholder="Escribe un breve resumen de tu trayectoria y competencias clave..." data-i18n-placeholder="field.summaryPlaceholder"></textarea>
             </div>
           </div>
         </div>
@@ -176,13 +176,13 @@
           </div>
           <div class="acc-body">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <span style="font-size:11px; color:#94a3b8;">Cifras destacadas (proyectos, horas, rendimiento)</span>
+              <span style="font-size:11px; color:#94a3b8;" data-i18n="field.kpiSubtitle">Cifras destacadas (proyectos, horas, rendimiento)</span>
               <label style="font-size:12px; color:#cbd5e1; cursor:pointer;">
-                <input type="checkbox" id="opt_showKpis"> Activar Barra de KPIs
+                <input type="checkbox" id="opt_showKpis"> <span data-i18n="field.showKpis">Activar Barra de KPIs</span>
               </label>
             </div>
             <div id="kpiList"></div>
-            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center; margin-top:6px;" onclick="addKpi()">+ Añadir Métrica (KPI)</button>
+            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center; margin-top:6px;" onclick="addKpi()" data-i18n="btn.addKpi">+ Añadir Métrica (KPI)</button>
           </div>
         </div>
 
@@ -197,7 +197,7 @@
           </div>
           <div class="acc-body">
             <div id="experienceList"></div>
-            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center;" onclick="addExperience()">+ Añadir Puesto Laboral</button>
+            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center;" onclick="addExperience()" data-i18n="btn.addExperience">+ Añadir Puesto Laboral</button>
           </div>
         </div>
 
@@ -212,7 +212,7 @@
           </div>
           <div class="acc-body">
             <div id="projectsList"></div>
-            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center;" onclick="addProject()">+ Añadir Proyecto</button>
+            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center;" onclick="addProject()" data-i18n="btn.addProject">+ Añadir Proyecto</button>
           </div>
         </div>
 
@@ -227,7 +227,7 @@
           </div>
           <div class="acc-body">
             <div id="educationList"></div>
-            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center;" onclick="addEducation()">+ Añadir Formación</button>
+            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center;" onclick="addEducation()" data-i18n="btn.addEducation">+ Añadir Formación</button>
           </div>
         </div>
 
@@ -242,23 +242,23 @@
           </div>
           <div class="acc-body">
             <div class="form-group">
-              <label class="form-label">Lenguajes de Programación (separados por coma)</label>
-              <input type="text" id="in_skills_lang" class="form-input" oninput="syncSkills()" placeholder="Java, Python, C++, JavaScript, PHP">
+              <label class="form-label" data-i18n="skills.languages">Lenguajes de Programación (separados por coma)</label>
+              <input type="text" id="in_skills_lang" class="form-input" oninput="syncSkills()" placeholder="Java, Python, C++, JavaScript, PHP" data-i18n-placeholder="skills.languagesPlaceholder">
             </div>
 
             <div class="form-group">
-              <label class="form-label">Bases de Datos & SQL (separados por coma)</label>
-              <input type="text" id="in_skills_db" class="form-input" oninput="syncSkills()" placeholder="MySQL, SQL Server, PostgreSQL, SQLite">
+              <label class="form-label" data-i18n="skills.databases">Bases de Datos & SQL (separados por coma)</label>
+              <input type="text" id="in_skills_db" class="form-input" oninput="syncSkills()" placeholder="MySQL, SQL Server, PostgreSQL, SQLite" data-i18n-placeholder="skills.databasesPlaceholder">
             </div>
 
             <div class="form-group">
-              <label class="form-label">Herramientas, BI & Sistemas (separados por coma)</label>
-              <input type="text" id="in_skills_tools" class="form-input" oninput="syncSkills()" placeholder="Git, Docker, Linux, Excel Avanzado, Power BI">
+              <label class="form-label" data-i18n="skills.tools">Herramientas, BI & Sistemas (separados por coma)</label>
+              <input type="text" id="in_skills_tools" class="form-input" oninput="syncSkills()" placeholder="Git, Docker, Linux, Excel Avanzado, Power BI" data-i18n-placeholder="skills.toolsPlaceholder">
             </div>
 
             <div class="form-group">
-              <label class="form-label">Habilidades Blandas / Metodologías</label>
-              <input type="text" id="in_skills_soft" class="form-input" oninput="syncSkills()" placeholder="Scrum, Aprendizaje Autodidacta, Trabajo en Equipo">
+              <label class="form-label" data-i18n="skills.soft">Habilidades Blandas / Metodologías</label>
+              <input type="text" id="in_skills_soft" class="form-input" oninput="syncSkills()" placeholder="Scrum, Aprendizaje Autodidacta, Trabajo en Equipo" data-i18n-placeholder="skills.softPlaceholder">
             </div>
           </div>
         </div>
@@ -274,7 +274,7 @@
           </div>
           <div class="acc-body">
             <div id="certList"></div>
-            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center;" onclick="addCert()">+ Añadir Certificación</button>
+            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center;" onclick="addCert()" data-i18n="btn.addCert">+ Añadir Certificación</button>
           </div>
         </div>
 
@@ -287,22 +287,22 @@
       <!-- Barra de Configuración de la Plantilla -->
       <div class="preview-toolbar">
         <div class="toolbar-group">
-          <label style="font-size:12px; color:#cbd5e1; font-weight:600;">Plantilla:</label>
+          <label style="font-size:12px; color:#cbd5e1; font-weight:600;" data-i18n="settings.template">Plantilla:</label>
           <select id="select_template" class="form-select" style="padding: 4px 8px; font-size: 12.5px;">
-            <option value="tech">💻 Tech & Desarrollador (Sistemas)</option>
-            <option value="data">📊 Industrial & Data Analyst (Operaciones)</option>
-            <option value="ats">🤖 ATS Minimalista Clásico (Filtros)</option>
-            <option value="modern">👔 Moderna Ejecutiva (Doble Columna)</option>
+            <option value="tech" data-i18n="tmpl.tech">💻 Tech & Desarrollador (Sistemas)</option>
+            <option value="data" data-i18n="tmpl.data">📊 Industrial & Data Analyst (Operaciones)</option>
+            <option value="ats" data-i18n="tmpl.ats">🤖 ATS Minimalista Clásico (Filtros)</option>
+            <option value="modern" data-i18n="tmpl.modern">👔 Moderna Ejecutiva (Doble Columna)</option>
           </select>
         </div>
 
         <div class="toolbar-group">
           <label style="font-size:12px; color:#cbd5e1; font-weight:600;" data-i18n="settings.theme">Color:</label>
           <select id="select_theme" class="form-select" style="padding: 4px 8px; font-size: 12.5px;">
-            <option value="navy">Azul Ejecutivo / Tech</option>
-            <option value="teal">Esmeralda Data / BI</option>
-            <option value="indigo">Índigo Moderno</option>
-            <option value="graphite">Grafito Minimalista</option>
+            <option value="navy" data-i18n="theme.navy">Azul Ejecutivo / Tech</option>
+            <option value="teal" data-i18n="theme.teal">Esmeralda Data / BI</option>
+            <option value="indigo" data-i18n="theme.indigo">Índigo Moderno</option>
+            <option value="graphite" data-i18n="theme.graphite">Grafito Minimalista</option>
           </select>
         </div>
 
@@ -319,7 +319,7 @@
           <button class="app-btn app-btn-outline app-btn-icon" onclick="changeZoom(-0.1)">−</button>
           <span id="zoomValText" style="font-size:12px; color:#cbd5e1; font-weight:600; min-width:38px; text-align:center;">100%</span>
           <button class="app-btn app-btn-outline app-btn-icon" onclick="changeZoom(0.1)">+</button>
-          <button class="app-btn app-btn-outline" style="padding: 4px 8px; font-size: 11px;" onclick="changeZoom('fit')">Ajustar</button>
+          <button class="app-btn app-btn-outline" style="padding: 4px 8px; font-size: 11px;" onclick="changeZoom('fit')" data-i18n="preview.fit">Ajustar</button>
         </div>
       </div>
 
@@ -340,7 +340,7 @@
       <div class="modal-header">
         <div>
           <h3 class="modal-title" data-i18n="bank.modalTitle">💡 Banco de Frases de Impacto & Verbos de Acción</h3>
-          <div id="bulletBankTargetHeader" style="font-size:12px; color:#38bdf8; margin-top:3px; font-weight:500;">
+          <div id="bulletBankTargetHeader" style="font-size:12px; color:#38bdf8; margin-top:3px; font-weight:500;" data-i18n="bank.targetSubtitle">
             Seleccionando frase para tu experiencia
           </div>
         </div>
@@ -348,26 +348,26 @@
       </div>
       <div class="modal-body" style="gap: 12px;">
         <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-          <input type="text" id="bulletBankSearch" placeholder="🔍 Buscar frases clave (ej. SQL, automatización, dashboards, Scrum, Kaizen)..." class="form-input" style="flex:1; min-width:240px; font-size:12.5px;" oninput="filterBulletBank(this.value)">
+          <input type="text" id="bulletBankSearch" placeholder="🔍 Buscar frases clave (ej. SQL, automatización, dashboards, Scrum, Kaizen)..." class="form-input" style="flex:1; min-width:240px; font-size:12.5px;" oninput="filterBulletBank(this.value)" data-i18n-placeholder="bank.searchPlaceholder">
           <select id="bulletBankCategoryFilter" class="form-select" style="width:auto; font-size:12px;" onchange="filterBulletBankCategory(this.value)">
-            <option value="all">Todas las categorías</option>
-            <option value="desarrollo">Desarrollo de Software</option>
-            <option value="datos">Análisis de Datos & BI</option>
-            <option value="mantenimiento">Mantenimiento Industrial</option>
-            <option value="redes">Redes & Soporte TI</option>
-            <option value="estudiantes">Proyectos Universitarios</option>
-            <option value="verbos">⚡ Verbos de Acción ATS</option>
+            <option value="all" data-i18n="bank.allCategories">Todas las categorías</option>
+            <option value="desarrollo" data-i18n="bank.catDev">Desarrollo de Software</option>
+            <option value="datos" data-i18n="bank.catData">Análisis de Datos & BI</option>
+            <option value="mantenimiento" data-i18n="bank.catMaint">Mantenimiento Industrial</option>
+            <option value="redes" data-i18n="bank.catNet">Redes & Soporte TI</option>
+            <option value="estudiantes" data-i18n="bank.catStudent">Proyectos Universitarios</option>
+            <option value="verbos" data-i18n="bank.catVerbs">⚡ Verbos de Acción ATS</option>
           </select>
         </div>
 
-        <p style="font-size:12px; color:#94a3b8; margin:0;">
+        <p style="font-size:12px; color:#94a3b8; margin:0;" data-i18n="bank.instructions">
           Haz clic en cualquier frase o verbo para insertarlo directamente en los logros de este puesto de trabajo.
         </p>
 
         <div id="bulletBankContent" style="display:flex; flex-direction:column; gap:14px;"></div>
       </div>
       <div class="modal-footer">
-        <button class="app-btn app-btn-outline" onclick="closeModal('bulletBankModal')">Cerrar</button>
+        <button class="app-btn app-btn-outline" onclick="closeModal('bulletBankModal')" data-i18n="bank.close">Cerrar</button>
       </div>
     </div>
   </div>
@@ -385,10 +385,10 @@
             0%
           </div>
           <div>
-            <div style="display:inline-block; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:700; color:#ffffff; margin-bottom:4px;" id="atsScoreBadge">
+            <div style="display:inline-block; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:700; color:#ffffff; margin-bottom:4px;" id="atsScoreBadge" data-i18n="ats.evaluating">
               Evaluando...
             </div>
-            <p style="font-size:12px; color:#94a3b8;">
+            <p style="font-size:12px; color:#94a3b8;" data-i18n="ats.desc">
               Puntuación estimada de aprobación ante filtros automáticos de recursos humanos (ATS) y reclutadores técnicos.
             </p>
           </div>
@@ -397,7 +397,7 @@
         <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;" id="atsChecksList"></div>
       </div>
       <div class="modal-footer">
-        <button class="app-btn app-btn-primary" onclick="closeModal('atsModal')">Entendido</button>
+        <button class="app-btn app-btn-primary" onclick="closeModal('atsModal')" data-i18n="ats.understand">Entendido</button>
       </div>
     </div>
   </div>
@@ -410,7 +410,7 @@
         <button class="modal-close" onclick="closeModal('profileManagerModal')">✕</button>
       </div>
       <div class="modal-body">
-        <p style="font-size:12.5px; color:#94a3b8;">
+        <p style="font-size:12.5px; color:#94a3b8;" data-i18n="profiles.desc">
           Gestiona perfiles para diferentes compañeros o crea variantes especializadas para cada postulación.
         </p>
 
@@ -419,29 +419,29 @@
 
         <!-- Formulario para Crear Nuevo Perfil -->
         <div style="background:#0f172a; border:1px solid #334155; padding:14px; border-radius:8px; margin-top:10px;">
-          <h4 style="color:#60a5fa; font-size:13px; margin-bottom:8px;">➕ Crear Nuevo Perfil</h4>
+          <h4 style="color:#60a5fa; font-size:13px; margin-bottom:8px;" data-i18n="profiles.createNew">➕ Crear Nuevo Perfil</h4>
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">Nombre del Perfil o Compañero</label>
-              <input type="text" id="newProfileNameInput" class="form-input" placeholder="ej. María González (Prácticas)">
+              <label class="form-label" data-i18n="profiles.nameInput">Nombre del Perfil o Compañero</label>
+              <input type="text" id="newProfileNameInput" class="form-input" placeholder="ej. María González (Prácticas)" data-i18n-placeholder="profiles.namePlaceholder">
             </div>
             <div class="form-group">
-              <label class="form-label">Plantilla Inicial</label>
+              <label class="form-label" data-i18n="profiles.initialTemplate">Plantilla Inicial</label>
               <select id="newProfileTemplateSelect" class="form-select">
-                <option value="tech">Tech & Desarrollador</option>
-                <option value="data">Industrial & Data Analyst</option>
-                <option value="ats">ATS Minimalista Clásico</option>
-                <option value="modern">Moderna Ejecutiva</option>
+                <option value="tech" data-i18n="tmpl.tech">Tech & Desarrollador</option>
+                <option value="data" data-i18n="tmpl.data">Industrial & Data Analyst</option>
+                <option value="ats" data-i18n="tmpl.ats">ATS Minimalista Clásico</option>
+                <option value="modern" data-i18n="tmpl.modern">Moderna Ejecutiva</option>
               </select>
             </div>
           </div>
-          <button class="app-btn app-btn-primary" style="margin-top:10px; width:100%; justify-content:center;" onclick="createNewProfileFromModal()">
+          <button class="app-btn app-btn-primary" style="margin-top:10px; width:100%; justify-content:center;" onclick="createNewProfileFromModal()" data-i18n="profiles.createBtn">
             Crear y Abrir Perfil
           </button>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="app-btn app-btn-outline" onclick="closeModal('profileManagerModal')">Cerrar</button>
+        <button class="app-btn app-btn-outline" onclick="closeModal('profileManagerModal')" data-i18n="profiles.close">Cerrar</button>
       </div>
     </div>
   </div>
@@ -458,8 +458,8 @@
           <div class="donation-hero">
             <div class="donation-hero-icon">☕</div>
             <div class="donation-hero-text">
-              <h4>100% Libre, Offline y Gratuito de por vida</h4>
-              <p>
+              <h4 data-i18n="coffee.heroTitle">100% Libre, Offline y Gratuito de por vida</h4>
+              <p data-i18n="coffee.heroDesc">
                 OpenCV Studio nació para que tú y tus compañeros nunca tengan que pagar suscripciones abusivas por crear y descargar su CV. Si esta herramienta te ayudó a conseguir empleo o te ahorró tiempo, ¡tu apoyo voluntario permite seguir manteniéndola y mejorándola!
               </p>
             </div>
@@ -468,14 +468,14 @@
           <!-- Opción 1: Buy Me a Coffee -->
           <div class="donation-option-card">
             <div class="donation-option-header">
-              <span class="donation-option-title">💛 Donación Digital Internacional</span>
-              <span style="font-size:11px; color:#94a3b8;">Tarjeta / PayPal</span>
+              <span class="donation-option-title" data-i18n="coffee.buyMeTitle">💛 Donación Digital Internacional</span>
+              <span style="font-size:11px; color:#94a3b8;" data-i18n="coffee.paymentMethods">Tarjeta / PayPal</span>
             </div>
-            <p style="font-size:12px; color:#cbd5e1; margin:0;">
+            <p style="font-size:12px; color:#cbd5e1; margin:0;" data-i18n="coffee.buyMeDesc">
               Invítame un café directamente a través de Buy Me a Coffee de forma rápida y segura:
             </p>
             <button class="bmc-action-btn" onclick="openBuyMeACoffee()">
-              <span>☕ Donar un café en BuyMeACoffee.com</span>
+              <span data-i18n="coffee.buyMeBtn">☕ Donar un café en BuyMeACoffee.com</span>
               <span style="font-size:13px; font-weight:bold;">↗</span>
             </button>
           </div>
@@ -483,27 +483,27 @@
           <!-- Opción 2: Transferencia SPEI México (Nu) -->
           <div class="donation-option-card">
             <div class="donation-option-header">
-              <span class="donation-option-title">🏦 Transferencia Directa SPEI (México)</span>
-              <span style="font-size:11px; color:#a7f3d0; background:#065f46; padding:2px 7px; border-radius:4px;">Sin comisiones</span>
+              <span class="donation-option-title" data-i18n="coffee.clabeTitle">🏦 Transferencia Directa SPEI (México)</span>
+              <span style="font-size:11px; color:#a7f3d0; background:#065f46; padding:2px 7px; border-radius:4px;" data-i18n="coffee.noFees">Sin comisiones</span>
             </div>
-            <p style="font-size:12px; color:#cbd5e1; margin:0;">
+            <p style="font-size:12px; color:#cbd5e1; margin:0;" data-i18n="coffee.clabeDesc">
               Si estás en México, puedes aportar mediante transferencia directa desde cualquier aplicación bancaria:
             </p>
             <div style="font-size:11.5px; color:#94a3b8; display:flex; flex-direction:column; gap:3px;">
-              <div><strong>Banco:</strong> Nu México (Nu)</div>
-              <div><strong>Beneficiario:</strong> CoriosMwRaw</div>
+              <div><strong data-i18n="coffee.bankLabel">Banco:</strong> Nu México (Nu)</div>
+              <div><strong data-i18n="coffee.beneficiaryLabel">Beneficiario:</strong> CoriosMwRaw</div>
             </div>
             <div class="clabe-display-box">
               <span class="clabe-number" id="clabeText">638180010128388591</span>
               <button class="btn-copy-clabe" id="btnCopyClabe" onclick="copyClabeToClipboard()">
-                <span>📋 Copiar CLABE</span>
+                <span data-i18n="coffee.copyBtn">📋 Copiar CLABE</span>
               </button>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="app-btn app-btn-outline" onclick="closeModal('supportModal')">Cerrar</button>
+        <button class="app-btn app-btn-outline" onclick="closeModal('supportModal')" data-i18n="coffee.close">Cerrar</button>
       </div>
     </div>
   </div>
@@ -512,35 +512,35 @@
   <div class="modal-backdrop" id="cvExtractorModal">
     <div class="modal-dialog" style="max-width: 680px;">
       <div class="modal-header">
-        <h3 class="modal-title">📥 Extraer Información de CV Existente</h3>
+        <h3 class="modal-title" data-i18n="extractor.title">📥 Extraer Información de CV Existente</h3>
         <button class="modal-close" onclick="closeModal('cvExtractorModal')">✕</button>
       </div>
       <div class="modal-body">
-        <p style="font-size:12.5px; color:#94a3b8; margin:0;">
+        <p style="font-size:12.5px; color:#94a3b8; margin:0;" data-i18n="extractor.subtitle">
           ¿Ya tienes tu currículum en PDF, Word o LinkedIn? No empieces desde cero: sube tu PDF directamente, o pega el texto y nuestro analizador inteligente organizará tu información en un nuevo perfil de OpenCV Studio.
         </p>
 
         <!-- Selección de Archivo o Pegado -->
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
-          <label style="font-size:12px; font-weight:600; color:#e2e8f0;">Pega el texto o carga tu archivo:</label>
+          <label style="font-size:12px; font-weight:600; color:#e2e8f0;" data-i18n="extractor.pastePrompt">Pega el texto o carga tu archivo:</label>
           <div style="display:flex; gap:6px;">
-            <button class="app-btn app-btn-primary" style="font-size:11.5px; padding:4px 10px;" onclick="extractDirectlyFromPdfDialog()" title="Seleccionar y extraer directamente desde un archivo PDF">
+            <button class="app-btn app-btn-primary" style="font-size:11.5px; padding:4px 10px;" onclick="extractDirectlyFromPdfDialog()" title="Seleccionar y extraer directamente desde un archivo PDF" data-i18n="extractor.btnPdf">
               📄 Cargar CV en PDF
             </button>
             <input type="file" id="cvTextFileInput" accept=".pdf,.txt,.json,.md" style="display:none;" onchange="handleCvFileSelect(event)">
-            <button class="app-btn app-btn-outline" style="font-size:11.5px; padding:4px 9px;" onclick="document.getElementById('cvTextFileInput').click()" title="Cargar archivo de texto plano o JSON">
+            <button class="app-btn app-btn-outline" style="font-size:11.5px; padding:4px 9px;" onclick="document.getElementById('cvTextFileInput').click()" title="Cargar archivo de texto plano o JSON" data-i18n="extractor.btnOther">
               📁 Otro (.txt / .json)
             </button>
           </div>
         </div>
 
-        <textarea id="rawCvInput" class="extractor-paste-box" placeholder="Selecciona todo el texto de tu CV actual (Ctrl+A y luego Ctrl+C en tu PDF o Word) y pégalo aquí con Ctrl+V..."></textarea>
+        <textarea id="rawCvInput" class="extractor-paste-box" placeholder="Selecciona todo el texto de tu CV actual (Ctrl+A y luego Ctrl+C en tu PDF o Word) y pégalo aquí con Ctrl+V..." data-i18n-placeholder="extractor.pastePlaceholder"></textarea>
 
         <div style="display:flex; gap:10px;">
-          <button class="app-btn app-btn-primary" style="flex:1; justify-content:center;" onclick="analyzePastedCvText()">
+          <button class="app-btn app-btn-primary" style="flex:1; justify-content:center;" onclick="analyzePastedCvText()" data-i18n="extractor.btnProcess">
             ⚡ Analizar y Detectar Campos
           </button>
-          <button class="app-btn app-btn-outline" onclick="document.getElementById('rawCvInput').value = ''; document.getElementById('extractorPreviewSection').style.display = 'none'; document.getElementById('extractorStatusAlert').style.display = 'none';">
+          <button class="app-btn app-btn-outline" onclick="document.getElementById('rawCvInput').value = ''; document.getElementById('extractorPreviewSection').style.display = 'none'; document.getElementById('extractorStatusAlert').style.display = 'none';" data-i18n="extractor.btnClear">
             Limpiar
           </button>
         </div>
@@ -556,38 +556,38 @@
 
         <!-- Sección de Vista Previa de Detección -->
         <div id="extractorPreviewSection" style="display:none; flex-direction:column; gap:10px; margin-top:6px;">
-          <h4 style="font-size:12.5px; color:#38bdf8; margin:0;">✨ Resumen de Información Detectada:</h4>
+          <h4 style="font-size:12.5px; color:#38bdf8; margin:0;" data-i18n="extractor.summaryTitle">✨ Resumen de Información Detectada:</h4>
           
           <div class="extractor-preview-box" id="extractorPreviewBox"></div>
 
           <div class="form-row" style="margin-top:4px;">
             <div class="form-group">
-              <label class="form-label">Nombre del Perfil a Crear</label>
-              <input type="text" id="extractedProfileName" class="form-input" placeholder="Nombre para este perfil">
+              <label class="form-label" data-i18n="extractor.nameLabel">Nombre del Perfil a Crear</label>
+              <input type="text" id="extractedProfileName" class="form-input" placeholder="Nombre para este perfil" data-i18n-placeholder="extractor.namePlaceholder">
             </div>
             <div class="form-group">
-              <label class="form-label">Plantilla Deseada</label>
+              <label class="form-label" data-i18n="extractor.templateLabel">Plantilla Deseada</label>
               <select id="extractedProfileTemplate" class="form-select">
-                <option value="tech">Tech & Desarrollador</option>
-                <option value="data">Industrial & Data Analyst</option>
-                <option value="ats">ATS Minimalista Clásico</option>
-                <option value="modern">Moderna Ejecutiva</option>
+                <option value="tech" data-i18n="tmpl.tech">Tech & Desarrollador</option>
+                <option value="data" data-i18n="tmpl.data">Industrial & Data Analyst</option>
+                <option value="ats" data-i18n="tmpl.ats">ATS Minimalista Clásico</option>
+                <option value="modern" data-i18n="tmpl.modern">Moderna Ejecutiva</option>
               </select>
             </div>
           </div>
 
-          <button class="app-btn app-btn-primary" style="width:100%; justify-content:center; padding:10px;" onclick="confirmExtractedProfile()">
+          <button class="app-btn app-btn-primary" style="width:100%; justify-content:center; padding:10px;" onclick="confirmExtractedProfile()" data-i18n="extractor.saveBtn">
             ✅ Crear y Abrir este Perfil en el Editor
           </button>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="app-btn app-btn-outline" onclick="closeModal('cvExtractorModal')">Cerrar</button>
+        <button class="app-btn app-btn-outline" onclick="closeModal('cvExtractorModal')" data-i18n="extractor.close">Cerrar</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL 6: Diálogo Profesional & Confirmaciones del Sistema (Reemplazo moderno de alert/confirm) -->
+  <!-- MODAL 6: Diálogo Profesional & Confirmaciones del Sistema -->
   <div class="modal-backdrop" id="appDialogModal" style="z-index: 10000;">
     <div class="modal-dialog app-dialog-box" style="max-width: 480px; text-align: center; padding: 26px 22px 20px 22px; border-radius: 16px; background: #0f172a; border: 1px solid rgba(56, 189, 248, 0.28); box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.85), 0 0 35px rgba(56, 189, 248, 0.15);">
       <div id="appDialogIconWrapper" class="dialog-icon-wrapper success">
@@ -602,16 +602,16 @@
         Mensaje del sistema
       </p>
 
-      <!-- Tarjeta de Detalles Enriquecidos (para perfiles creados o resúmenes) -->
+      <!-- Tarjeta de Detalles Enriquecidos -->
       <div id="appDialogDetailsCard" style="display: none; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.15); border-radius: 10px; padding: 12px 16px; text-align: left; margin-bottom: 20px; font-size: 12.5px;">
         <div id="appDialogDetailsContent"></div>
       </div>
 
       <div class="dialog-actions" style="display: flex; justify-content: center; gap: 10px; width: 100%;">
-        <button id="appDialogCancelBtn" class="app-btn app-btn-outline" style="display: none; padding: 10px 20px; font-size: 13px;" onclick="closeAppDialog(false)">
+        <button id="appDialogCancelBtn" class="app-btn app-btn-outline" style="display: none; padding: 10px 20px; font-size: 13px;" onclick="closeAppDialog(false)" data-i18n="dialog.cancel">
           Cancelar
         </button>
-        <button id="appDialogConfirmBtn" class="app-btn app-btn-primary" style="flex: 1; max-width: 280px; justify-content: center; padding: 11px 22px; font-size: 13.5px; font-weight: 600; border-radius: 8px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);" onclick="closeAppDialog(true)">
+        <button id="appDialogConfirmBtn" class="app-btn app-btn-primary" style="flex: 1; max-width: 280px; justify-content: center; padding: 11px 22px; font-size: 13.5px; font-weight: 600; border-radius: 8px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);" onclick="closeAppDialog(true)" data-i18n="dialog.ok">
           Entendido
         </button>
       </div>

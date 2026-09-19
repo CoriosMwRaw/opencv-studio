@@ -135,3 +135,10 @@ const DataTemplate = {
     `;
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.DataTemplate = DataTemplate;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = DataTemplate;
+}

@@ -116,3 +116,10 @@ const ModernTemplate = {
     `;
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.ModernTemplate = ModernTemplate;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = ModernTemplate;
+}

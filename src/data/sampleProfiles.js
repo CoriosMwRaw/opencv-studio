@@ -298,3 +298,10 @@ const sampleProfiles = {
     }
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.sampleProfiles = sampleProfiles;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = sampleProfiles;
+}

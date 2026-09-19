@@ -148,3 +148,10 @@ const TechTemplate = {
     `;
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.TechTemplate = TechTemplate;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = TechTemplate;
+}

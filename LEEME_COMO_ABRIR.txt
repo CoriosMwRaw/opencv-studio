@@ -1,0 +1,47 @@
+========================================================================
+           OpenCV Studio — Instrucciones para Ejecutar en Windows
+========================================================================
+
+¿Por qué Windows muestra una advertencia al descargarlo?
+------------------------------------------------------------------------
+OpenCV Studio es una herramienta 100% LIBRE, GRATUITA y de CÓDIGO ABIERTO.
+A diferencia de empresas con software comercial que pagan licencias de 
+$400+ USD anuales a Microsoft por certificados de firma, los proyectos 
+open source independientes no cuentan con este certificado de pago.
+
+Por esta razón, Windows Defender SmartScreen activa de forma preventiva
+su alerta de "Windows protegió su PC" ante cualquier archivo descargado
+de Internet (marca Mark-of-the-Web / Zone.Identifier).
+
+El código fuente completo es 100% transparente y auditable en:
+https://github.com/CoriosMwRaw/opencv-studio
+
+
+¿CÓMO EJECUTARLO EN MENOS DE 3 SEGUNDOS? (Elige cualquiera)
+------------------------------------------------------------------------
+
+OPCIÓN 1 (LA MÁS FÁCIL - RECOMENDADA):
+  Haz doble clic en el archivo:
+  👉 "Abrir_OpenCV_Studio.bat"
+  Este archivo removerá el bloqueo de Windows automáticamente y abrirá
+  la aplicación sin ninguna advertencia.
+
+OPCIÓN 2 (DESDE LA PANTALLA AZUL DE WINDOWS DEFENDER):
+  1. Haz doble clic en "OpenCV Studio.exe".
+  2. Cuando aparezca la pantalla azul "Windows protegió su PC", haz clic en:
+     "Más información" (texto subrayado).
+  3. Haz clic en el botón que aparecerá abajo:
+     "Ejecutar de todas formas".
+  (Solo necesitas hacer esto la primera vez).
+
+OPCIÓN 3 (DESBLOQUEO MANUAL EN PROPIEDADES):
+  1. Haz clic derecho sobre la carpeta o sobre "OpenCV Studio.exe".
+  2. Selecciona "Propiedades".
+  3. En la pestaña General (abajo a la derecha), marca la casilla:
+     [✓] "Desbloquear" (Unblock).
+  4. Haz clic en "Aceptar" y abre la aplicación normalmente.
+
+========================================================================
+¡Gracias por usar y compartir OpenCV Studio!
+Para dudas o sugerencias, visita nuestro repositorio en GitHub.
+========================================================================

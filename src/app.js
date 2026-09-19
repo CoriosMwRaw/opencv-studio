@@ -30,11 +30,11 @@ const templates = {
 
 // Inicialización de la aplicación
 document.addEventListener('DOMContentLoaded', () => {
+  initProfileSelector();
+  loadCurrentProfile();
   if (typeof applyTranslations === 'function') {
     applyTranslations(currentLanguage);
   }
-  initProfileSelector();
-  loadCurrentProfile();
   setupEventListeners();
   updatePreview();
 });
@@ -224,9 +224,12 @@ function persistAndRefresh() {
 
 // Actualizar Previsualización en Tiempo Real
 function updatePreview() {
+  if (!currentProfile) return;
   const canvas = document.getElementById('cvPaperTarget');
-  const templateId = currentProfile.settings.template || 'tech';
+  if (!canvas) return;
+  const templateId = (currentProfile.settings && currentProfile.settings.template) || 'tech';
   const templateObj = templates[templateId] || templates['tech'];
+  if (!templateObj) return;
 
   canvas.innerHTML = templateObj.render(currentProfile);
 }
@@ -238,49 +241,61 @@ function updatePreview() {
 // Experiencia Laboral
 function renderExperienceEditor() {
   const container = document.getElementById('experienceList');
+  if (!container) return;
   container.innerHTML = '';
+  const lang = (typeof currentLanguage !== 'undefined' ? currentLanguage : 'es');
+  const isEn = lang === 'en';
 
-  (currentProfile.experience || []).forEach((exp, idx) => {
+  ((currentProfile && currentProfile.experience) || []).forEach((exp, idx) => {
     const item = document.createElement('div');
     item.className = 'item-box';
     item.id = `item_exp_${idx}`;
+    const defaultRole = t('exp.newRole', lang);
+    const roleLabel = t('exp.role', lang);
+    const companyLabel = t('exp.company', lang);
+    const periodLabel = t('exp.period', lang) + (isEn ? ' (e.g. Aug 2023 - Present)' : ' (ej. Ago 2023 - Presente)');
+    const locationLabel = t('exp.location', lang);
+    const bulletsLabel = t('exp.bullets', lang);
+    const phraseBankBtn = t('btn.phraseBank', lang);
+    const deleteTitle = t('exp.delete', lang);
+
     item.innerHTML = `
       <div class="item-box-header" onclick="toggleItemCollapse('item_exp_${idx}')">
         <span class="item-box-title">
-          <span>💼 #${idx + 1}: ${exp.role || 'Nuevo Puesto'}</span>
+          <span>💼 #${idx + 1}: ${escapeHtml(exp.role || defaultRole)}</span>
         </span>
         <div style="display:flex; gap:6px; align-items:center;">
           <span style="font-size:11px; color:#94a3b8;">▼</span>
-          <button class="app-btn app-btn-danger app-btn-icon" onclick="event.stopPropagation(); deleteExperience(${idx})" title="Eliminar puesto">🗑️</button>
+          <button class="app-btn app-btn-danger app-btn-icon" onclick="event.stopPropagation(); deleteExperience(${idx})" title="${deleteTitle}">🗑️</button>
         </div>
       </div>
       <div class="item-box-body">
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Puesto o Rol</label>
-            <input type="text" class="form-input" value="${exp.role || ''}" oninput="updateExpField(${idx}, 'role', this.value)">
+            <label class="form-label">${roleLabel}</label>
+            <input type="text" class="form-input" value="${escapeHtml(exp.role || '')}" oninput="updateExpField(${idx}, 'role', this.value)" placeholder="${t('exp.rolePlaceholder', lang)}">
           </div>
           <div class="form-group">
-            <label class="form-label">Empresa / Institución</label>
-            <input type="text" class="form-input" value="${exp.company || ''}" oninput="updateExpField(${idx}, 'company', this.value)">
+            <label class="form-label">${companyLabel}</label>
+            <input type="text" class="form-input" value="${escapeHtml(exp.company || '')}" oninput="updateExpField(${idx}, 'company', this.value)" placeholder="${t('exp.companyPlaceholder', lang)}">
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Período (ej. Ago 2023 - Presente)</label>
-            <input type="text" class="form-input" value="${exp.period || ''}" oninput="updateExpField(${idx}, 'period', this.value)">
+            <label class="form-label">${periodLabel}</label>
+            <input type="text" class="form-input" value="${escapeHtml(exp.period || '')}" oninput="updateExpField(${idx}, 'period', this.value)" placeholder="${t('exp.periodPlaceholder', lang)}">
           </div>
           <div class="form-group">
-            <label class="form-label">Ubicación</label>
-            <input type="text" class="form-input" value="${exp.location || ''}" oninput="updateExpField(${idx}, 'location', this.value)">
+            <label class="form-label">${locationLabel}</label>
+            <input type="text" class="form-input" value="${escapeHtml(exp.location || '')}" oninput="updateExpField(${idx}, 'location', this.value)" placeholder="${t('exp.locationPlaceholder', lang)}">
           </div>
         </div>
         <div class="form-group">
           <div class="form-label">
-            <span>Logros y Responsabilidades (uno por línea)</span>
-            <button class="app-btn app-btn-outline" style="padding: 2px 7px; font-size: 11px;" onclick="openBulletBankForExp(${idx})">💡 Banco de Frases</button>
+            <span>${bulletsLabel}</span>
+            <button class="app-btn app-btn-outline" style="padding: 2px 7px; font-size: 11px;" onclick="openBulletBankForExp(${idx})">${phraseBankBtn}</button>
           </div>
-          <textarea class="form-textarea" rows="4" id="exp_bullets_${idx}" oninput="updateExpBullets(${idx}, this.value)">${(exp.bullets || []).join('\n')}</textarea>
+          <textarea class="form-textarea" rows="4" id="exp_bullets_${idx}" oninput="updateExpBullets(${idx}, this.value)">${escapeHtml((exp.bullets || []).join('\n'))}</textarea>
         </div>
       </div>
     `;
@@ -337,40 +352,49 @@ async function deleteExperience(idx) {
 // Proyectos
 function renderProjectsEditor() {
   const container = document.getElementById('projectsList');
+  if (!container) return;
   container.innerHTML = '';
+  const lang = (typeof currentLanguage !== 'undefined' ? currentLanguage : 'es');
 
-  (currentProfile.projects || []).forEach((pr, idx) => {
+  ((currentProfile && currentProfile.projects) || []).forEach((pr, idx) => {
     const item = document.createElement('div');
     item.className = 'item-box';
     item.id = `item_proj_${idx}`;
+    const defaultTitle = t('proj.newTitle', lang);
+    const titleLabel = t('proj.title', lang);
+    const techLabel = t('proj.tech', lang);
+    const linkLabel = t('proj.link', lang);
+    const descLabel = t('proj.desc', lang);
+    const deleteTitle = t('proj.delete', lang);
+
     item.innerHTML = `
       <div class="item-box-header" onclick="toggleItemCollapse('item_proj_${idx}')">
         <span class="item-box-title">
-          <span>🚀 #${idx + 1}: ${pr.title || 'Nuevo Proyecto'}</span>
+          <span>🚀 #${idx + 1}: ${escapeHtml(pr.title || defaultTitle)}</span>
         </span>
         <div style="display:flex; gap:6px; align-items:center;">
           <span style="font-size:11px; color:#94a3b8;">▼</span>
-          <button class="app-btn app-btn-danger app-btn-icon" onclick="event.stopPropagation(); deleteProject(${idx})">🗑️</button>
+          <button class="app-btn app-btn-danger app-btn-icon" onclick="event.stopPropagation(); deleteProject(${idx})" title="${deleteTitle}">🗑️</button>
         </div>
       </div>
       <div class="item-box-body">
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Título del Proyecto</label>
-            <input type="text" class="form-input" value="${pr.title || ''}" oninput="updateProjField(${idx}, 'title', this.value)">
+            <label class="form-label">${titleLabel}</label>
+            <input type="text" class="form-input" value="${escapeHtml(pr.title || '')}" oninput="updateProjField(${idx}, 'title', this.value)" placeholder="${t('proj.titlePlaceholder', lang)}">
           </div>
           <div class="form-group">
-            <label class="form-label">Tecnologías (ej. React • Node.js)</label>
-            <input type="text" class="form-input" value="${pr.tech || ''}" oninput="updateProjField(${idx}, 'tech', this.value)">
+            <label class="form-label">${techLabel}</label>
+            <input type="text" class="form-input" value="${escapeHtml(pr.tech || '')}" oninput="updateProjField(${idx}, 'tech', this.value)" placeholder="${t('proj.techPlaceholder', lang)}">
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Enlace / Repositorio (Opcional)</label>
-          <input type="text" class="form-input" value="${pr.link || ''}" oninput="updateProjField(${idx}, 'link', this.value)">
+          <label class="form-label">${linkLabel}</label>
+          <input type="text" class="form-input" value="${escapeHtml(pr.link || '')}" oninput="updateProjField(${idx}, 'link', this.value)" placeholder="${t('proj.linkPlaceholder', lang)}">
         </div>
         <div class="form-group">
-          <label class="form-label">Descripción del Proyecto</label>
-          <textarea class="form-textarea" rows="2" oninput="updateProjField(${idx}, 'description', this.value)">${pr.description || ''}</textarea>
+          <label class="form-label">${descLabel}</label>
+          <textarea class="form-textarea" rows="2" oninput="updateProjField(${idx}, 'description', this.value)" placeholder="${t('proj.descPlaceholder', lang)}">${escapeHtml(pr.description || '')}</textarea>
         </div>
       </div>
     `;
@@ -416,40 +440,49 @@ async function deleteProject(idx) {
 // Educación
 function renderEducationEditor() {
   const container = document.getElementById('educationList');
+  if (!container) return;
   container.innerHTML = '';
+  const lang = (typeof currentLanguage !== 'undefined' ? currentLanguage : 'es');
 
-  (currentProfile.education || []).forEach((ed, idx) => {
+  ((currentProfile && currentProfile.education) || []).forEach((ed, idx) => {
     const item = document.createElement('div');
     item.className = 'item-box';
     item.id = `item_edu_${idx}`;
+    const defaultDegree = t('edu.newDegree', lang);
+    const degreeLabel = t('edu.degree', lang);
+    const schoolLabel = t('edu.school', lang);
+    const periodLabel = t('edu.period', lang);
+    const detailsLabel = t('edu.details', lang);
+    const deleteTitle = t('edu.delete', lang);
+
     item.innerHTML = `
       <div class="item-box-header" onclick="toggleItemCollapse('item_edu_${idx}')">
         <span class="item-box-title">
-          <span>🎓 #${idx + 1}: ${ed.degree || 'Estudio'}</span>
+          <span>🎓 #${idx + 1}: ${escapeHtml(ed.degree || defaultDegree)}</span>
         </span>
         <div style="display:flex; gap:6px; align-items:center;">
           <span style="font-size:11px; color:#94a3b8;">▼</span>
-          <button class="app-btn app-btn-danger app-btn-icon" onclick="event.stopPropagation(); deleteEducation(${idx})">🗑️</button>
+          <button class="app-btn app-btn-danger app-btn-icon" onclick="event.stopPropagation(); deleteEducation(${idx})" title="${deleteTitle}">🗑️</button>
         </div>
       </div>
       <div class="item-box-body">
         <div class="form-group">
-          <label class="form-label">Grado / Título (ej. Ingeniería en Sistemas)</label>
-          <input type="text" class="form-input" value="${ed.degree || ''}" oninput="updateEduField(${idx}, 'degree', this.value)">
+          <label class="form-label">${degreeLabel}</label>
+          <input type="text" class="form-input" value="${escapeHtml(ed.degree || '')}" oninput="updateEduField(${idx}, 'degree', this.value)" placeholder="${t('edu.degreePlaceholder', lang)}">
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Escuela / Universidad</label>
-            <input type="text" class="form-input" value="${ed.school || ''}" oninput="updateEduField(${idx}, 'school', this.value)">
+            <label class="form-label">${schoolLabel}</label>
+            <input type="text" class="form-input" value="${escapeHtml(ed.school || '')}" oninput="updateEduField(${idx}, 'school', this.value)" placeholder="${t('edu.schoolPlaceholder', lang)}">
           </div>
           <div class="form-group">
-            <label class="form-label">Período / Semestre</label>
-            <input type="text" class="form-input" value="${ed.period || ''}" oninput="updateEduField(${idx}, 'period', this.value)">
+            <label class="form-label">${periodLabel}</label>
+            <input type="text" class="form-input" value="${escapeHtml(ed.period || '')}" oninput="updateEduField(${idx}, 'period', this.value)" placeholder="${t('edu.periodPlaceholder', lang)}">
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Detalles Adicionales</label>
-          <input type="text" class="form-input" value="${ed.details || ''}" oninput="updateEduField(${idx}, 'details', this.value)">
+          <label class="form-label">${detailsLabel}</label>
+          <input type="text" class="form-input" value="${escapeHtml(ed.details || '')}" oninput="updateEduField(${idx}, 'details', this.value)" placeholder="${t('edu.detailsPlaceholder', lang)}">
         </div>
       </div>
     `;
@@ -513,15 +546,17 @@ function syncSkills() {
 // KPIs
 function renderKpisEditor() {
   const container = document.getElementById('kpiList');
+  if (!container) return;
   container.innerHTML = '';
+  const lang = (typeof currentLanguage !== 'undefined' ? currentLanguage : 'es');
 
-  (currentProfile.kpis || []).forEach((k, idx) => {
+  ((currentProfile && currentProfile.kpis) || []).forEach((k, idx) => {
     const row = document.createElement('div');
     row.className = 'kpi-card';
     row.innerHTML = `
-      <input type="text" class="form-input" style="width:85px; flex-shrink:0; font-weight:700; color:#38bdf8;" placeholder="Cifra (4+)" value="${escapeHtml(k.number || '')}" oninput="updateKpi(${idx}, 'number', this.value)">
-      <input type="text" class="form-input" style="flex:1;" placeholder="Etiqueta (ej. Proyectos Entregados)" value="${escapeHtml(k.label || '')}" oninput="updateKpi(${idx}, 'label', this.value)">
-      <button class="app-btn app-btn-danger app-btn-icon" style="flex-shrink:0; padding:5px 8px;" onclick="deleteKpi(${idx})" title="Eliminar métrica">🗑️</button>
+      <input type="text" class="form-input" style="width:85px; flex-shrink:0; font-weight:700; color:#38bdf8;" placeholder="${t('kpi.numberPlaceholder', lang)}" value="${escapeHtml(k.number || '')}" oninput="updateKpi(${idx}, 'number', this.value)">
+      <input type="text" class="form-input" style="flex:1;" placeholder="${t('kpi.labelPlaceholder', lang)}" value="${escapeHtml(k.label || '')}" oninput="updateKpi(${idx}, 'label', this.value)">
+      <button class="app-btn app-btn-danger app-btn-icon" style="flex-shrink:0; padding:5px 8px;" onclick="deleteKpi(${idx})" title="${t('kpi.delete', lang)}">🗑️</button>
     `;
     container.appendChild(row);
   });
@@ -559,19 +594,21 @@ async function deleteKpi(idx) {
 // Certificaciones
 function renderCertificationsEditor() {
   const container = document.getElementById('certList');
+  if (!container) return;
   container.innerHTML = '';
+  const lang = (typeof currentLanguage !== 'undefined' ? currentLanguage : 'es');
 
-  (currentProfile.certifications || []).forEach((c, idx) => {
+  ((currentProfile && currentProfile.certifications) || []).forEach((c, idx) => {
     const card = document.createElement('div');
     card.className = 'cert-card';
     card.innerHTML = `
       <div style="display:flex; gap:6px; align-items:center;">
-        <input type="text" class="form-input" style="flex:1; font-weight:600;" placeholder="Título del Certificado o Especialidad" value="${escapeHtml(c.title || '')}" oninput="updateCert(${idx}, 'title', this.value)">
-        <button class="app-btn app-btn-danger app-btn-icon" style="flex-shrink:0; padding:5px 8px;" onclick="deleteCert(${idx})" title="Eliminar certificación">🗑️</button>
+        <input type="text" class="form-input" style="flex:1; font-weight:600;" placeholder="${t('cert.titlePlaceholder', lang)}" value="${escapeHtml(c.title || '')}" oninput="updateCert(${idx}, 'title', this.value)">
+        <button class="app-btn app-btn-danger app-btn-icon" style="flex-shrink:0; padding:5px 8px;" onclick="deleteCert(${idx})" title="${t('cert.delete', lang)}">🗑️</button>
       </div>
       <div style="display:flex; gap:6px; align-items:center;">
-        <input type="text" class="form-input" style="flex:1;" placeholder="Institución / Plataforma (ej. Platzi, Cisco, Oracle)" value="${escapeHtml(c.issuer || '')}" oninput="updateCert(${idx}, 'issuer', this.value)">
-        <input type="text" class="form-input" style="width:75px; flex-shrink:0; text-align:center;" placeholder="Año" value="${escapeHtml(c.year || '')}" oninput="updateCert(${idx}, 'year', this.value)">
+        <input type="text" class="form-input" style="flex:1;" placeholder="${t('cert.issuerPlaceholder', lang)}" value="${escapeHtml(c.issuer || '')}" oninput="updateCert(${idx}, 'issuer', this.value)">
+        <input type="text" class="form-input" style="width:75px; flex-shrink:0; text-align:center;" placeholder="${t('cert.yearPlaceholder', lang)}" value="${escapeHtml(c.year || '')}" oninput="updateCert(${idx}, 'year', this.value)">
       </div>
     `;
     container.appendChild(card);
@@ -677,7 +714,9 @@ function openProfileManager() {
 
 function renderProfileManagerUI() {
   const listContainer = document.getElementById('profileCardsContainer');
+  if (!listContainer) return;
   listContainer.innerHTML = '';
+  const lang = (typeof currentLanguage !== 'undefined' ? currentLanguage : 'es');
 
   const profiles = storage.getAllProfiles();
   const activeId = storage.getActiveProfileId();
@@ -696,17 +735,17 @@ function renderProfileManagerUI() {
     card.innerHTML = `
       <div>
         <div style="font-weight:700; font-size:13.5px; color:#ffffff; display:flex; align-items:center; gap:8px;">
-          <span>${prof.name}</span>
-          ${isCurrent ? '<span style="background:#059669; color:#fff; font-size:10px; padding:2px 6px; border-radius:10px;">Activo</span>' : ''}
+          <span>${escapeHtml(prof.name)}</span>
+          ${isCurrent ? `<span style="background:#059669; color:#fff; font-size:10px; padding:2px 6px; border-radius:10px;">${t('profiles.activeBadge', lang)}</span>` : ''}
         </div>
         <div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">
-          Titular: ${prof.personal?.headline || 'Sin titular'} | Plantilla: ${prof.settings?.template || 'tech'}
+          ${t('profiles.headlineLabel', lang)} ${escapeHtml(prof.personal?.headline || (lang === 'en' ? 'No headline' : 'Sin titular'))} | ${t('profiles.templateLabel', lang)} ${escapeHtml(prof.settings?.template || 'tech')}
         </div>
       </div>
       <div style="display:flex; gap:6px;">
-        ${!isCurrent ? `<button class="app-btn app-btn-primary app-btn-icon" onclick="selectProfileFromModal('${prof.id}')" title="Cargar este perfil">Usar</button>` : ''}
-        <button class="app-btn app-btn-outline app-btn-icon" onclick="duplicateProfileFromModal('${prof.id}')" title="Duplicar">📑</button>
-        ${Object.keys(profiles).length > 1 ? `<button class="app-btn app-btn-danger app-btn-icon" onclick="deleteProfileFromModal('${prof.id}')" title="Eliminar">🗑️</button>` : ''}
+        ${!isCurrent ? `<button class="app-btn app-btn-primary app-btn-icon" onclick="selectProfileFromModal('${prof.id}')" title="${t('profiles.useBtn', lang)}">${t('profiles.useBtn', lang)}</button>` : ''}
+        <button class="app-btn app-btn-outline app-btn-icon" onclick="duplicateProfileFromModal('${prof.id}')" title="${t('profiles.duplicateBtn', lang)}">📑</button>
+        ${Object.keys(profiles).length > 1 ? `<button class="app-btn app-btn-danger app-btn-icon" onclick="deleteProfileFromModal('${prof.id}')" title="${t('profiles.deleteBtn', lang)}">🗑️</button>` : ''}
       </div>
     `;
     listContainer.appendChild(card);
@@ -1642,7 +1681,8 @@ function switchLanguage(lang) {
   if (typeof setLanguage === 'function') {
     setLanguage(lang);
   }
-  if (currentProfile && currentProfile.settings) {
+  if (currentProfile) {
+    if (!currentProfile.settings) currentProfile.settings = {};
     currentProfile.settings.cvLanguage = lang;
     const select = document.getElementById('select_cv_lang');
     if (select) select.value = lang;
@@ -1653,6 +1693,16 @@ function switchLanguage(lang) {
   renderEducationEditor();
   renderKpisEditor();
   renderCertificationsEditor();
+
+  const pmModal = document.getElementById('profileManagerModal');
+  if (pmModal && pmModal.classList.contains('active')) {
+    renderProfileManagerUI();
+  }
+
+  const bbModal = document.getElementById('bulletBankModal');
+  if (bbModal && bbModal.classList.contains('active')) {
+    renderBulletBankList();
+  }
 
   const isEn = lang === 'en';
   showToastNotification(
