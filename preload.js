@@ -5,5 +5,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   exportPdf: (options) => ipcRenderer.invoke('export-pdf', options),
   saveJsonDialog: (data, defaultName) => ipcRenderer.invoke('save-json-dialog', { data, defaultName }),
   loadJsonDialog: () => ipcRenderer.invoke('load-json-dialog'),
-  openExternal: (url) => ipcRenderer.invoke('open-external', url)
+  openExternal: (url) => ipcRenderer.invoke('open-external', url),
+  extractPdfText: (filePath) => ipcRenderer.invoke('extract-pdf-text', filePath),
+  selectAndExtractPdf: () => ipcRenderer.invoke('select-and-extract-pdf')
 });

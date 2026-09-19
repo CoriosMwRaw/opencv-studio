@@ -124,3 +124,39 @@ ipcMain.handle('load-json-dialog', async () => {
     return { success: false, error: err.message };
   }
 });
+
+// IPC: Extraer texto de un archivo PDF específico
+ipcMain.handle('extract-pdf-text', async (event, filePath) => {
+  try {
+    const { PDFParse } = require('pdf-parse');
+    const buffer = fs.readFileSync(filePath);
+    const parser = new PDFParse(new Uint8Array(buffer));
+    const res = await parser.getText();
+    return { success: true, text: res.text || res };
+  } catch (err) {
+    console.error('Error al extraer PDF:', err);
+    return { success: false, error: err.message };
+  }
+});
+
+// IPC: Abrir diálogo para seleccionar y extraer texto de un PDF
+ipcMain.handle('select-and-extract-pdf', async () => {
+  try {
+    const { filePaths } = await dialog.showOpenDialog(mainWindow, {
+      title: 'Seleccionar Currículum en Formato PDF',
+      filters: [{ name: 'Documento PDF', extensions: ['pdf'] }],
+      properties: ['openFile']
+    });
+
+    if (!filePaths || filePaths.length === 0) return { success: false, canceled: true };
+
+    const { PDFParse } = require('pdf-parse');
+    const buffer = fs.readFileSync(filePaths[0]);
+    const parser = new PDFParse(new Uint8Array(buffer));
+    const res = await parser.getText();
+    return { success: true, text: res.text || res, filePath: filePaths[0] };
+  } catch (err) {
+    console.error('Error en select-and-extract-pdf:', err);
+    return { success: false, error: err.message };
+  }
+});

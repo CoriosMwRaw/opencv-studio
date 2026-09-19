@@ -17,7 +17,7 @@ La mayoría de las plataformas en línea para crear currículums permiten diseñ
 **OpenCV Studio** nació como un proyecto de código abierto para estudiantes universitarios y profesionistas que necesitan:
 - ✅ **100% Gratuito y Libre de por vida** (Licencia MIT).
 - ✅ **Completamente Offline**: Tus datos nunca salen de tu computadora. Privacidad total.
-- ✅ **Extractor Inteligente de CV Existente**: Pega el texto de tu currículum actual (de PDF, Word o LinkedIn) y el sistema estructurará tus datos automáticamente sin tener que reescribir todo desde cero.
+- ✅ **Extractor Inteligente de CV Existente (Compatible con PDF)**: Carga tu archivo PDF directamente o pega el texto de tu currículum actual (de PDF, Word o LinkedIn) y el sistema estructurará tus datos automáticamente sin tener que reescribir todo desde cero.
 - ✅ **Vista Previa en Tiempo Real**: Editas en el panel izquierdo y ves los cambios al instante en el lienzo de impresión.
 - ✅ **Optimizado para ATS**: Puntuación algorítmica y recomendaciones para superar filtros automáticos de contratación.
 - ✅ **4 Plantillas Profesionales**: Tech Developer, Data Analyst con KPIs, ATS Minimalista y Ejecutivo Moderno.
@@ -96,7 +96,7 @@ npm run build
 - 🏦 **Transferencia Directa SPEI (México - Sin comisiones):**
   - **Banco:** Nu México (Nu)
   - **CLABE Interbancaria:** `638180010128388591`
-  - **Beneficiario:** César Alberto López Martínez
+  - **Beneficiario:** CoriosMwRaw
 
 ---
 

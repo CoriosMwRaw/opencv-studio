@@ -124,12 +124,15 @@
 
             <div class="form-group">
               <label class="form-label">Insignias / Destacados Rápidos (uno por línea)</label>
-              <textarea id="in_badges" class="form-textarea" rows="2" placeholder="ej. 🎓 7mo Semestre de Ingeniería&#10;💻 Desarrollo Fullstack"></textarea>
+              <textarea id="in_badges" class="form-textarea" rows="3" placeholder="ej. 🎓 7mo Semestre de Ingeniería en Sistemas&#10;💻 Desarrollo Web Fullstack & APIs&#10;🚀 Proyectos de Alto Impacto"></textarea>
             </div>
 
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-              <button class="app-btn app-btn-outline" onclick="triggerPhotoUpload()">📷 Subir / Cambiar Foto</button>
-              <label style="font-size:12px; color:#cbd5e1; cursor:pointer;">
+            <div class="photo-uploader-card">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <button class="app-btn app-btn-outline" onclick="triggerPhotoUpload()">📷 Subir / Cambiar Foto</button>
+                <span style="font-size:11px; color:#94a3b8;">(Auto-comprimida a 320px)</span>
+              </div>
+              <label style="font-size:12px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;">
                 <input type="checkbox" id="opt_showPhoto"> Mostrar Foto en CV
               </label>
             </div>
@@ -170,6 +173,7 @@
               </label>
             </div>
             <div id="kpiList"></div>
+            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center; margin-top:6px;" onclick="addKpi()">+ Añadir Métrica (KPI)</button>
           </div>
         </div>
 
@@ -451,7 +455,7 @@
             </p>
             <div style="font-size:11.5px; color:#94a3b8; display:flex; flex-direction:column; gap:3px;">
               <div><strong>Banco:</strong> Nu México (Nu)</div>
-              <div><strong>Beneficiario:</strong> César Alberto López Martínez</div>
+              <div><strong>Beneficiario:</strong> CoriosMwRaw</div>
             </div>
             <div class="clabe-display-box">
               <span class="clabe-number" id="clabeText">638180010128388591</span>
@@ -477,16 +481,19 @@
       </div>
       <div class="modal-body">
         <p style="font-size:12.5px; color:#94a3b8; margin:0;">
-          ¿Ya tienes tu currículum en PDF, Word o LinkedIn? No empieces desde cero: pega el texto o carga tu archivo y nuestro analizador inteligente organizará tu información en un nuevo perfil de OpenCV Studio.
+          ¿Ya tienes tu currículum en PDF, Word o LinkedIn? No empieces desde cero: sube tu PDF directamente, o pega el texto y nuestro analizador inteligente organizará tu información en un nuevo perfil de OpenCV Studio.
         </p>
 
         <!-- Selección de Archivo o Pegado -->
-        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-          <label style="font-size:12px; font-weight:600; color:#e2e8f0;">Pega el texto copiado de tu CV:</label>
-          <div>
-            <input type="file" id="cvTextFileInput" accept=".txt,.json,.md" style="display:none;" onchange="handleCvFileSelect(event)">
-            <button class="app-btn app-btn-outline" style="font-size:11.5px; padding:4px 9px;" onclick="document.getElementById('cvTextFileInput').click()">
-              📁 Cargar Archivo (.txt / .json)
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+          <label style="font-size:12px; font-weight:600; color:#e2e8f0;">Pega el texto o carga tu archivo:</label>
+          <div style="display:flex; gap:6px;">
+            <button class="app-btn app-btn-primary" style="font-size:11.5px; padding:4px 10px;" onclick="extractDirectlyFromPdfDialog()" title="Seleccionar y extraer directamente desde un archivo PDF">
+              📄 Cargar CV en PDF
+            </button>
+            <input type="file" id="cvTextFileInput" accept=".pdf,.txt,.json,.md" style="display:none;" onchange="handleCvFileSelect(event)">
+            <button class="app-btn app-btn-outline" style="font-size:11.5px; padding:4px 9px;" onclick="document.getElementById('cvTextFileInput').click()" title="Cargar archivo de texto plano o JSON">
+              📁 Otro (.txt / .json)
             </button>
           </div>
         </div>

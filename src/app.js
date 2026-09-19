@@ -7,6 +7,16 @@ let currentProfile = null;
 let currentZoom = 1.0;
 let activeTargetBulletInput = null;
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 // Registro de Plantillas disponibles
 const templates = {
   tech: TechTemplate,
@@ -439,19 +449,32 @@ function renderKpisEditor() {
 
   (currentProfile.kpis || []).forEach((k, idx) => {
     const row = document.createElement('div');
-    row.className = 'form-row';
-    row.style.marginBottom = '6px';
+    row.className = 'kpi-card';
     row.innerHTML = `
-      <input type="text" class="form-input" placeholder="Cifra (ej. 4+)" value="${k.number}" oninput="updateKpi(${idx}, 'number', this.value)">
-      <input type="text" class="form-input" placeholder="Etiqueta (ej. Proyectos)" value="${k.label}" oninput="updateKpi(${idx}, 'label', this.value)">
+      <input type="text" class="form-input" style="width:85px; flex-shrink:0; font-weight:700; color:#38bdf8;" placeholder="Cifra (4+)" value="${escapeHtml(k.number || '')}" oninput="updateKpi(${idx}, 'number', this.value)">
+      <input type="text" class="form-input" style="flex:1;" placeholder="Etiqueta (ej. Proyectos Entregados)" value="${escapeHtml(k.label || '')}" oninput="updateKpi(${idx}, 'label', this.value)">
+      <button class="app-btn app-btn-danger app-btn-icon" style="flex-shrink:0; padding:5px 8px;" onclick="deleteKpi(${idx})" title="Eliminar métrica">🗑️</button>
     `;
     container.appendChild(row);
   });
 }
 
+function addKpi() {
+  if (!currentProfile.kpis) currentProfile.kpis = [];
+  currentProfile.kpis.push({ number: '100%', label: 'Satisfacción / Calidad' });
+  persistAndRefresh();
+  renderKpisEditor();
+}
+
 function updateKpi(idx, field, val) {
   currentProfile.kpis[idx][field] = val;
   persistAndRefresh();
+}
+
+function deleteKpi(idx) {
+  currentProfile.kpis.splice(idx, 1);
+  persistAndRefresh();
+  renderKpisEditor();
 }
 
 // Certificaciones
@@ -460,24 +483,25 @@ function renderCertificationsEditor() {
   container.innerHTML = '';
 
   (currentProfile.certifications || []).forEach((c, idx) => {
-    const row = document.createElement('div');
-    row.className = 'form-row-3';
-    row.style.marginBottom = '6px';
-    row.innerHTML = `
-      <input type="text" class="form-input" placeholder="Certificado" value="${c.title}" oninput="updateCert(${idx}, 'title', this.value)">
-      <input type="text" class="form-input" placeholder="Emisor" value="${c.issuer}" oninput="updateCert(${idx}, 'issuer', this.value)">
-      <div style="display:flex; gap:4px;">
-        <input type="text" class="form-input" placeholder="Año" value="${c.year}" oninput="updateCert(${idx}, 'year', this.value)" style="width:70px;">
-        <button class="app-btn app-btn-danger app-btn-icon" onclick="deleteCert(${idx})">🗑️</button>
+    const card = document.createElement('div');
+    card.className = 'cert-card';
+    card.innerHTML = `
+      <div style="display:flex; gap:6px; align-items:center;">
+        <input type="text" class="form-input" style="flex:1; font-weight:600;" placeholder="Título del Certificado o Especialidad" value="${escapeHtml(c.title || '')}" oninput="updateCert(${idx}, 'title', this.value)">
+        <button class="app-btn app-btn-danger app-btn-icon" style="flex-shrink:0; padding:5px 8px;" onclick="deleteCert(${idx})" title="Eliminar certificación">🗑️</button>
+      </div>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <input type="text" class="form-input" style="flex:1;" placeholder="Institución / Plataforma (ej. Platzi, Cisco, Oracle)" value="${escapeHtml(c.issuer || '')}" oninput="updateCert(${idx}, 'issuer', this.value)">
+        <input type="text" class="form-input" style="width:75px; flex-shrink:0; text-align:center;" placeholder="Año" value="${escapeHtml(c.year || '')}" oninput="updateCert(${idx}, 'year', this.value)">
       </div>
     `;
-    container.appendChild(row);
+    container.appendChild(card);
   });
 }
 
 function addCert() {
   if (!currentProfile.certifications) currentProfile.certifications = [];
-  currentProfile.certifications.push({ title: 'Nueva Certificación', issuer: 'Emisor', year: '2025' });
+  currentProfile.certifications.push({ title: 'Nueva Certificación', issuer: 'Emisor / Plataforma', year: '2025' });
   persistAndRefresh();
   renderCertificationsEditor();
 }
@@ -876,9 +900,40 @@ function openCvExtractorModal() {
   pendingExtractedProfile = null;
 }
 
-function handleCvFileSelect(event) {
+async function extractDirectlyFromPdfDialog() {
+  if (window.electronAPI && window.electronAPI.selectAndExtractPdf) {
+    const res = await window.electronAPI.selectAndExtractPdf();
+    if (res.canceled) return;
+    if (res.success && res.text) {
+      document.getElementById('rawCvInput').value = res.text;
+      analyzePastedCvText();
+    } else {
+      alert('Error al leer el archivo PDF: ' + (res.error || 'No se pudo extraer texto del PDF.'));
+    }
+  } else {
+    document.getElementById('cvTextFileInput').click();
+  }
+}
+
+async function handleCvFileSelect(event) {
   const file = event.target.files[0];
   if (!file) return;
+
+  if (file.name.toLowerCase().endsWith('.pdf')) {
+    if (window.electronAPI && window.electronAPI.extractPdfText && file.path) {
+      const res = await window.electronAPI.extractPdfText(file.path);
+      if (res.success && res.text) {
+        document.getElementById('rawCvInput').value = res.text;
+        analyzePastedCvText();
+      } else {
+        alert('Error al extraer texto del PDF: ' + (res.error || 'Archivo ilegible.'));
+      }
+      return;
+    } else {
+      alert('Para procesar archivos PDF, por favor utiliza la versión de escritorio de OpenCV Studio o copia y pega el texto del PDF en el recuadro inferior.');
+      return;
+    }
+  }
 
   const reader = new FileReader();
   reader.onload = (e) => {

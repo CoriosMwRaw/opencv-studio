@@ -320,6 +320,11 @@ body {
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
+.form-textarea {
+  min-height: 75px;
+  line-height: 1.45;
+}
+
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -328,8 +333,42 @@ body {
 
 .form-row-3 {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: 2fr 1.5fr 75px;
+  gap: 8px;
+  align-items: center;
+}
+
+.cert-card {
+  background: #182234;
+  border: 1px solid #334155;
+  border-radius: 7px;
+  padding: 10px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.photo-uploader-card {
+  background: #182234;
+  border: 1px solid #334155;
+  border-radius: 7px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.kpi-card {
+  background: #182234;
+  border: 1px solid #334155;
+  border-radius: 7px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 /* Tarjetas Dinámicas en Editor (Experiencia, Proyectos, etc.) */

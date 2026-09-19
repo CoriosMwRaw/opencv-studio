@@ -21,5 +21,8 @@
   "devDependencies": {
     "electron": "^33.2.1",
     "electron-packager": "^17.1.2"
+  },
+  "dependencies": {
+    "pdf-parse": "^2.4.5"
   }
 }

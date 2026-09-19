@@ -6,17 +6,21 @@ Todas las versiones notables de este proyecto se documentan en este archivo.
 
 ### 🚀 Novedades y Características Principales
 - **📥 Extractor Inteligente de CVs Existentes (`cvParser.js`)**:
+  - **Soporte nativo para extracción directa desde archivos PDF** (`pdf-parse`), sin necesidad de copiar y pegar manualmente.
   - Motor de análisis heurístico de texto para procesar currículums en texto plano copiados desde PDFs, documentos de Word o perfiles de LinkedIn.
   - Reconocimiento estructurado de datos de contacto (email, teléfono, ubicación, LinkedIn, GitHub y sitios web).
-  - Segmentación automática de secciones (Resumen, Experiencia Laboral, Formación Académica, Habilidades e Idiomas).
+  - Segmentación automática de secciones (Resumen/Síntesis, Experiencia Laboral, Formación Académica, Habilidades e Idiomas).
   - Extracción detallada de puestos, empresas, períodos y viñetas de logros.
   - Soporte de importación directa para formatos JSON Resume y respaldos de OpenCV Studio.
   - Vista previa interactiva de entidades detectadas antes de generar el nuevo perfil.
 - **☕ Módulo de Donaciones Comunitarias ("Invítame un café")**:
   - Integración de enlace seguro a **Buy Me a Coffee** ([buymeacoffee.com/coriosmwraw](https://buymeacoffee.com/coriosmwraw)) para donaciones internacionales con tarjeta o PayPal.
-  - Integración de opción de transferencia bancaria directa (SPEI) en México con cuenta **Nu México** (CLABE: `638180010128388591`) a nombre de **César Alberto López Martínez**.
+  - Integración de opción de transferencia bancaria directa (SPEI) en México con cuenta **Nu México** (CLABE: `638180010128388591`) a nombre de **CoriosMwRaw**.
   - Botón de copiado de CLABE en 1 clic con confirmación visual interactiva.
-- **🎨 Botón Destacado en Barra Superior**:
+- **🎨 Mejoras Visuales en el Editor y Barra Superior**:
+  - Rediseño de las tarjetas de *Certificaciones y Cursos* para eliminar compresión y truncamiento de texto.
+  - Ampliación del área de texto de insignias y diseño ordenado para el selector de fotografía de perfil.
+  - Botones de agregar y eliminar métricas KPIs individuales.
   - Añadido botón de café con diseño ámbar de alto contraste y modal de soporte amigable.
   - Añadido botón de acceso rápido para extracción de CVs existentes.
 

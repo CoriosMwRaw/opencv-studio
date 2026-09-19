@@ -120,7 +120,7 @@ window.cvParser = (function() {
     };
 
     const sectionRegexes = [
-      { key: 'summary', regex: /^(?:perfil(?:\s+profesional|\s+laboral)?|resumen(?:\s+ejecutivo)?|acerca\s+de\s+m[ií]|sobre\s+m[ií]|summary|about\s+me|profile|objetivo(?:\s+profesional)?)$/i },
+      { key: 'summary', regex: /^(?:perfil(?:\s+profesional|\s+laboral)?|resumen(?:\s+ejecutivo|\s+profesional)?|s[ií]ntesis(?:\s+profesional|\s+curricular|\s+laboral)?|acerca\s+de\s+m[ií]|sobre\s+m[ií]|summary|about\s+me|profile|objetivo(?:\s+profesional)?)$/i },
       { key: 'experience', regex: /^(?:experiencia(?:\s+laboral|\s+profesional)?|trayectoria(?:\s+laboral)?|historial\s+laboral|work\s+experience|employment\s+history|experience)$/i },
       { key: 'education', regex: /^(?:educaci[oó]n|formaci[oó]n(?:\s+acad[eé]mica)?|estudios|academic\s+background|education)$/i },
       { key: 'skills', regex: /^(?:habilidades(?:\s+t[eé]cnicas)?|aptitudes|skills|competencias|tecnolog[ií]as|herramientas|stack(?:\s+tecnol[oó]gico)?)$/i },
