@@ -22,15 +22,51 @@ function createWindow() {
   });
 
   mainWindow.once('ready-to-show', () => {
+    mainWindow.maximize();
     mainWindow.show();
     mainWindow.focus();
   });
 
   mainWindow.loadFile('index.html');
 
+  // Atajo de teclado F11 para alternar modo pantalla completa total
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'F11' && input.type === 'keyDown') {
+      mainWindow.setFullScreen(!mainWindow.isFullScreen());
+      event.preventDefault();
+    }
+  });
+
+  // Notificar al frontend cambios de estado de pantalla completa
+  mainWindow.on('enter-full-screen', () => {
+    if (mainWindow && mainWindow.webContents) {
+      mainWindow.webContents.send('fullscreen-state-changed', true);
+    }
+  });
+
+  mainWindow.on('leave-full-screen', () => {
+    if (mainWindow && mainWindow.webContents) {
+      mainWindow.webContents.send('fullscreen-state-changed', false);
+    }
+  });
+
   // Handler para open-external
   ipcMain.handle('open-external', async (event, url) => {
     shell.openExternal(url);
+  });
+
+  // Handler para alternar pantalla completa desde la UI
+  ipcMain.handle('toggle-fullscreen', () => {
+    if (mainWindow) {
+      const isFull = !mainWindow.isFullScreen();
+      mainWindow.setFullScreen(isFull);
+      return isFull;
+    }
+    return false;
+  });
+
+  ipcMain.handle('is-fullscreen', () => {
+    return mainWindow ? mainWindow.isFullScreen() : false;
   });
 
   // Abrir enlaces externos en el navegador predeterminado

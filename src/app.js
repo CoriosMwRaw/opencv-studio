@@ -165,6 +165,17 @@ function setupEventListeners() {
       }
     });
   });
+
+  // Escuchar eventos de pantalla completa (Electron y Web)
+  if (window.electronAPI && window.electronAPI.onFullScreenChanged) {
+    window.electronAPI.onFullScreenChanged((isFull) => {
+      updateFullScreenButtonUI(isFull);
+    });
+  }
+
+  document.addEventListener('fullscreenchange', () => {
+    updateFullScreenButtonUI(!!document.fullscreenElement);
+  });
 }
 
 function expandAllAccordions() {
@@ -970,6 +981,39 @@ function changeZoom(factor) {
   const paper = document.getElementById('cvPaperTarget');
   paper.style.transform = `scale(${currentZoom})`;
   document.getElementById('zoomValText').textContent = `${Math.round(currentZoom * 100)}%`;
+}
+
+// Control de Pantalla Completa
+async function toggleFullScreenMode() {
+  if (window.electronAPI && window.electronAPI.toggleFullScreen) {
+    const isFull = await window.electronAPI.toggleFullScreen();
+    updateFullScreenButtonUI(isFull);
+    showToastNotification(
+      isFull ? 'Pantalla Completa' : 'Modo Estándar',
+      'info',
+      isFull ? 'Presiona F11 o el botón superior para salir.' : 'Ventana restaurada a modo estándar.',
+      2200
+    );
+  } else {
+    // Alternativa para navegador web
+    if (!document.fullscreenElement) {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+  }
+}
+
+function updateFullScreenButtonUI(isFull) {
+  const btn = document.getElementById('btnToggleFullScreen');
+  if (btn) {
+    btn.innerHTML = isFull ? '🗗' : '⛶';
+    btn.title = isFull ? 'Salir de pantalla completa (F11)' : 'Pantalla completa (F11)';
+  }
 }
 
 async function exportToPDF() {

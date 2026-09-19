@@ -12,5 +12,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
     const listener = (_event, data) => callback(data);
     ipcRenderer.on('pdf-extraction-status', listener);
     return () => ipcRenderer.removeListener('pdf-extraction-status', listener);
+  },
+  toggleFullScreen: () => ipcRenderer.invoke('toggle-fullscreen'),
+  isFullScreen: () => ipcRenderer.invoke('is-fullscreen'),
+  onFullScreenChanged: (callback) => {
+    const listener = (_event, isFull) => callback(isFull);
+    ipcRenderer.on('fullscreen-state-changed', listener);
+    return () => ipcRenderer.removeListener('fullscreen-state-changed', listener);
   }
 });
