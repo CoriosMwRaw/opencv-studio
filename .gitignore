@@ -1,0 +1,29 @@
+# Dependencias de desarrollo
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Compilaciones nativas y binarios pesados
+dist/
+build/
+*.exe
+*.zip
+*.tar.gz
+*.dmg
+
+# Archivos de sistema y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs y temporales
+*.log
+scratch/
+test_run.js
+inspect.js

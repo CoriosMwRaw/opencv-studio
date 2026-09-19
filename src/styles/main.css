@@ -1,0 +1,1334 @@
+/* ==========================================================================
+   OpenCV Studio - Estilos Generales de la Aplicación y Editor
+   ========================================================================== */
+
+:root {
+  --bg-app: #0f172a;
+  --bg-panel: #1e293b;
+  --bg-input: #334155;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --primary-btn: #2563eb;
+  --primary-hover: #1d4ed8;
+  --accent-gold: #f59e0b;
+  --danger: #ef4444;
+  --success: #10b981;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Superior de la App */
+.app-topbar {
+  background-color: #0b1324;
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  height: 56px;
+  z-index: 50;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-badge {
+  background: rgba(37, 99, 235, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-selector-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-panel);
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.profile-select {
+  background: transparent;
+  color: #ffffff;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  max-width: 240px;
+}
+
+.profile-select option {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+/* Botones */
+.app-btn {
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  color: #ffffff;
+  user-select: none;
+}
+
+.app-btn-primary {
+  background: var(--primary-btn);
+}
+.app-btn-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.app-btn-outline {
+  background: transparent;
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+.app-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.app-btn-success {
+  background: #059669;
+}
+.app-btn-success:hover {
+  background: #047857;
+}
+
+.app-btn-danger {
+  background: #dc2626;
+}
+.app-btn-danger:hover {
+  background: #b91c1c;
+}
+
+.app-btn-icon {
+  padding: 5px 9px;
+  font-size: 12px;
+}
+
+/* Layout Dividido (Split Screen) */
+.split-workspace {
+  display: flex;
+  flex-grow: 1;
+  height: calc(100vh - 56px);
+  overflow: hidden;
+}
+
+/* Panel Izquierdo: Formulario Editor */
+.editor-pane {
+  width: 44%;
+  min-width: 420px;
+  max-width: 620px;
+  background-color: var(--bg-panel);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.editor-header {
+  padding: 12px 20px;
+  background: #182234;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.editor-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #cbd5e1;
+}
+
+.editor-scroll {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 16px 18px 40px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Acordeón de Secciones */
+.acc-card {
+  background: #131d2e;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+  flex-shrink: 0; /* CORRECCIÓN CLAVE: evita que flexbox aplaste los acordeones */
+}
+
+.acc-card:hover {
+  border-color: #475569;
+}
+
+.acc-header {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s;
+}
+
+.acc-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.acc-title-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.acc-icon {
+  font-size: 15px;
+}
+
+.acc-arrow {
+  color: var(--text-muted);
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+
+.acc-card.open .acc-arrow {
+  transform: rotate(180deg);
+}
+
+.acc-body {
+  padding: 16px;
+  display: none;
+  border-top: 1px solid var(--border-color);
+  flex-direction: column;
+  gap: 12px;
+}
+
+.acc-card.open .acc-body {
+  display: flex;
+}
+
+/* Controles de expansión masiva */
+.editor-tools-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2px;
+}
+
+.btn-link-mini {
+  background: none;
+  border: none;
+  color: #60a5fa;
+  font-size: 11.5px;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+.btn-link-mini:hover {
+  text-decoration: underline;
+}
+
+/* Inputs y Formularios */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-input, .form-textarea, .form-select {
+  background: #1e293b;
+  border: 1px solid #475569;
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--primary-btn);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.form-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+/* Tarjetas Dinámicas en Editor (Experiencia, Proyectos, etc.) */
+.item-box {
+  background: #1a2538;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 12px 14px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.item-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.item-box-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #60a5fa;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.item-box-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item-box.collapsed .item-box-body {
+  display: none;
+}
+
+/* Panel Derecho: Previsualización en Vivo */
+.preview-pane {
+  flex-grow: 1;
+  background-color: #334155;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.preview-toolbar {
+  background: #1e293b;
+  border-bottom: 1px solid #475569;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.preview-canvas-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: radial-gradient(circle, #475569 10%, #334155 90%);
+}
+
+/* Hoja de Papel del CV */
+.cv-paper-container {
+  width: 215.9mm; /* Tamaño Carta */
+  min-height: 279.4mm;
+  background: #ffffff;
+  color: #1e293b;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  transform-origin: top center;
+  transition: transform 0.2s ease;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   PALETAS Y TEMAS DE COLOR DINÁMICOS
+   ========================================================================== */
+
+.theme-navy {
+  --p-primary: #0f2b48;
+  --p-accent: #2563eb;
+  --p-accent-soft: #dbeafe;
+  --p-badge: #1d4ed8;
+  --p-grad: linear-gradient(135deg, #0b1f36 0%, #102d4f 50%, #1e4976 100%);
+  --p-sidebar-bg: #f8fafc;
+}
+
+.theme-teal {
+  --p-primary: #064e3b;
+  --p-accent: #059669;
+  --p-accent-soft: #d1fae5;
+  --p-badge: #047857;
+  --p-grad: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #047857 100%);
+  --p-sidebar-bg: #f0fdf4;
+}
+
+.theme-indigo {
+  --p-primary: #312e81;
+  --p-accent: #4f46e5;
+  --p-accent-soft: #e0e7ff;
+  --p-badge: #4338ca;
+  --p-grad: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+  --p-sidebar-bg: #f5f3ff;
+}
+
+.theme-graphite {
+  --p-primary: #18181b;
+  --p-accent: #0284c7;
+  --p-accent-soft: #e0f2fe;
+  --p-badge: #0369a1;
+  --p-grad: linear-gradient(135deg, #09090b 0%, #18181b 50%, #27272a 100%);
+  --p-sidebar-bg: #fafafa;
+}
+
+/* ==========================================================================
+   PLANTILLA 1: TECH & DEVELOPER
+   ========================================================================== */
+.t-tech {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  line-height: 1.45;
+}
+
+.t-tech .cv-header {
+  background: var(--p-grad);
+  color: #ffffff;
+  padding: 24px 30px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.t-tech .cv-photo-wrapper {
+  flex-shrink: 0;
+}
+
+.t-tech .cv-photo-img {
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ffffff;
+  display: block;
+}
+
+.t-tech .cv-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+  line-height: 1.15;
+}
+
+.t-tech .cv-headline {
+  font-size: 13px;
+  font-weight: 600;
+  color: #93c5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+.t-tech .header-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.t-tech .h-badge {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #e2e8f0;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+
+.t-tech .contact-strip {
+  background: #091a2e;
+  padding: 8px 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  font-size: 12px;
+  color: #cbd5e1;
+}
+
+.t-tech .contact-item a {
+  color: #93c5fd;
+  text-decoration: none;
+}
+
+.t-tech .kpi-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px 30px;
+  gap: 10px;
+}
+
+.t-tech .kpi-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid var(--p-accent);
+  padding: 6px 10px;
+  border-radius: 5px;
+}
+
+.t-tech .kpi-number {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--p-primary);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.t-tech .kpi-label {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.t-tech .cv-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+}
+
+.t-tech .sidebar {
+  background: #fbfcfd;
+  border-right: 1px solid #e2e8f0;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.t-tech .main-content {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.t-tech .sec-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--p-primary);
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+}
+
+.t-tech .side-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0f172a;
+  text-transform: uppercase;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.t-tech .skill-badges-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.t-tech .tag-pill {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.t-tech .tag-pill.highlight {
+  background: var(--p-accent-soft);
+  border-color: #bfdbfe;
+  color: var(--p-badge);
+}
+
+.t-tech .summary-box {
+  background: #f8fafc;
+  border-left: 3px solid var(--p-accent);
+  padding: 10px 14px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #334155;
+  text-align: justify;
+}
+
+.t-tech .job-card {
+  margin-bottom: 14px;
+}
+
+.t-tech .job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 3px;
+}
+
+.t-tech .job-role {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--p-primary);
+}
+
+.t-tech .job-period {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--p-badge);
+  background: var(--p-accent-soft);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.t-tech .job-company {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.t-tech .bullet-list {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.t-tech .bullet-list li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 12px;
+  color: #334155;
+  line-height: 1.45;
+}
+
+.t-tech .bullet-list li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--p-accent);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.t-tech .project-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.t-tech .project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 3px;
+}
+
+.t-tech .project-title {
+  font-size: 12.8px;
+  font-weight: 700;
+  color: var(--p-primary);
+}
+
+.t-tech .project-tech {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #475569;
+  background: #e2e8f0;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.t-tech .project-desc {
+  font-size: 12px;
+  color: #334155;
+  line-height: 1.4;
+}
+
+.t-tech .edu-item, .t-tech .cert-item {
+  margin-bottom: 10px;
+}
+.t-tech .edu-degree, .t-tech .cert-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--p-primary);
+}
+.t-tech .edu-school, .t-tech .cert-meta {
+  font-size: 11.5px;
+  color: #475569;
+}
+.t-tech .edu-meta {
+  font-size: 10.5px;
+  color: #94a3b8;
+}
+
+/* ==========================================================================
+   PLANTILLA 2: INDUSTRIAL & DATA ANALYST (ESTRUCTURADA Y ELEGANTE)
+   ========================================================================== */
+.t-data {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #1e293b;
+  line-height: 1.45;
+}
+
+.t-data .data-header {
+  background: var(--p-primary);
+  color: #ffffff;
+  padding: 26px 32px;
+  border-bottom: 4px solid var(--p-accent);
+}
+
+.t-data .data-header-content {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.t-data .cv-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.t-data .cv-headline {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--p-accent-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+.t-data .contact-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 12px;
+  color: #e2e8f0;
+}
+
+.t-data .contact-inline a {
+  color: #6ee7b7;
+  text-decoration: none;
+}
+
+.t-data .kpi-banner-industrial {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: #f1f5f9;
+  border-bottom: 1px solid #cbd5e1;
+  padding: 12px 32px;
+  gap: 14px;
+}
+
+.t-data .kpi-block {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-top: 3px solid var(--p-accent);
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.t-data .kpi-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--p-primary);
+  display: block;
+}
+
+.t-data .kpi-desc {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.3px;
+}
+
+.t-data .data-body-container {
+  display: grid;
+  grid-template-columns: 1fr 270px;
+  padding: 24px 32px;
+  gap: 24px;
+}
+
+.t-data .data-section {
+  margin-bottom: 20px;
+}
+
+.t-data .data-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--p-primary);
+  border-bottom: 2px solid var(--p-accent);
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+}
+
+.t-data .data-summary-text {
+  font-size: 12.5px;
+  color: #334155;
+  text-align: justify;
+  line-height: 1.5;
+  background: #f8fafc;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border-left: 3px solid var(--p-accent);
+}
+
+.t-data .exp-industrial-item {
+  margin-bottom: 14px;
+}
+
+.t-data .exp-ind-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.t-data .exp-ind-role {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--p-primary);
+}
+
+.t-data .exp-ind-date {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--p-badge);
+  background: var(--p-accent-soft);
+  padding: 1px 7px;
+  border-radius: 4px;
+}
+
+.t-data .exp-ind-company {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.t-data .bullet-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.t-data .bullet-list li {
+  position: relative;
+  padding-left: 15px;
+  font-size: 12px;
+  color: #334155;
+  line-height: 1.45;
+}
+
+.t-data .bullet-list li::before {
+  content: "■";
+  position: absolute;
+  left: 0;
+  color: var(--p-accent);
+  font-size: 8px;
+  top: 3px;
+}
+
+.t-data .tag-pill {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 2px;
+}
+
+.t-data .tag-pill.highlight {
+  background: var(--p-accent-soft);
+  border-color: #a7f3d0;
+  color: var(--p-badge);
+}
+
+/* ==========================================================================
+   PLANTILLA 3: ATS MINIMALIST CLÁSICO (100% COMPATIBLE CON ROBOTS)
+   ========================================================================== */
+.t-ats {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  padding: 32px 38px;
+  color: #111827;
+  line-height: 1.4;
+}
+
+.t-ats .ats-header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.t-ats .ats-name {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #111827;
+  margin-bottom: 3px;
+}
+
+.t-ats .ats-sub {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.t-ats .ats-contact {
+  font-size: 11px;
+  color: #4b5563;
+}
+
+.t-ats .ats-contact a {
+  color: #111827;
+  text-decoration: underline;
+}
+
+.t-ats .ats-section {
+  margin-bottom: 16px;
+}
+
+.t-ats .ats-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #111827;
+  margin-bottom: 3px;
+}
+
+.t-ats .ats-divider {
+  height: 1.5px;
+  background-color: #111827;
+  margin-bottom: 8px;
+}
+
+.t-ats .ats-text {
+  font-size: 11.8px;
+  color: #1f2937;
+  line-height: 1.45;
+  text-align: justify;
+}
+
+.t-ats .ats-entry {
+  margin-bottom: 12px;
+}
+
+.t-ats .ats-entry-header {
+  font-size: 12px;
+  color: #111827;
+  margin-bottom: 3px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.t-ats .ats-entry-date {
+  font-size: 11.5px;
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.t-ats .ats-list {
+  list-style-type: disc;
+  margin-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.t-ats .ats-list li {
+  font-size: 11.8px;
+  color: #1f2937;
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   PLANTILLA 4: MODERNA EJECUTIVA (DOBLE COLUMNA DE ALTO IMPACTO)
+   ========================================================================== */
+.t-modern {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 279.4mm;
+}
+
+.t-modern .modern-left-col {
+  background: var(--p-primary);
+  color: #ffffff;
+  padding: 26px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.t-modern .modern-photo-box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.t-modern .modern-photo-img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ffffff;
+  display: block;
+}
+
+.t-modern .modern-side-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #93c5fd;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+
+.t-modern .modern-contact-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 11.5px;
+  color: #e2e8f0;
+}
+
+.t-modern .modern-contact-list a {
+  color: #93c5fd;
+  text-decoration: none;
+}
+
+.t-modern .modern-tags-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.t-modern .modern-tag {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #ffffff;
+  font-size: 10.5px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.t-modern .modern-edu-block {
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+.t-modern .modern-edu-block strong {
+  display: block;
+  color: #ffffff;
+}
+.t-modern .modern-edu-block p {
+  color: #cbd5e1;
+}
+.t-modern .modern-edu-block small {
+  color: #94a3b8;
+}
+
+.t-modern .modern-right-col {
+  padding: 28px 28px;
+  background: #ffffff;
+  color: #1e293b;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.t-modern .modern-header {
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 10px;
+}
+
+.t-modern .modern-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--p-primary);
+  line-height: 1.15;
+}
+
+.t-modern .modern-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--p-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 3px;
+}
+
+.t-modern .modern-sec-heading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--p-primary);
+  border-bottom: 1.5px solid var(--p-accent);
+  padding-bottom: 3px;
+  margin-bottom: 10px;
+}
+
+.t-modern .modern-text {
+  font-size: 12px;
+  color: #334155;
+  line-height: 1.45;
+  text-align: justify;
+}
+
+.t-modern .modern-job {
+  margin-bottom: 14px;
+  position: relative;
+  padding-left: 14px;
+  border-left: 2px solid var(--p-accent-soft);
+}
+
+.t-modern .modern-job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.t-modern .modern-job-role {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--p-primary);
+}
+
+.t-modern .modern-job-date {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--p-accent);
+}
+
+.t-modern .modern-job-company {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 5px;
+}
+
+.t-modern .bullet-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.t-modern .bullet-list li {
+  position: relative;
+  padding-left: 14px;
+  font-size: 11.8px;
+  color: #334155;
+  line-height: 1.4;
+}
+
+.t-modern .bullet-list li::before {
+  content: "•";
+  position: absolute;
+  left: 2px;
+  color: var(--p-accent);
+  font-size: 14px;
+  top: -1px;
+}
+
+.t-modern .modern-proj-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+}
+
+.t-modern .modern-tag-mini {
+  font-size: 10px;
+  background: #e2e8f0;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: #475569;
+}
+
+/* ==========================================================================
+   MODALES Y UTILIDADES
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-backdrop.active {
+  display: flex;
+}
+
+.modal-dialog {
+  background: #1e293b;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 620px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.modal-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

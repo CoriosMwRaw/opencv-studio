@@ -1,0 +1,74 @@
+/* ==========================================================================
+   OpenCV Studio - Estilos de Impresión Pixel-Perfect (PDF)
+   ========================================================================== */
+
+@media print {
+  body {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: #000000 !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  .app-topbar,
+  .editor-pane,
+  .preview-toolbar,
+  .modal-backdrop {
+    display: none !important;
+  }
+
+  .split-workspace {
+    display: block !important;
+    height: auto !important;
+  }
+
+  .preview-pane {
+    background: transparent !important;
+    display: block !important;
+    height: auto !important;
+  }
+
+  .preview-canvas-container {
+    background: transparent !important;
+    padding: 0 !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .cv-paper-container {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Mantener colores de fondo exactos */
+  .cv-header,
+  .contact-strip,
+  .kpi-bar,
+  .h-badge,
+  .tag-pill,
+  .job-period,
+  .summary-box,
+  .project-card,
+  .kpi-card {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .job-card,
+  .project-card,
+  .edu-item {
+    page-break-inside: avoid;
+  }
+
+  @page {
+    size: letter;
+    margin: 8mm 8mm;
+  }
+}

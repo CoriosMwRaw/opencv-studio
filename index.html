@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenCV Studio - Creador de CV Profesional y Libre</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="src/styles/main.css">
+  <link rel="stylesheet" href="src/styles/print.css">
+</head>
+<body>
+
+  <!-- Input oculto para subir fotografía -->
+  <input type="file" id="photoFileInput" accept="image/*" style="display: none;">
+
+  <!-- Header Superior de la Aplicación -->
+  <header class="app-topbar">
+    <div class="brand-section">
+      <div class="brand-logo">
+        <span>⚡ OpenCV Studio</span>
+        <span class="brand-badge">100% Libre & Offline</span>
+      </div>
+
+      <div class="profile-selector-box">
+        <label for="profileSelect" style="font-size: 11px; color: var(--text-muted);">Perfil:</label>
+        <select id="profileSelect" class="profile-select"></select>
+        <button class="app-btn app-btn-outline" style="padding: 2px 7px; font-size: 11px;" onclick="openProfileManager()" title="Administrar Perfiles">⚙️</button>
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <button class="app-btn app-btn-outline" onclick="openATSAnalyzer()">
+        ✨ Analizar ATS
+      </button>
+
+      <button class="app-btn app-btn-outline" onclick="exportJSON()" title="Guardar respaldo en archivo JSON">
+        💾 Respaldar (JSON)
+      </button>
+
+      <button class="app-btn app-btn-outline" onclick="importJSON()" title="Cargar respaldo desde archivo JSON">
+        📂 Cargar (JSON)
+      </button>
+
+      <button class="app-btn app-btn-primary" onclick="exportToPDF()">
+        🖨️ Exportar a PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- Espacio de Trabajo Dividido (Editor + Vista Previa) -->
+  <div class="split-workspace">
+    
+    <!-- Panel Izquierdo: Formulario Editor -->
+    <aside class="editor-pane">
+      <div class="editor-header">
+        <span class="editor-title">📝 Editor de Información</span>
+        <div class="editor-tools-bar">
+          <button class="btn-link-mini" onclick="expandAllAccordions()">▼ Expandir</button>
+          <span style="color:#475569;">|</span>
+          <button class="btn-link-mini" onclick="collapseAllAccordions()">▲ Colapsar</button>
+        </div>
+      </div>
+
+      <div class="editor-scroll">
+        
+        <!-- 1. Datos Personales -->
+        <div class="acc-card open">
+          <div class="acc-header">
+            <div class="acc-title-left">
+              <span class="acc-icon">👤</span>
+              <span>Datos Personales y Contacto</span>
+            </div>
+            <span class="acc-arrow">▼</span>
+          </div>
+          <div class="acc-body">
+            <div class="form-group">
+              <label class="form-label">Nombre Completo</label>
+              <input type="text" id="in_fullName" class="form-input" placeholder="Nombre completo">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Titular Profesional / Especialidad</label>
+              <input type="text" id="in_headline" class="form-input" placeholder="ej. Ingeniero de Software Junior">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Teléfono / WhatsApp</label>
+                <input type="text" id="in_phone" class="form-input" placeholder="ej. (55) 1234 5678">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Correo Electrónico</label>
+                <input type="email" id="in_email" class="form-input" placeholder="ej. correo@ejemplo.com">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Ubicación (Ciudad, Estado)</label>
+                <input type="text" id="in_location" class="form-input" placeholder="ej. Guadalajara, Jal., México">
+              </div>
+              <div class="form-group">
+                <label class="form-label">LinkedIn (URL o usuario)</label>
+                <input type="text" id="in_linkedin" class="form-input" placeholder="https://linkedin.com/in/...">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">GitHub / Portafolio Web</label>
+              <input type="text" id="in_github" class="form-input" placeholder="https://github.com/...">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Insignias / Destacados Rápidos (uno por línea)</label>
+              <textarea id="in_badges" class="form-textarea" rows="2" placeholder="ej. 🎓 7mo Semestre de Ingeniería&#10;💻 Desarrollo Fullstack"></textarea>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+              <button class="app-btn app-btn-outline" onclick="triggerPhotoUpload()">📷 Subir / Cambiar Foto</button>
+              <label style="font-size:12px; color:#cbd5e1; cursor:pointer;">
+                <input type="checkbox" id="opt_showPhoto"> Mostrar Foto en CV
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Perfil Profesional -->
+        <div class="acc-card open">
+          <div class="acc-header">
+            <div class="acc-title-left">
+              <span class="acc-icon">📄</span>
+              <span>Perfil Profesional / Resumen</span>
+            </div>
+            <span class="acc-arrow">▼</span>
+          </div>
+          <div class="acc-body">
+            <div class="form-group">
+              <label class="form-label">Resumen Ejecutivo (35 - 85 palabras)</label>
+              <textarea id="in_summary" class="form-textarea" rows="4" placeholder="Escribe un breve resumen de tu trayectoria y competencias clave..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Métricas Clave (KPIs) -->
+        <div class="acc-card">
+          <div class="acc-header">
+            <div class="acc-title-left">
+              <span class="acc-icon">📊</span>
+              <span>Métricas de Impacto / KPIs</span>
+            </div>
+            <span class="acc-arrow">▼</span>
+          </div>
+          <div class="acc-body">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-size:11px; color:#94a3b8;">Cifras destacadas (proyectos, horas, rendimiento)</span>
+              <label style="font-size:12px; color:#cbd5e1; cursor:pointer;">
+                <input type="checkbox" id="opt_showKpis"> Activar Barra de KPIs
+              </label>
+            </div>
+            <div id="kpiList"></div>
+          </div>
+        </div>
+
+        <!-- 4. Experiencia Laboral -->
+        <div class="acc-card open">
+          <div class="acc-header">
+            <div class="acc-title-left">
+              <span class="acc-icon">💼</span>
+              <span>Experiencia Laboral</span>
+            </div>
+            <span class="acc-arrow">▼</span>
+          </div>
+          <div class="acc-body">
+            <div id="experienceList"></div>
+            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center;" onclick="addExperience()">+ Añadir Puesto Laboral</button>
+          </div>
+        </div>
+
+        <!-- 5. Proyectos Técnicos -->
+        <div class="acc-card open">
+          <div class="acc-header">
+            <div class="acc-title-left">
+              <span class="acc-icon">🚀</span>
+              <span>Proyectos Destacados</span>
+            </div>
+            <span class="acc-arrow">▼</span>
+          </div>
+          <div class="acc-body">
+            <div id="projectsList"></div>
+            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center;" onclick="addProject()">+ Añadir Proyecto</button>
+          </div>
+        </div>
+
+        <!-- 6. Educación y Estudios -->
+        <div class="acc-card open">
+          <div class="acc-header">
+            <div class="acc-title-left">
+              <span class="acc-icon">🎓</span>
+              <span>Educación y Formación</span>
+            </div>
+            <span class="acc-arrow">▼</span>
+          </div>
+          <div class="acc-body">
+            <div id="educationList"></div>
+            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center;" onclick="addEducation()">+ Añadir Formación</button>
+          </div>
+        </div>
+
+        <!-- 7. Stack Técnico & Habilidades -->
+        <div class="acc-card">
+          <div class="acc-header">
+            <div class="acc-title-left">
+              <span class="acc-icon">🛠️</span>
+              <span>Stack Técnico & Habilidades</span>
+            </div>
+            <span class="acc-arrow">▼</span>
+          </div>
+          <div class="acc-body">
+            <div class="form-group">
+              <label class="form-label">Lenguajes de Programación (separados por coma)</label>
+              <input type="text" id="in_skills_lang" class="form-input" oninput="syncSkills()" placeholder="Java, Python, C++, JavaScript, PHP">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Bases de Datos & SQL (separados por coma)</label>
+              <input type="text" id="in_skills_db" class="form-input" oninput="syncSkills()" placeholder="MySQL, SQL Server, PostgreSQL, SQLite">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Herramientas, BI & Sistemas (separados por coma)</label>
+              <input type="text" id="in_skills_tools" class="form-input" oninput="syncSkills()" placeholder="Git, Docker, Linux, Excel Avanzado, Power BI">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Habilidades Blandas / Metodologías</label>
+              <input type="text" id="in_skills_soft" class="form-input" oninput="syncSkills()" placeholder="Scrum, Aprendizaje Autodidacta, Trabajo en Equipo">
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. Certificaciones -->
+        <div class="acc-card">
+          <div class="acc-header">
+            <div class="acc-title-left">
+              <span class="acc-icon">📜</span>
+              <span>Certificaciones y Cursos</span>
+            </div>
+            <span class="acc-arrow">▼</span>
+          </div>
+          <div class="acc-body">
+            <div id="certList"></div>
+            <button class="app-btn app-btn-outline" style="width:100%; justify-content:center;" onclick="addCert()">+ Añadir Certificación</button>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- Panel Derecho: Previsualización en Vivo -->
+    <main class="preview-pane">
+      
+      <!-- Barra de Configuración de la Plantilla -->
+      <div class="preview-toolbar">
+        <div class="toolbar-group">
+          <label style="font-size:12px; color:#cbd5e1; font-weight:600;">Plantilla:</label>
+          <select id="select_template" class="form-select" style="padding: 4px 8px; font-size: 12.5px;">
+            <option value="tech">💻 Tech & Desarrollador (Sistemas)</option>
+            <option value="data">📊 Industrial & Data Analyst (Operaciones)</option>
+            <option value="ats">🤖 ATS Minimalista Clásico (Filtros)</option>
+            <option value="modern">👔 Moderna Ejecutiva (Doble Columna)</option>
+          </select>
+        </div>
+
+        <div class="toolbar-group">
+          <label style="font-size:12px; color:#cbd5e1; font-weight:600;">Color:</label>
+          <select id="select_theme" class="form-select" style="padding: 4px 8px; font-size: 12.5px;">
+            <option value="navy">Azul Ejecutivo / Tech</option>
+            <option value="teal">Esmeralda Data / BI</option>
+            <option value="indigo">Índigo Moderno</option>
+            <option value="graphite">Grafito Minimalista</option>
+          </select>
+        </div>
+
+        <!-- Controles de Zoom -->
+        <div class="toolbar-group">
+          <button class="app-btn app-btn-outline app-btn-icon" onclick="changeZoom(-0.1)">−</button>
+          <span id="zoomValText" style="font-size:12px; color:#cbd5e1; font-weight:600; min-width:38px; text-align:center;">100%</span>
+          <button class="app-btn app-btn-outline app-btn-icon" onclick="changeZoom(0.1)">+</button>
+          <button class="app-btn app-btn-outline" style="padding: 4px 8px; font-size: 11px;" onclick="changeZoom('fit')">Ajustar</button>
+        </div>
+      </div>
+
+      <!-- Lienzo del CV -->
+      <div class="preview-canvas-container">
+        <div class="cv-paper-container" id="cvPaperTarget">
+          <!-- Aquí se renderiza dinámicamente el CV -->
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- MODAL 1: Banco de Frases -->
+  <div class="modal-backdrop" id="bulletBankModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">💡 Banco de Frases de Impacto & Verbos de Acción</h3>
+        <button class="modal-close" onclick="closeModal('bulletBankModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:12.5px; color:#94a3b8;">
+          Haz clic en cualquier frase para insertarla directamente en la experiencia laboral seleccionada.
+        </p>
+        <div id="bulletBankContent"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="app-btn app-btn-outline" onclick="closeModal('bulletBankModal')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Analizador ATS -->
+  <div class="modal-backdrop" id="atsModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">✨ Diagnóstico de Compatibilidad ATS</h3>
+        <button class="modal-close" onclick="closeModal('atsModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; align-items:center; gap:20px; background:#0f172a; padding:16px; border-radius:10px; border:1px solid #334155;">
+          <div style="font-size:42px; font-weight:800; font-family:'Space Grotesk',sans-serif; color:#38bdf8;" id="atsScoreText">
+            0%
+          </div>
+          <div>
+            <div style="display:inline-block; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:700; color:#ffffff; margin-bottom:4px;" id="atsScoreBadge">
+              Evaluando...
+            </div>
+            <p style="font-size:12px; color:#94a3b8;">
+              Puntuación estimada de aprobación ante filtros automáticos de recursos humanos (ATS) y reclutadores técnicos.
+            </p>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;" id="atsChecksList"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="app-btn app-btn-primary" onclick="closeModal('atsModal')">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Administrador de Perfiles Completo -->
+  <div class="modal-backdrop" id="profileManagerModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">⚙️ Administrar Perfiles de Currículum</h3>
+        <button class="modal-close" onclick="closeModal('profileManagerModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:12.5px; color:#94a3b8;">
+          Gestiona perfiles para diferentes compañeros o crea variantes especializadas para cada postulación.
+        </p>
+
+        <!-- Lista de Perfiles Existentes -->
+        <div id="profileCardsContainer" style="display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto;"></div>
+
+        <!-- Formulario para Crear Nuevo Perfil -->
+        <div style="background:#0f172a; border:1px solid #334155; padding:14px; border-radius:8px; margin-top:10px;">
+          <h4 style="color:#60a5fa; font-size:13px; margin-bottom:8px;">➕ Crear Nuevo Perfil</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Nombre del Perfil o Compañero</label>
+              <input type="text" id="newProfileNameInput" class="form-input" placeholder="ej. María González (Prácticas)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Plantilla Inicial</label>
+              <select id="newProfileTemplateSelect" class="form-select">
+                <option value="tech">Tech & Desarrollador</option>
+                <option value="data">Industrial & Data Analyst</option>
+                <option value="ats">ATS Minimalista Clásico</option>
+                <option value="modern">Moderna Ejecutiva</option>
+              </select>
+            </div>
+          </div>
+          <button class="app-btn app-btn-primary" style="margin-top:10px; width:100%; justify-content:center;" onclick="createNewProfileFromModal()">
+            Crear y Abrir Perfil
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="app-btn app-btn-outline" onclick="closeModal('profileManagerModal')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts de la Aplicación -->
+  <script src="src/data/sampleProfiles.js"></script>
+  <script src="src/data/bulletBank.js"></script>
+  <script src="src/storage.js"></script>
+  <script src="src/atsAnalyzer.js"></script>
+  
+  <!-- Plantillas -->
+  <script src="src/templates/techTemplate.js"></script>
+  <script src="src/templates/dataTemplate.js"></script>
+  <script src="src/templates/atsTemplate.js"></script>
+  <script src="src/templates/modernTemplate.js"></script>
+  
+  <!-- Controlador -->
+  <script src="src/app.js"></script>
+
+</body>
+</html>
