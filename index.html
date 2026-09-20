@@ -25,12 +25,15 @@
         <span class="brand-name">OpenCV <span class="brand-highlight">Studio</span></span>
         <span class="brand-badge" data-i18n="topbar.badge">100% Libre & Offline</span>
       </div>
+    </div>
 
-      <div class="profile-selector-box">
-        <label for="profileSelect" style="font-size: 11px; color: var(--text-muted);" data-i18n="topbar.profile">Perfil:</label>
-        <select id="profileSelect" class="profile-select"></select>
-        <button class="app-btn app-btn-outline" style="padding: 2px 7px; font-size: 11px;" onclick="openProfileManager()" title="Administrar Perfiles" data-i18n-title="topbar.profileMgr">⚙️</button>
-      </div>
+    <!-- Selector de Perfil y Botón de Configuración Siempre Visible -->
+    <div class="profile-selector-box">
+      <span class="profile-selector-label" data-i18n="topbar.profile">👤 Perfil:</span>
+      <select id="profileSelect" class="profile-select" title="Seleccionar perfil de currículum"></select>
+      <button id="btnProfileManager" class="app-btn app-btn-profile-mgr" onclick="openProfileManager()" title="Administrar perfiles (seleccionar, duplicar o eliminar)" data-i18n-title="topbar.profileMgr">
+        ⚙️ <span class="profile-mgr-text" data-i18n="topbar.profileOptions">Configurar</span>
+      </button>
     </div>
 
     <div class="topbar-actions">
@@ -293,7 +296,7 @@
             <option value="tech" data-i18n="tmpl.tech">💻 Tech & Desarrollador (Sistemas)</option>
             <option value="harvard" data-i18n="tmpl.harvard">🎓 Harvard Classic (Ivy League ATS)</option>
             <option value="data" data-i18n="tmpl.data">📊 Industrial & Data Analyst (Operaciones)</option>
-            <option value="ats" data-i18n="tmpl.ats">🤖 ATS Minimalista Clásico (Filtros)</option>
+            <option value="timeline" data-i18n="tmpl.timeline">⏳ Timeline Ejecutivo (Hitos & Cronología)</option>
             <option value="modern" data-i18n="tmpl.modern">👔 Moderna Ejecutiva (Doble Columna)</option>
             <option value="compact" data-i18n="tmpl.compact">📄 Elegante Compacta (1 Página ATS)</option>
           </select>
@@ -375,31 +378,104 @@
     </div>
   </div>
 
-  <!-- MODAL 2: Analizador ATS -->
+  <!-- MODAL 2: Analizador ATS Exhaustivo y Animado -->
   <div class="modal-backdrop" id="atsModal">
-    <div class="modal-dialog">
+    <div class="modal-dialog ats-modal-dialog">
       <div class="modal-header">
-        <h3 class="modal-title" data-i18n="ats.title">✨ Diagnóstico de Compatibilidad ATS</h3>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:20px;">🛡️</span>
+          <h3 class="modal-title" data-i18n="ats.title">Auditoría Exhaustiva de Compatibilidad ATS</h3>
+        </div>
         <button class="modal-close" onclick="closeModal('atsModal')">✕</button>
       </div>
-      <div class="modal-body">
-        <div style="display:flex; align-items:center; gap:20px; background:#0f172a; padding:16px; border-radius:10px; border:1px solid #334155;">
-          <div style="font-size:42px; font-weight:800; font-family:'Space Grotesk',sans-serif; color:#38bdf8;" id="atsScoreText">
-            0%
+
+      <div class="modal-body" style="padding: 18px 22px; position:relative; min-height: 480px;">
+        
+        <!-- Estado 1: Animación de Escaneo Radar HUD -->
+        <div id="atsScanOverlay" class="ats-scan-overlay">
+          <div class="ats-radar-container">
+            <div class="ats-radar-circle"></div>
+            <div class="ats-radar-sweep"></div>
+            <div class="ats-radar-icon">📄</div>
           </div>
-          <div>
-            <div style="display:inline-block; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:700; color:#ffffff; margin-bottom:4px;" id="atsScoreBadge" data-i18n="ats.evaluating">
-              Evaluando...
+          <div class="ats-scan-status" id="atsScanStatusText">Iniciando auditoría de 48 parámetros ATS...</div>
+          <div class="ats-scan-progressbar-track">
+            <div class="ats-scan-progressbar-fill" id="atsScanProgressFill"></div>
+          </div>
+          <div class="ats-scan-subtext">Verificando algoritmos de Workday, Taleo, Greenhouse y SAP SuccessFactors</div>
+        </div>
+
+        <!-- Estado 2: Resultados y Diagnóstico Completo -->
+        <div id="atsResultsContainer" style="display:none;">
+          <!-- Encabezado de Puntuación con Medidor Radial SVG -->
+          <div class="ats-score-hero">
+            <div class="ats-radial-gauge-wrapper">
+              <svg class="ats-radial-gauge" viewBox="0 0 120 120">
+                <circle class="ats-gauge-bg" cx="60" cy="60" r="50"></circle>
+                <circle class="ats-gauge-progress" id="atsGaugeProgressCircle" cx="60" cy="60" r="50"></circle>
+              </svg>
+              <div class="ats-gauge-center">
+                <span id="atsScoreValue">0%</span>
+                <small>ATS SCORE</small>
+              </div>
             </div>
-            <p style="font-size:12px; color:#94a3b8;" data-i18n="ats.desc">
-              Puntuación estimada de aprobación ante filtros automáticos de recursos humanos (ATS) y reclutadores técnicos.
-            </p>
+
+            <div class="ats-hero-info">
+              <div class="ats-verdict-badge" id="atsVerdictBadge">Evaluando...</div>
+              <p class="ats-verdict-text" id="atsVerdictText"></p>
+              <div class="ats-metric-chips">
+                <span class="ats-chip" id="atsChipTotal">🎯 48 Parámetros auditados</span>
+                <span class="ats-chip ats-chip-pass" id="atsChipPassed">✓ 0 Cumplidos</span>
+                <span class="ats-chip ats-chip-warn" id="atsChipFixes">⚡ 0 Oportunidades</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barra de Pestañas Interactivas -->
+          <div class="ats-tabs-bar">
+            <button class="ats-tab-btn active" id="tabBtnSummary" onclick="switchAtsTab('summary')">📊 Resumen Ejecutivo</button>
+            <button class="ats-tab-btn" id="tabBtnAudit" onclick="switchAtsTab('audit')">🔍 Auditoría Detallada (48 Pts)</button>
+            <button class="ats-tab-btn" id="tabBtnKeywords" onclick="switchAtsTab('keywords')">🏷️ Palabras Clave</button>
+            <button class="ats-tab-btn" id="tabBtnFixes" onclick="switchAtsTab('fixes')">⚡ Acciones Rápidas</button>
+          </div>
+
+          <!-- Pestaña 1: Resumen de Dimensiones -->
+          <div id="atsTabSummary" class="ats-tab-content active">
+            <div class="ats-dimensions-grid" id="atsDimensionsGrid"></div>
+          </div>
+
+          <!-- Pestaña 2: Auditoría Detallada -->
+          <div id="atsTabAudit" class="ats-tab-content">
+            <div class="ats-filter-bar">
+              <span style="font-size:12px; color:#94a3b8;">Filtrar parámetros:</span>
+              <button class="ats-filter-btn active" id="filterBtnAll" onclick="filterAtsAudit('all', this)">Todos (48)</button>
+              <button class="ats-filter-btn" onclick="filterAtsAudit('passed', this)">✓ Aprobados</button>
+              <button class="ats-filter-btn" onclick="filterAtsAudit('needs-fix', this)">⚠️ Por Mejorar</button>
+            </div>
+            <div class="ats-audit-items-list" id="atsAuditItemsList"></div>
+          </div>
+
+          <!-- Pestaña 3: Palabras Clave Detectadas -->
+          <div id="atsTabKeywords" class="ats-tab-content">
+            <div class="ats-keywords-intro">
+              Tecnologías y habilidades clave detectadas e indexadas en tu currículum:
+            </div>
+            <div class="ats-keywords-cloud" id="atsKeywordsCloud"></div>
+          </div>
+
+          <!-- Pestaña 4: Acciones Inmediatas -->
+          <div id="atsTabFixes" class="ats-tab-content">
+            <div class="ats-fixes-intro">
+              Recomendaciones priorizadas para elevar tu puntuación ATS al máximo nivel:
+            </div>
+            <div class="ats-fixes-list" id="atsFixesList"></div>
           </div>
         </div>
 
-        <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;" id="atsChecksList"></div>
       </div>
-      <div class="modal-footer">
+
+      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:11px; color:#64748b;">Algoritmo heurístico de OpenCV Studio basado en estándares ATS de Silicon Valley</span>
         <button class="app-btn app-btn-primary" onclick="closeModal('atsModal')" data-i18n="ats.understand">Entendido</button>
       </div>
     </div>
@@ -431,10 +507,12 @@
             <div class="form-group">
               <label class="form-label" data-i18n="profiles.initialTemplate">Plantilla Inicial</label>
               <select id="newProfileTemplateSelect" class="form-select">
-                <option value="tech" data-i18n="tmpl.tech">Tech & Desarrollador</option>
-                <option value="data" data-i18n="tmpl.data">Industrial & Data Analyst</option>
-                <option value="ats" data-i18n="tmpl.ats">ATS Minimalista Clásico</option>
-                <option value="modern" data-i18n="tmpl.modern">Moderna Ejecutiva</option>
+                <option value="tech" data-i18n="tmpl.tech">💻 Tech & Desarrollador (Sistemas)</option>
+                <option value="harvard" data-i18n="tmpl.harvard">🎓 Harvard Classic (Ivy League ATS)</option>
+                <option value="data" data-i18n="tmpl.data">📊 Industrial & Data Analyst (Operaciones)</option>
+                <option value="timeline" data-i18n="tmpl.timeline">⏳ Timeline Ejecutivo (Hitos & Cronología)</option>
+                <option value="modern" data-i18n="tmpl.modern">👔 Moderna Ejecutiva (Doble Columna)</option>
+                <option value="compact" data-i18n="tmpl.compact">📄 Elegante Compacta (1 Página ATS)</option>
               </select>
             </div>
           </div>
@@ -530,7 +608,7 @@
             <button class="app-btn app-btn-primary" style="font-size:11.5px; padding:4px 10px;" onclick="extractDirectlyFromPdfDialog()" title="Seleccionar y extraer directamente desde un archivo PDF" data-i18n="extractor.btnPdf">
               📄 Cargar CV en PDF
             </button>
-            <input type="file" id="cvTextFileInput" accept=".pdf,.txt,.json,.md" style="display:none;" onchange="handleCvFileSelect(event)">
+            <input type="file" id="cvTextFileInput" accept=".pdf,.docx,.doc,.txt,.json,.md" style="display:none;" onchange="handleCvFileSelect(event)">
             <button class="app-btn app-btn-outline" style="font-size:11.5px; padding:4px 9px;" onclick="document.getElementById('cvTextFileInput').click()" title="Cargar archivo de texto plano o JSON" data-i18n="extractor.btnOther">
               📁 Otro (.txt / .json)
             </button>
@@ -571,10 +649,12 @@
             <div class="form-group">
               <label class="form-label" data-i18n="extractor.templateLabel">Plantilla Deseada</label>
               <select id="extractedProfileTemplate" class="form-select">
-                <option value="tech" data-i18n="tmpl.tech">Tech & Desarrollador</option>
-                <option value="data" data-i18n="tmpl.data">Industrial & Data Analyst</option>
-                <option value="ats" data-i18n="tmpl.ats">ATS Minimalista Clásico</option>
-                <option value="modern" data-i18n="tmpl.modern">Moderna Ejecutiva</option>
+                <option value="tech" data-i18n="tmpl.tech">💻 Tech & Desarrollador (Sistemas)</option>
+                <option value="harvard" data-i18n="tmpl.harvard">🎓 Harvard Classic (Ivy League ATS)</option>
+                <option value="data" data-i18n="tmpl.data">📊 Industrial & Data Analyst (Operaciones)</option>
+                <option value="timeline" data-i18n="tmpl.timeline">⏳ Timeline Ejecutivo (Hitos & Cronología)</option>
+                <option value="modern" data-i18n="tmpl.modern">👔 Moderna Ejecutiva (Doble Columna)</option>
+                <option value="compact" data-i18n="tmpl.compact">📄 Elegante Compacta (1 Página ATS)</option>
               </select>
             </div>
           </div>
@@ -636,7 +716,7 @@
   <script src="src/templates/techTemplate.js"></script>
   <script src="src/templates/harvardTemplate.js"></script>
   <script src="src/templates/dataTemplate.js"></script>
-  <script src="src/templates/atsTemplate.js"></script>
+  <script src="src/templates/timelineTemplate.js"></script>
   <script src="src/templates/modernTemplate.js"></script>
   <script src="src/templates/compactTemplate.js"></script>
   

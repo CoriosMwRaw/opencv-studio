@@ -1,12 +1,14 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, webUtils } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
   isElectron: true,
+  getPathForFile: (file) => (webUtils && typeof webUtils.getPathForFile === 'function') ? webUtils.getPathForFile(file) : (file.path || ''),
   exportPdf: (options) => ipcRenderer.invoke('export-pdf', options),
   saveJsonDialog: (data, defaultName) => ipcRenderer.invoke('save-json-dialog', { data, defaultName }),
   loadJsonDialog: () => ipcRenderer.invoke('load-json-dialog'),
   openExternal: (url) => ipcRenderer.invoke('open-external', url),
   extractPdfText: (filePath) => ipcRenderer.invoke('extract-pdf-text', filePath),
+  extractDocxText: (filePath) => ipcRenderer.invoke('extract-docx-text', filePath),
   selectAndExtractPdf: () => ipcRenderer.invoke('select-and-extract-pdf'),
   onPdfExtractionStatus: (callback) => {
     const listener = (_event, data) => callback(data);

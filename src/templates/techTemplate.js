@@ -67,7 +67,7 @@ const TechTemplate = {
           <span class="edu-degree">${ed.degree}</span>
           <span class="edu-period">${ed.period}</span>
         </div>
-        <div class="edu-school">${ed.school}</div>
+        <div class="edu-school">${ed.school || ""}</div>
         ${ed.details ? `<div class="edu-meta">${ed.details}</div>` : ''}
       </div>
     `).join('');

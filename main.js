@@ -155,7 +155,7 @@ ipcMain.handle('export-pdf', async (event, options = {}) => {
     const { filePath } = await dialog.showSaveDialog(mainWindow, {
       title: 'Guardar CV en formato PDF',
       defaultPath: options.defaultName || 'Mi_Curriculum_Profesional.pdf',
-      filters: [{ name: 'Documento PDF', extensions: ['pdf'] }]
+      filters: [{ name: 'Currículums (PDF, Word, Texto)', extensions: ['pdf', 'docx', 'txt', 'md'] }]
     });
 
     if (!filePath) return { success: false, canceled: true };
@@ -329,11 +329,59 @@ ipcMain.handle('extract-pdf-text', async (event, filePath) => {
 });
 
 // IPC: Abrir diálogo para seleccionar y extraer texto de un PDF
+
+// IPC: Extraer texto de un archivo DOCX (.docx de Microsoft Word)
+ipcMain.handle('extract-docx-text', async (event, filePath) => {
+  try {
+    const yauzl = require('yauzl');
+    return new Promise((resolve) => {
+      yauzl.open(filePath, { lazyEntries: true }, (err, zipfile) => {
+        if (err) return resolve({ success: false, error: 'No se pudo abrir el archivo Word: ' + err.message });
+        let found = false;
+        zipfile.readEntry();
+        zipfile.on('entry', (entry) => {
+          if (entry.fileName === 'word/document.xml') {
+            found = true;
+            zipfile.openReadStream(entry, (err, stream) => {
+              if (err) return resolve({ success: false, error: err.message });
+              const chunks = [];
+              stream.on('data', c => chunks.push(c));
+              stream.on('end', () => {
+                const xml = Buffer.concat(chunks).toString('utf8');
+                const text = xml
+                  .replace(/<w:tab[^>]*\/>/g, '\t')
+                  .replace(/<w:br[^>]*\/>/g, '\n')
+                  .replace(/<\/w:p>/g, '\n')
+                  .replace(/<[^>]+>/g, '')
+                  .replace(/&lt;/g, '<')
+                  .replace(/&gt;/g, '>')
+                  .replace(/&amp;/g, '&')
+                  .replace(/&quot;/g, '"')
+                  .replace(/&apos;/g, "'")
+                  .trim();
+                resolve({ success: true, text, filePath, method: 'docx' });
+              });
+            });
+          } else {
+            zipfile.readEntry();
+          }
+        });
+        zipfile.on('end', () => {
+          if (!found) resolve({ success: false, error: 'No se encontró contenido de texto en el archivo Word' });
+        });
+        zipfile.on('error', (zErr) => resolve({ success: false, error: zErr.message }));
+      });
+    });
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+});
+
 ipcMain.handle('select-and-extract-pdf', async () => {
   try {
     const { filePaths } = await dialog.showOpenDialog(mainWindow, {
       title: 'Seleccionar Currículum en Formato PDF',
-      filters: [{ name: 'Documento PDF', extensions: ['pdf'] }],
+      filters: [{ name: 'Currículums (PDF, Word, Texto)', extensions: ['pdf', 'docx', 'txt', 'md'] }],
       properties: ['openFile']
     });
 

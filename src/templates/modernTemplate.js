@@ -51,7 +51,7 @@ const ModernTemplate = {
             ${(data.education || []).map(ed => `
               <div class="modern-edu-block">
                 <strong>${ed.degree}</strong>
-                <p>${ed.school}</p>
+                <p>${ed.school || ""}</p>
                 <small>${ed.period}</small>
               </div>
             `).join('')}

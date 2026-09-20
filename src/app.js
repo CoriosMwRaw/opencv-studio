@@ -24,8 +24,8 @@ function escapeHtml(str) {
 const templates = {
   tech: TechTemplate,
   harvard: HarvardTemplate,
+  timeline: TimelineTemplate,
   data: DataTemplate,
-  ats: ATSTemplate,
   modern: ModernTemplate,
   compact: CompactTemplate
 };
@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Inicializar Selector de Perfiles
 function initProfileSelector() {
   const select = document.getElementById('profileSelect');
+  if (!select) return;
   select.innerHTML = '';
   const profiles = storage.getAllProfiles();
   const activeId = storage.getActiveProfileId();
@@ -51,10 +52,21 @@ function initProfileSelector() {
   Object.values(profiles).forEach(prof => {
     const opt = document.createElement('option');
     opt.value = prof.id;
-    opt.textContent = prof.name || prof.personal.fullName;
+    opt.textContent = prof.name || prof.personal?.fullName || 'Perfil';
     if (prof.id === activeId) opt.selected = true;
     select.appendChild(opt);
   });
+
+  // Acceso directo a administración/eliminación desde el selector
+  const sep = document.createElement('option');
+  sep.disabled = true;
+  sep.textContent = '──────────';
+  select.appendChild(sep);
+
+  const optManage = document.createElement('option');
+  optManage.value = '__manage__';
+  optManage.textContent = '⚙️ Administrar / Eliminar...';
+  select.appendChild(optManage);
 }
 
 // Cargar Datos del Perfil Activo en el Formulario
@@ -119,6 +131,11 @@ function loadCurrentProfile() {
 function setupEventListeners() {
   // Cambio de Perfil
   document.getElementById('profileSelect').addEventListener('change', (e) => {
+    if (e.target.value === '__manage__') {
+      initProfileSelector();
+      openProfileManager();
+      return;
+    }
     storage.setActiveProfile(e.target.value);
     loadCurrentProfile();
     updatePreview();
@@ -722,32 +739,40 @@ function renderProfileManagerUI() {
 
   const profiles = storage.getAllProfiles();
   const activeId = storage.getActiveProfileId();
+  const totalProfiles = Object.keys(profiles).length;
 
   Object.values(profiles).forEach(prof => {
     const isCurrent = prof.id === activeId;
     const card = document.createElement('div');
-    card.style.background = isCurrent ? '#1e3a5f' : '#182234';
+    card.style.background = isCurrent ? 'rgba(30, 58, 95, 0.75)' : '#182234';
     card.style.border = isCurrent ? '1.5px solid #38bdf8' : '1px solid #334155';
     card.style.padding = '10px 14px';
     card.style.borderRadius = '8px';
     card.style.display = 'flex';
     card.style.justifyContent = 'space-between';
     card.style.alignItems = 'center';
+    card.style.gap = '12px';
 
     card.innerHTML = `
-      <div>
+      <div style="min-width:0; flex:1;">
         <div style="font-weight:700; font-size:13.5px; color:#ffffff; display:flex; align-items:center; gap:8px;">
-          <span>${escapeHtml(prof.name)}</span>
-          ${isCurrent ? `<span style="background:#059669; color:#fff; font-size:10px; padding:2px 6px; border-radius:10px;">${t('profiles.activeBadge', lang)}</span>` : ''}
+          <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(prof.name || prof.personal?.fullName || 'Perfil')}</span>
+          ${isCurrent ? `<span style="background:#059669; color:#fff; font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px; flex-shrink:0;">${t('profiles.activeBadge', lang)}</span>` : ''}
         </div>
-        <div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">
-          ${t('profiles.headlineLabel', lang)} ${escapeHtml(prof.personal?.headline || (lang === 'en' ? 'No headline' : 'Sin titular'))} | ${t('profiles.templateLabel', lang)} ${escapeHtml(prof.settings?.template || 'tech')}
+        <div style="font-size:11.5px; color:#94a3b8; margin-top:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+          ${t('profiles.headlineLabel', lang)} ${escapeHtml(prof.personal?.headline || (lang === 'en' ? 'No headline' : 'Sin titular'))} • ${t('profiles.templateLabel', lang)} ${escapeHtml(prof.settings?.template || 'tech')}
         </div>
       </div>
-      <div style="display:flex; gap:6px;">
-        ${!isCurrent ? `<button class="app-btn app-btn-primary app-btn-icon" onclick="selectProfileFromModal('${prof.id}')" title="${t('profiles.useBtn', lang)}">${t('profiles.useBtn', lang)}</button>` : ''}
-        <button class="app-btn app-btn-outline app-btn-icon" onclick="duplicateProfileFromModal('${prof.id}')" title="${t('profiles.duplicateBtn', lang)}">📑</button>
-        ${Object.keys(profiles).length > 1 ? `<button class="app-btn app-btn-danger app-btn-icon" onclick="deleteProfileFromModal('${prof.id}')" title="${t('profiles.deleteBtn', lang)}">🗑️</button>` : ''}
+      <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;">
+        ${!isCurrent 
+          ? `<button class="app-btn app-btn-primary" style="padding:4px 10px; font-size:12px;" onclick="selectProfileFromModal('${prof.id}')" title="Activar este perfil">✓ ${t('profiles.useBtn', lang)}</button>` 
+          : `<span style="font-size:11px; color:#38bdf8; font-weight:700; background:rgba(56,189,248,0.12); padding:3px 8px; border-radius:6px; border:1px solid rgba(56,189,248,0.3);">En uso</span>`
+        }
+        <button class="app-btn app-btn-outline" style="padding:4px 8px; font-size:12px;" onclick="duplicateProfileFromModal('${prof.id}')" title="${t('profiles.duplicateBtn', lang)}">📑 Copiar</button>
+        ${totalProfiles > 1 
+          ? `<button class="app-btn app-btn-danger" style="padding:4px 9px; font-size:12px;" onclick="deleteProfileFromModal('${prof.id}')" title="${t('profiles.deleteBtn', lang)}">🗑️ Eliminar</button>` 
+          : ''
+        }
       </div>
     `;
     listContainer.appendChild(card);
@@ -998,35 +1023,203 @@ function insertBulletToActiveExp(phrase) {
   showToastNotification('Frase añadida al CV', 'success', `Se integró el logro en "${exp.role || 'Puesto'}".`);
 }
 
+let currentAtsResult = null;
+
 function openATSAnalyzer() {
   const modal = document.getElementById('atsModal');
+  modal.classList.add('active');
+
+  const scanOverlay = document.getElementById('atsScanOverlay');
+  const resultsContainer = document.getElementById('atsResultsContainer');
+  const progressFill = document.getElementById('atsScanProgressFill');
+  const statusText = document.getElementById('atsScanStatusText');
+
+  // Mostrar escaneo animado
+  scanOverlay.style.display = 'flex';
+  resultsContainer.style.display = 'none';
+  progressFill.style.width = '0%';
+  statusText.textContent = 'Iniciando escaneo de estructura sintáctica...';
+
+  setTimeout(() => {
+    progressFill.style.width = '35%';
+    statusText.textContent = 'Auditando 48 parámetros contra filtros Workday & Taleo...';
+  }, 250);
+
+  setTimeout(() => {
+    progressFill.style.width = '75%';
+    statusText.textContent = 'Analizando densidad de palabras clave y verbos de acción...';
+  }, 600);
+
+  setTimeout(() => {
+    progressFill.style.width = '100%';
+    statusText.textContent = '¡Auditoría completada con éxito!';
+  }, 950);
+
+  setTimeout(() => {
+    scanOverlay.style.display = 'none';
+    resultsContainer.style.display = 'block';
+    renderAtsResults();
+  }, 1150);
+}
+
+function renderAtsResults() {
   const lang = currentProfile?.settings?.cvLanguage || (typeof currentLanguage !== 'undefined' ? currentLanguage : 'es');
   const result = ATSAnalyzer.analyze(currentProfile, lang);
+  currentAtsResult = result;
 
-  document.getElementById('atsScoreText').textContent = `${result.score}%`;
-  document.getElementById('atsScoreBadge').textContent = result.rating;
-  document.getElementById('atsScoreBadge').style.backgroundColor = result.badgeColor;
+  // 1. Contador animado de puntuación
+  const scoreValEl = document.getElementById('atsScoreValue');
+  let currentVal = 0;
+  const targetVal = result.score;
+  const duration = 900;
+  const stepTime = 15;
+  const steps = duration / stepTime;
+  const increment = targetVal / steps;
 
-  const checksList = document.getElementById('atsChecksList');
-  checksList.innerHTML = '';
+  const timer = setInterval(() => {
+    currentVal += increment;
+    if (currentVal >= targetVal) {
+      currentVal = targetVal;
+      clearInterval(timer);
+    }
+    scoreValEl.textContent = `${Math.round(currentVal)}%`;
+  }, stepTime);
 
-  result.checks.forEach(c => {
-    const item = document.createElement('div');
-    item.style.background = '#182234';
-    item.style.padding = '10px 14px';
-    item.style.borderRadius = '6px';
-    item.style.border = `1px solid ${c.passed ? '#059669' : '#d97706'}`;
-    item.innerHTML = `
-      <div style="display:flex; justify-content:space-between; font-weight:700; font-size:13px; color:#ffffff;">
-        <span>${c.passed ? '✓' : '⚠️'} ${c.category}</span>
-        <span style="color:#60a5fa;">${c.points}</span>
+  // 2. Medidor Radial SVG animado
+  const circle = document.getElementById('atsGaugeProgressCircle');
+  const radius = 50;
+  const circumference = 2 * Math.PI * radius; // ~314.16
+  circle.style.strokeDasharray = `${circumference}`;
+  circle.style.strokeDashoffset = `${circumference}`;
+  circle.style.stroke = result.badgeColor;
+
+  setTimeout(() => {
+    const offset = circumference - (targetVal / 100) * circumference;
+    circle.style.strokeDashoffset = `${offset}`;
+  }, 60);
+
+  // 3. Veredicto y Chips
+  const badgeEl = document.getElementById('atsVerdictBadge');
+  badgeEl.textContent = result.rating;
+  badgeEl.style.backgroundColor = result.badgeColor;
+  badgeEl.style.boxShadow = `0 2px 10px ${result.badgeColor}55`;
+
+  document.getElementById('atsVerdictText').textContent = result.verdictText;
+  document.getElementById('atsChipPassed').textContent = `✓ ${result.passedChecks} Cumplidos`;
+  document.getElementById('atsChipFixes').textContent = `⚡ ${result.quickFixes.length} Oportunidades`;
+
+  // 4. Renderizar Pestaña Resumen (Dimensiones)
+  const dimGrid = document.getElementById('atsDimensionsGrid');
+  dimGrid.innerHTML = '';
+  result.dimensions.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'ats-dim-card';
+    const barColor = d.percentage >= 85 ? '#10b981' : (d.percentage >= 65 ? '#0284c7' : (d.percentage >= 45 ? '#f59e0b' : '#ef4444'));
+    card.innerHTML = `
+      <div class="ats-dim-head">
+        <span class="ats-dim-title">${d.icon} ${escapeHtml(d.title)}</span>
+        <span class="ats-dim-score" style="color:${barColor};">${d.score}/${d.max} (${d.percentage}%)</span>
       </div>
-      <div style="font-size:12px; color:#94a3b8; margin-top:4px;">${c.tip}</div>
+      <div class="ats-dim-bar-track">
+        <div class="ats-dim-bar-fill" style="width:0%; background:${barColor};" data-target-w="${d.percentage}%"></div>
+      </div>
+      <div class="ats-dim-snippet">${escapeHtml(d.items[0]?.tip || '')}</div>
     `;
-    checksList.appendChild(item);
+    dimGrid.appendChild(card);
   });
 
-  modal.classList.add('active');
+  setTimeout(() => {
+    dimGrid.querySelectorAll('.ats-dim-bar-fill').forEach(fill => {
+      fill.style.width = fill.getAttribute('data-target-w');
+    });
+  }, 80);
+
+  // 5. Renderizar Pestaña Auditoría Detallada
+  renderAtsAuditItems('all');
+
+  // 6. Renderizar Pestaña Palabras Clave
+  const kwCloud = document.getElementById('atsKeywordsCloud');
+  kwCloud.innerHTML = '';
+  if (result.keywordsFound.length === 0) {
+    kwCloud.innerHTML = '<div style="font-size:12px; color:#94a3b8;">No se detectaron palabras clave específicas en las secciones analizadas.</div>';
+  } else {
+    result.keywordsFound.forEach(kw => {
+      const chip = document.createElement('span');
+      chip.className = `ats-kw-badge ats-kw-${kw.cat}`;
+      chip.textContent = kw.tag;
+      kwCloud.appendChild(chip);
+    });
+  }
+
+  // 7. Renderizar Pestaña Quick Fixes
+  const fixesList = document.getElementById('atsFixesList');
+  fixesList.innerHTML = '';
+  if (result.quickFixes.length === 0) {
+    fixesList.innerHTML = '<div style="font-size:12px; color:#10b981; font-weight:700;">¡Felicitaciones! Tu currículum cumple con los 48 parámetros evaluados al 100%.</div>';
+  } else {
+    result.quickFixes.forEach(fix => {
+      const card = document.createElement('div');
+      card.className = 'ats-fix-card';
+      const badgeText = fix.priority === 'high' ? 'Alta Prioridad' : (fix.priority === 'medium' ? 'Prioridad Media' : 'Sugerencia');
+      card.innerHTML = `
+        <span class="ats-fix-badge ats-fix-${fix.priority}">${badgeText}</span>
+        <p class="ats-fix-text">${escapeHtml(fix.text)}</p>
+      `;
+      fixesList.appendChild(card);
+    });
+  }
+
+  switchAtsTab('summary');
+}
+
+function switchAtsTab(tabId) {
+  const tabs = ['summary', 'audit', 'keywords', 'fixes'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    const content = document.getElementById(`atsTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    if (btn) btn.classList.toggle('active', t === tabId);
+    if (content) content.classList.toggle('active', t === tabId);
+  });
+}
+
+function filterAtsAudit(filterType, btnEl) {
+  if (btnEl) {
+    document.querySelectorAll('.ats-filter-btn').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+  }
+  renderAtsAuditItems(filterType);
+}
+
+function renderAtsAuditItems(filterType) {
+  if (!currentAtsResult) return;
+  const list = document.getElementById('atsAuditItemsList');
+  list.innerHTML = '';
+
+  const allItems = [];
+  currentAtsResult.dimensions.forEach(dim => {
+    dim.items.forEach(it => {
+      allItems.push({ ...it, dimension: dim.title, icon: dim.icon });
+    });
+  });
+
+  const filtered = allItems.filter(it => {
+    if (filterType === 'passed') return it.passed;
+    if (filterType === 'needs-fix') return !it.passed;
+    return true;
+  });
+
+  filtered.forEach(it => {
+    const div = document.createElement('div');
+    div.className = `ats-audit-item ${it.passed ? 'passed' : 'warn'}`;
+    div.innerHTML = `
+      <div class="ats-audit-item-top">
+        <span>${it.passed ? '✓' : '⚠️'} ${escapeHtml(it.label)}</span>
+        <span style="color:${it.passed ? '#34d399' : '#fbbf24'}; font-size:11px;">${it.pts}/${it.max} pts</span>
+      </div>
+      <div class="ats-audit-item-desc">${escapeHtml(it.tip)}</div>
+    `;
+    list.appendChild(div);
+  });
 }
 
 function closeModal(id) {
@@ -1324,15 +1517,43 @@ async function extractDirectlyFromPdfDialog() {
   }
 }
 
+let lastExtractedFileName = '';
+
 async function handleCvFileSelect(event) {
   const file = event.target.files[0];
   if (!file) return;
+  lastExtractedFileName = file.name;
 
+  const resolvedPath = (window.electronAPI && window.electronAPI.getPathForFile)
+    ? window.electronAPI.getPathForFile(file)
+    : (file.path || '');
+
+  // Soporte directo para archivos Word (.docx)
+  if (file.name.toLowerCase().endsWith('.docx')) {
+    if (window.electronAPI && window.electronAPI.extractDocxText && resolvedPath) {
+      setExtractorStatus(`Leyendo documento Word (${file.name})...`, '🔍');
+      try {
+        const res = await window.electronAPI.extractDocxText(resolvedPath);
+        if (res.success && res.text) {
+          document.getElementById('rawCvInput').value = res.text;
+          setExtractorStatus('✓ Documento Word procesado con éxito.', '✓');
+          analyzePastedCvText(file.name);
+        } else {
+          setExtractorStatus('Error al leer Word: ' + (res.error || 'Archivo ilegible.'), '❌', null, true);
+        }
+      } catch (err) {
+        setExtractorStatus('Error: ' + err.message, '❌', null, true);
+      }
+      return;
+    }
+  }
+
+  // Soporte directo para archivos PDF (.pdf)
   if (file.name.toLowerCase().endsWith('.pdf')) {
-    if (window.electronAPI && window.electronAPI.extractPdfText && file.path) {
+    if (window.electronAPI && window.electronAPI.extractPdfText && resolvedPath) {
       setExtractorStatus(`Leyendo ${file.name}...`, '🔍');
       try {
-        const res = await window.electronAPI.extractPdfText(file.path);
+        const res = await window.electronAPI.extractPdfText(resolvedPath);
         if (res.success && res.text) {
           document.getElementById('rawCvInput').value = res.text;
           if (res.method === 'ocr') {
@@ -1340,7 +1561,7 @@ async function handleCvFileSelect(event) {
           } else {
             setExtractorStatus('✓ Texto extraído al instante.', '✓');
           }
-          analyzePastedCvText();
+          analyzePastedCvText(file.name);
         } else {
           setExtractorStatus('Error al extraer texto del PDF: ' + (res.error || 'Archivo ilegible.'), '❌', null, true);
         }
@@ -1365,13 +1586,14 @@ async function handleCvFileSelect(event) {
     const content = e.target.result;
     document.getElementById('rawCvInput').value = content;
     setExtractorStatus('✓ Archivo cargado correctamente.', '✓');
-    analyzePastedCvText();
+    analyzePastedCvText(file.name);
   };
   reader.readAsText(file);
 }
 
-function analyzePastedCvText() {
+function analyzePastedCvText(optionalFilename = '') {
   const rawText = document.getElementById('rawCvInput').value.trim();
+  const filename = optionalFilename || lastExtractedFileName || '';
   if (!rawText) {
     showAppDialog({
       title: 'Texto no proporcionado',
@@ -1383,7 +1605,7 @@ function analyzePastedCvText() {
   }
 
   try {
-    const parsed = window.cvParser.parseCVText(rawText);
+    const parsed = window.cvParser.parseCVText(rawText, filename);
     pendingExtractedProfile = parsed;
 
     const previewBox = document.getElementById('extractorPreviewBox');
