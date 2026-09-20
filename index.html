@@ -29,7 +29,7 @@
 
     <!-- Selector de Perfil y Botón de Configuración Siempre Visible -->
     <div class="profile-selector-box">
-      <span class="profile-selector-label" data-i18n="topbar.profile">👤 Perfil:</span>
+      <span class="profile-selector-label" title="Perfil de currículum">👤</span>
       <select id="profileSelect" class="profile-select" title="Seleccionar perfil de currículum"></select>
       <button id="btnProfileManager" class="app-btn app-btn-profile-mgr" onclick="openProfileManager()" title="Administrar perfiles (seleccionar, duplicar o eliminar)" data-i18n-title="topbar.profileMgr">
         ⚙️ <span class="profile-mgr-text" data-i18n="topbar.profileOptions">Configurar</span>
@@ -38,7 +38,7 @@
 
     <div class="topbar-actions">
       <button class="app-btn app-btn-outline" onclick="openCvExtractorModal()" title="Importar o extraer datos desde tu CV existente en texto o archivo" data-i18n="topbar.extract">
-        📥 Extraer de CV
+        📥 Extraer CV
       </button>
 
       <button class="app-btn app-btn-outline" onclick="openATSAnalyzer()" data-i18n="topbar.ats">
@@ -54,7 +54,7 @@
       </button>
 
       <button class="app-btn app-btn-primary" onclick="exportToPDF()" data-i18n="topbar.pdf">
-        🖨️ Exportar a PDF
+        🖨️ Exportar PDF
       </button>
 
       <div class="lang-selector-box" title="Idioma de la aplicación y plantillas / Language">

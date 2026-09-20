@@ -36,50 +36,42 @@ body {
 .app-topbar {
   background-color: #0b1324;
   border-bottom: 1px solid var(--border-color);
-  padding: 0 14px;
+  padding: 0 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  height: 56px;
-  max-height: 56px;
+  height: 52px;
+  max-height: 52px;
   box-sizing: border-box;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none;
+  overflow: hidden;
   z-index: 50;
-  gap: 8px;
-}
-
-.app-topbar::-webkit-scrollbar {
-  display: none;
+  gap: 6px;
 }
 
 .brand-section {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-shrink: 1;
-  min-width: 0;
-  overflow: hidden;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .brand-logo {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: #ffffff;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   user-select: none;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .brand-logo-img {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
   filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.45));
   transition: transform 0.2s ease;
@@ -102,6 +94,7 @@ body {
 }
 
 .brand-badge {
+  display: none;
   background: rgba(37, 99, 235, 0.2);
   color: #60a5fa;
   border: 1px solid rgba(96, 165, 250, 0.4);
@@ -118,39 +111,38 @@ body {
 .profile-selector-box {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   background: rgba(30, 41, 59, 0.75);
   border: 1px solid rgba(56, 189, 248, 0.3);
-  padding: 3px 8px;
-  border-radius: 8px;
+  padding: 2px 6px;
+  border-radius: 7px;
   flex-shrink: 0;
   box-sizing: border-box;
-  height: 36px;
-  max-height: 36px;
+  height: 32px;
+  max-height: 32px;
 }
 
 .profile-selector-label {
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   color: #94a3b8;
   white-space: nowrap;
   user-select: none;
   display: inline-flex;
   align-items: center;
-  gap: 3px;
 }
 
 .profile-select {
   background: #0f172a;
   color: #f8fafc;
   border: 1px solid #334155;
-  border-radius: 6px;
-  padding: 0 8px;
-  font-size: 12px;
+  border-radius: 5px;
+  padding: 0 6px;
+  font-size: 11.5px;
   font-weight: 600;
-  height: 28px;
-  max-width: 140px;
-  min-width: 90px;
+  height: 26px;
+  max-width: 125px;
+  min-width: 85px;
   outline: none;
   cursor: pointer;
   text-overflow: ellipsis;
@@ -170,16 +162,16 @@ body {
   background: rgba(56, 189, 248, 0.15) !important;
   border: 1px solid rgba(56, 189, 248, 0.45) !important;
   color: #38bdf8 !important;
-  height: 28px !important;
-  max-height: 28px !important;
-  padding: 0 8px !important;
-  font-size: 11.5px !important;
+  height: 26px !important;
+  max-height: 26px !important;
+  padding: 0 7px !important;
+  font-size: 11px !important;
   font-weight: 700 !important;
-  border-radius: 6px !important;
+  border-radius: 5px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 4px !important;
+  gap: 3px !important;
   cursor: pointer !important;
   white-space: nowrap !important;
   flex-shrink: 0 !important;
@@ -190,47 +182,22 @@ body {
   background: #0284c7 !important;
   border-color: #38bdf8 !important;
   color: #ffffff !important;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.45) !important;
-  transform: translateY(-1px);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.45) !important;
 }
 
-@media (max-width: 1350px) {
-  .brand-badge {
-    display: none;
-  }
-}
-
-@media (max-width: 1250px) {
-  .topbar-actions {
-    gap: 4px;
-  }
-  .topbar-actions .app-btn {
-    padding: 0 7px;
-    font-size: 11.5px;
-  }
-  .profile-select {
-    max-width: 110px;
-  }
-}
-
-@media (max-width: 1120px) {
-  .profile-mgr-text {
-    display: none;
-  }
-}
-
+/* Acciones Principales de la Barra Superior */
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   flex-shrink: 0;
 }
 
 .topbar-actions .app-btn {
-  height: 34px;
-  max-height: 34px;
-  padding: 0 10px;
-  font-size: 12px;
+  height: 30px;
+  max-height: 30px;
+  padding: 0 8px;
+  font-size: 11.5px;
   font-weight: 600;
   white-space: nowrap;
   display: inline-flex;
@@ -239,17 +206,47 @@ body {
   box-sizing: border-box;
   flex-shrink: 0;
   line-height: 1;
+  gap: 4px;
 }
 
 .topbar-actions .app-btn-icon {
-  width: 34px;
-  height: 34px;
-  min-width: 34px;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.topbar-actions .app-btn-coffee {
+  padding: 0 9px;
+  font-size: 11.5px;
+}
+
+/* Reglas Responsivas */
+@media (min-width: 1550px) {
+  .brand-badge {
+    display: inline-block;
+  }
+}
+
+@media (max-width: 1300px) {
+  .profile-mgr-text {
+    display: none;
+  }
+  .topbar-actions {
+    gap: 3px;
+  }
+  .topbar-actions .app-btn {
+    padding: 0 6px;
+    font-size: 11px;
+  }
+  .profile-select {
+    max-width: 110px;
+  }
 }
 
 
@@ -314,7 +311,7 @@ body {
 .split-workspace {
   display: flex;
   flex-grow: 1;
-  height: calc(100vh - 56px);
+  height: calc(100vh - 52px);
   overflow: hidden;
 }
 
