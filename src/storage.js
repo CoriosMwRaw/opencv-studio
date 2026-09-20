@@ -23,6 +23,18 @@ class CVStorage {
       localStorage.removeItem('opencv_studio_profiles_v1');
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(sampleProfiles));
       localStorage.setItem(this.ACTIVE_KEY, 'estudiante_sistemas');
+    } else {
+      // Asegurar que perfiles nuevos de muestra (ej. Harvard Executive) aparezcan disponibles
+      let updated = false;
+      for (const [key, profile] of Object.entries(sampleProfiles)) {
+        if (!profiles[key]) {
+          profiles[key] = profile;
+          updated = true;
+        }
+      }
+      if (updated) {
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(profiles));
+      }
     }
   }
 

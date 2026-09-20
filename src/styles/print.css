@@ -63,7 +63,12 @@
 
   .job-card,
   .project-card,
-  .edu-item {
+  .edu-item,
+  .harvard-entry,
+  .compact-job,
+  .compact-proj,
+  .harvard-section,
+  .compact-sec {
     page-break-inside: avoid;
   }
 

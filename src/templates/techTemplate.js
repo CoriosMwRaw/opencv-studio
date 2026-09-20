@@ -12,10 +12,10 @@ const TechTemplate = {
     const langLabel = L.languages || (isEn ? 'Languages' : 'Lenguajes');
     const dbLabel = L.databases || (isEn ? 'Databases' : 'Bases de Datos');
     const toolsLabel = L.tools || (isEn ? 'Tools & Frameworks' : 'Herramientas & BI');
-    const softLabel = L.softSkills || (isEn ? 'Core Competencies' : 'Habilidades Blandas');
-    const eduTitle = L.education || (isEn ? 'Education' : 'Educación');
+    const softLabel = L.softSkills || (isEn ? 'Core Competencies' : 'Competencias Clave');
+    const eduTitle = L.education || (isEn ? 'Education' : 'Formación Académica');
     const certTitle = L.certifications || (isEn ? 'Certifications' : 'Certificaciones');
-    const summaryTitle = L.summary || (isEn ? 'Professional Summary' : 'Perfil Profesional');
+    const summaryTitle = L.summary || (isEn ? 'Professional Summary' : 'Resumen Profesional');
     const expTitle = L.experience || (isEn ? 'Professional Experience' : 'Experiencia Laboral');
     const projTitle = L.projects || (isEn ? 'Featured Projects' : 'Proyectos Clave');
 
@@ -63,9 +63,12 @@ const TechTemplate = {
 
     const eduHtml = (data.education || []).map(ed => `
       <div class="edu-item">
-        <div class="edu-degree">${ed.degree}</div>
+        <div class="edu-header">
+          <span class="edu-degree">${ed.degree}</span>
+          <span class="edu-period">${ed.period}</span>
+        </div>
         <div class="edu-school">${ed.school}</div>
-        <div class="edu-meta">${ed.period} ${ed.details ? `| ${ed.details}` : ''}</div>
+        ${ed.details ? `<div class="edu-meta">${ed.details}</div>` : ''}
       </div>
     `).join('');
 
@@ -110,11 +113,6 @@ const TechTemplate = {
               ${(s.softSkills || []).length ? `<div class="side-group-title">${softLabel}</div><div class="skill-badges-container">${renderTags(s.softSkills)}</div>` : ''}
             </div>
 
-            <div class="sec-group">
-              <h3 class="sec-title">${eduTitle}</h3>
-              ${eduHtml}
-            </div>
-
             ${(data.certifications || []).length ? `
               <div class="sec-group">
                 <h3 class="sec-title">${certTitle}</h3>
@@ -123,7 +121,7 @@ const TechTemplate = {
             ` : ''}
           </aside>
 
-          <main class="main-col">
+          <main class="main-content">
             ${data.summary ? `
               <section class="main-sec">
                 <h3 class="main-sec-title">${summaryTitle}</h3>
@@ -142,6 +140,13 @@ const TechTemplate = {
                 ${projectsHtml}
               </section>
             ` : ''}
+
+            <section class="main-sec">
+              <h3 class="main-sec-title">${eduTitle}</h3>
+              <div class="edu-card-list">
+                ${eduHtml}
+              </div>
+            </section>
           </main>
         </div>
       </div>

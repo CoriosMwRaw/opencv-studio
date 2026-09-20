@@ -23,7 +23,7 @@ const sampleProfiles = {
         "🤝 Metodologías Ágiles (Scrum)"
       ]
     },
-    summary: "Estudiante entusiasta de 7mo semestre de Ingeniería en Sistemas Computacionales con sólida formación técnica en arquitectura de software, modelado de bases de datos relacionales y desarrollo web. Orientado a la resolución analítica de problemas mediante código limpio y buenas prácticas de ingeniería. Apasionado por aprender nuevas tecnologías de manera autodidacta y colaborar en equipos multidisciplinarios.",
+    summary: "Estudiante entusiasta de 7mo semestre de Ingeniería en Sistemas Computacionales con sólida formación técnica en arquitectura de software, bases de datos y desarrollo web. Orientado a la resolución analítica de problemas mediante código limpio y buenas prácticas. Apasionado por aprender tecnologías modernas y colaborar en equipos multidisciplinarios.",
     kpis: [
       { number: "4+", label: "Proyectos de Software Completados" },
       { number: "3+", label: "Bases de Datos Relacionales" },
@@ -41,7 +41,7 @@ const sampleProfiles = {
           "Diseñé y programé módulos de registro, autenticación y consulta de clientes utilizando Java, Spring Boot y MySQL bajo arquitectura MVC.",
           "Automaticé procesos de exportación de reportes y facturación en formatos PDF y Excel, reduciendo el tiempo de generación en un 60%.",
           "Colaboré activamente en sprints semanales bajo metodología Scrum, documentando endpoints con Swagger y versionando código con Git/GitHub.",
-          "Ejecuté pruebas unitarias y pruebas de integración para asegurar la confiabilidad y prevenir regresiones en producción."
+          "Ejecuté pruebas unitarias e integración para asegurar confiabilidad y prevenir regresiones en entornos de staging."
         ]
       },
       {
@@ -51,9 +51,9 @@ const sampleProfiles = {
         period: "Agosto 2023 – Diciembre 2024",
         location: "Campus Universitario",
         bullets: [
-          "Brindé mantenimiento preventivo y correctivo a más de 45 equipos de cómputo en red, optimizando los tiempos de actividad del aula.",
-          "Configuré políticas de acceso, cuentas de usuario y segmentación básica de red en entornos Windows y distribuciones Linux (Ubuntu).",
-          "Capacité a docentes y alumnos en el uso de plataformas educativas y software de desarrollo (IDEs, servidores locales)."
+          "Brindé soporte preventivo y correctivo a más de 45 equipos de cómputo en red, optimizando los tiempos de disponibilidad del aula.",
+          "Configuré políticas de acceso, cuentas de usuario y segmentación básica de red en entornos Windows y Linux (Ubuntu).",
+          "Asesoré a docentes y alumnos en la configuración de entornos de programación y software especializado."
         ]
       }
     ],
@@ -68,9 +68,9 @@ const sampleProfiles = {
       {
         id: "proj_2",
         title: "Plataforma Web de Punto de Venta e Inventarios",
-        tech: "PHP • JavaScript • HTML5 / CSS3 • Bootstrap • SQLite",
+        tech: "PHP • JavaScript • HTML5 / CSS3 • SQLite",
         link: "https://github.com/usuario-ejemplo/pos-sistema",
-        description: "Sistema responsivo con catálogo de productos, control de stock en tiempo real, corte de caja y alertas de reabastecimiento automático."
+        description: "Sistema responsivo con catálogo de productos, control de stock en tiempo real, corte de caja y alertas automáticas de reabastecimiento."
       }
     ],
     education: [
@@ -86,7 +86,7 @@ const sampleProfiles = {
         degree: "Bachillerato Técnico en Informática / Programación",
         school: "Colegio de Educación Profesional Técnica",
         period: "2019 – 2022",
-        details: "Titulado con honores. Bases sólidas en algoritmos y redes."
+        details: "Titulado con honores. Bases sólidas en algoritmos y redes de datos."
       }
     ],
     skills: {
@@ -105,6 +105,105 @@ const sampleProfiles = {
       showPhoto: true,
       showKpis: true,
       fontFamily: "Plus Jakarta Sans"
+    }
+  },
+
+  "harvard_executive": {
+    id: "harvard_executive",
+    name: "Líder de Proyectos & Gestión de Negocios (Harvard Classic)",
+    personal: {
+      fullName: "EDUARDO MONTERO VILLARREAL",
+      headline: "PROJECT MANAGER & CONSULTOR DE NEGOCIOS | MBA • SCRUM MASTER • LEAN",
+      phone: "(55) 7654 3210",
+      email: "eduardo.montero@consulting.com",
+      location: "Ciudad de México / Híbrido",
+      linkedin: "https://linkedin.com/in/eduardo-montero-pm",
+      github: "https://github.com/eduardo-montero",
+      website: "",
+      photoUrl: "assets/default_avatar.svg",
+      badges: [
+        "🎯 Certificado PMP® & Scrum Master",
+        "💼 +6 Años Liderando Equipos de Alto Rendimiento",
+        "📈 Optimización de Procesos & Metodología OKR",
+        "🌐 Gestión de Proyectos Regionales LATAM"
+      ]
+    },
+    summary: "Project Manager y Consultor Estratégico con más de 6 años de experiencia liderando iniciativas de transformación digital, optimización operativa y entrega ágil de productos tecnológicos en empresas de servicios financieros y consultoría. Experto en alineación entre objetivos de negocio y ejecución técnica mediante marcos Scrum, Kanban y PMBOK. Capacidad probada para gestionar presupuestos superiores a $1.2M USD y coordinar equipos multidisciplinarios remotos.",
+    kpis: [
+      { number: "95%", label: "Entregas en Tiempo y Presupuesto" },
+      { number: "$1.4M", label: "Presupuesto Administrado Anual" },
+      { number: "+22%", label: "Incremento en Productividad de Sprints" },
+      { number: "C1", label: "Nivel de Inglés Avanzado (Negocios)" }
+    ],
+    experience: [
+      {
+        id: "exp_h1",
+        role: "Senior Project Manager & Consultor de Negocios",
+        company: "Vanguardia Estratégica Consultores",
+        period: "Marzo 2022 – Presente",
+        location: "Ciudad de México",
+        bullets: [
+          "Lideré la implementación de una plataforma omnicanal de atención al cliente para una institución bancaria regional, reduciendo tiempos de respuesta en un 38%.",
+          "Gestioné un portafolio de 5 proyectos simultáneos coordinando a 24 profesionales entre desarrolladores, diseñadores UX y analistas de negocio.",
+          "Establecí marcos de gobernanza ágil (Scrum de Scrums) y tableros de control ejecutivos en Jira y Power BI, elevando la visibilidad del avance al comité directivo.",
+          "Negocié contratos de servicios con proveedores tecnológicos clave, logrando un ahorro de costos operativos anuales de $85,000 USD."
+        ]
+      },
+      {
+        id: "exp_h2",
+        role: "Project Manager Jr. & Analista de Procesos",
+        company: "Grupo Financiero Atlas",
+        period: "Enero 2019 – Febrero 2022",
+        location: "Ciudad de México",
+        bullets: [
+          "Diseñé y documenté flujos de trabajo operativos bajo estándar BPMN para automatizar procesos de validación de créditos comerciales.",
+          "Facilité ceremonias ágiles (Daily, Sprint Planning, Retrospectivas) para 2 squads de ingeniería de software con entregas quincenales continuas.",
+          "Capacité a más de 120 usuarios internos en la adopción de nuevas herramientas de colaboración en la nube."
+        ]
+      }
+    ],
+    projects: [
+      {
+        id: "proj_h1",
+        title: "Automatización de Conciliación Financiera y Gobierno de Datos",
+        tech: "Power BI • Python • SQL • Azure Cloud",
+        link: "",
+        description: "Iniciativa estratégica que reemplazó reportes manuales en hojas de cálculo por una arquitectura de datos automatizada con controles de auditoría Sarbanes-Oxley (SOX)."
+      }
+    ],
+    education: [
+      {
+        id: "edu_h1",
+        degree: "Maestría en Administración de Negocios (MBA)",
+        school: "Instituto Panamericano de Alta Dirección de Empresa (IPADE)",
+        period: "2020 – 2022",
+        details: "Concentración en Estrategia Corporativa y Gestión de Operaciones. Graduado con mención de excelencia."
+      },
+      {
+        id: "edu_h2",
+        degree: "Licenciatura en Administración y Dirección de Empresas",
+        school: "Universidad Nacional Autónoma de México (UNAM)",
+        period: "2014 – 2018",
+        details: "Titulado con honores. Presidente de la Sociedad de Alumnos de la Facultad de Contaduría y Administración."
+      }
+    ],
+    skills: {
+      languages: ["Español (Nativo)", "Inglés (C1 Avanzado)", "Portugués (Intermedio)"],
+      databases: ["SQL para Negocios", "Power Query", "Data Warehouse"],
+      tools: ["Jira Software", "Confluence", "Microsoft Project", "SAP ERP", "Power BI", "Tableau", "Miro"],
+      softSkills: ["Liderazgo Estratégico", "Negociación con C-Level", "Gestión del Cambio", "Resolución de Conflictos", "Comunicación Ejecutiva"]
+    },
+    certifications: [
+      { title: "Project Management Professional (PMP®)", issuer: "Project Management Institute (PMI)", year: "2023" },
+      { title: "Professional Scrum Master I (PSM I)", issuer: "Scrum.org", year: "2022" },
+      { title: "Lean Six Sigma Green Belt", issuer: "International Six Sigma Institute", year: "2021" }
+    ],
+    settings: {
+      template: "harvard",
+      colorTheme: "crimson",
+      showPhoto: false,
+      showKpis: true,
+      fontFamily: "Times New Roman"
     }
   },
 
@@ -128,7 +227,7 @@ const sampleProfiles = {
         "📱 Diseño Responsivo & Accesible"
       ]
     },
-    summary: "Desarrolladora Web Fullstack con pasión por construir aplicaciones web modernas, intuitivas y de alto rendimiento. Especializada en React para el frontend y Node.js/Express para servicios backend, con amplia experiencia en diseño y consumo de APIs RESTful y gestión de bases de datos relacionales y NoSQL. Enfoque en código modular, pruebas automatizadas y estándares de accesibilidad web.",
+    summary: "Desarrolladora Web Fullstack con pasión por construir aplicaciones web modernas, intuitivas y de alto rendimiento. Especializada en React para el frontend y Node.js/Express para servicios backend, con amplia experiencia en diseño y consumo de APIs RESTful y bases de datos relacionales y NoSQL. Enfoque en código limpio, pruebas automatizadas y accesibilidad web.",
     kpis: [
       { number: "10+", label: "Aplicaciones Web Desplegadas" },
       { number: "98%", label: "Puntuación Lighthouse en Performance" },
@@ -143,9 +242,9 @@ const sampleProfiles = {
         period: "Julio 2024 – Presente",
         location: "Remoto / Híbrido",
         bullets: [
-          "Desarrollé interfaces de usuario interactivas con React, TypeScript y Tailwind CSS, reduciendo el tiempo de carga en un 35%.",
+          "Desarrollé interfaces interactivas con React, TypeScript y Tailwind CSS, reduciendo el tiempo de carga en un 35%.",
           "Implementé manejo de estado global con Redux Toolkit y consumo de endpoints mediante React Query.",
-          "Garanticé diseño adaptable para más de 15 tipos de resoluciones de pantalla y compatibilidad total entre navegadores."
+          "Garanticé diseño adaptable para múltiples resoluciones y compatibilidad total entre navegadores modernos."
         ]
       }
     ],
@@ -161,8 +260,8 @@ const sampleProfiles = {
     education: [
       {
         id: "edu_web_1",
-        degree: "Licenciatura / Ingeniería en Tecnologías de Información",
-        school: "Universidad Tecnológica",
+        degree: "Licenciatura en Tecnologías de Información",
+        school: "Universidad de Guadalajara (UdeG)",
         period: "2021 – 2025",
         details: "Especialidad en Ingeniería Web y Experiencia de Usuario."
       }
@@ -205,7 +304,7 @@ const sampleProfiles = {
         "⚙️ Automatización de Reportes"
       ]
     },
-    summary: "Analista de Datos con enfoque en transformar grandes volúmenes de información dispersa en tableros dinámicos e insights estratégicos para la dirección. Experto en modelado de datos en Power BI (DAX), extracción y limpieza mediante SQL y Power Query, y automatización de reportes operativos. Habilidad comprobada para colaborar con áreas de ventas, operaciones y finanzas para identificar oportunidades de ahorro y optimización.",
+    summary: "Analista de Datos con enfoque en transformar grandes volúmenes de información en tableros dinámicos e insights estratégicos para la toma de decisiones. Experto en modelado de datos en Power BI (DAX), extracción y limpieza mediante SQL y automatización de reportes operativos.",
     kpis: [
       { number: "25+", label: "Dashboards Ejecutivos Creados" },
       { number: "40 hrs", label: "Ahorro Mensual en Captura Manual" },
@@ -218,7 +317,7 @@ const sampleProfiles = {
         role: "Analista de Datos y Operaciones",
         company: "Grupo Industrial Vanguardia",
         period: "Septiembre 2023 – Presente",
-        location: "Planta Industrial",
+        location: "Monterrey, N.L.",
         bullets: [
           "Diseñé y automaticé tableros de control en Power BI para el seguimiento en tiempo real de indicadores clave de producción y mermas.",
           "Escribí consultas SQL avanzadas para extracción, limpieza y transformación (ETL) de datos provenientes de sistemas ERP.",
@@ -238,10 +337,10 @@ const sampleProfiles = {
     education: [
       {
         id: "edu_data_1",
-        degree: "Ingeniería Industrial / Sistemas Computacionales",
-        school: "Instituto Tecnológico",
+        degree: "Ingeniería Industrial y de Sistemas",
+        school: "Tecnológico de Monterrey (ITESM)",
         period: "2020 – 2024",
-        details: "Graduado con mención en Optimización de Procesos y Estadística."
+        details: "Graduado con mención en Optimización de Procesos y Analítica."
       }
     ],
     skills: {
@@ -290,11 +389,11 @@ const sampleProfiles = {
     },
     certifications: [],
     settings: {
-      template: "ats",
-      colorTheme: "navy",
+      template: "harvard",
+      colorTheme: "crimson",
       showPhoto: false,
       showKpis: false,
-      fontFamily: "Plus Jakarta Sans"
+      fontFamily: "Times New Roman"
     }
   }
 };

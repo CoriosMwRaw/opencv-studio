@@ -23,9 +23,11 @@ function escapeHtml(str) {
 // Registro de Plantillas disponibles
 const templates = {
   tech: TechTemplate,
+  harvard: HarvardTemplate,
   data: DataTemplate,
   ats: ATSTemplate,
-  modern: ModernTemplate
+  modern: ModernTemplate,
+  compact: CompactTemplate
 };
 
 // Inicialización de la aplicación

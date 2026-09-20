@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell, Menu, MenuItem } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -19,6 +19,62 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       spellcheck: true
+    }
+  });
+
+  // Configurar idiomas del corrector ortográfico (Español e Inglés)
+  try {
+    mainWindow.webContents.session.setSpellCheckerLanguages(['es-ES', 'es', 'en-US']);
+  } catch (err) {
+    console.warn('Could not set spellchecker languages:', err);
+  }
+
+  // Menú contextual nativo con clic derecho: Sugerencias ortográficas y edición
+  mainWindow.webContents.on('context-menu', (event, params) => {
+    const menu = new Menu();
+
+    // 1. Sugerencias del corrector ortográfico si la palabra tiene error
+    if (params.dictionarySuggestions && params.dictionarySuggestions.length > 0) {
+      for (const suggestion of params.dictionarySuggestions) {
+        menu.append(new MenuItem({
+          label: suggestion,
+          click: () => mainWindow.webContents.replaceMisspelling(suggestion)
+        }));
+      }
+      menu.append(new MenuItem({ type: 'separator' }));
+    }
+
+    // 2. Opción de agregar al diccionario personalizado
+    if (params.misspelledWord) {
+      if (!params.dictionarySuggestions || params.dictionarySuggestions.length === 0) {
+        menu.append(new MenuItem({
+          label: '(Sin sugerencias ortográficas)',
+          enabled: false
+        }));
+      }
+      menu.append(new MenuItem({
+        label: `Agregar "${params.misspelledWord}" al diccionario`,
+        click: () => mainWindow.webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord)
+      }));
+      menu.append(new MenuItem({ type: 'separator' }));
+    }
+
+    // 3. Acciones de edición si es un campo editable (inputs, textareas)
+    if (params.isEditable) {
+      menu.append(new MenuItem({ role: 'undo', label: 'Deshacer (Undo)' }));
+      menu.append(new MenuItem({ role: 'redo', label: 'Rehacer (Redo)' }));
+      menu.append(new MenuItem({ type: 'separator' }));
+      menu.append(new MenuItem({ role: 'cut', label: 'Cortar (Cut)' }));
+      menu.append(new MenuItem({ role: 'copy', label: 'Copiar (Copy)' }));
+      menu.append(new MenuItem({ role: 'paste', label: 'Pegar (Paste)' }));
+      menu.append(new MenuItem({ type: 'separator' }));
+      menu.append(new MenuItem({ role: 'selectAll', label: 'Seleccionar todo (Select All)' }));
+    } else if (params.selectionText && params.selectionText.trim().length > 0) {
+      menu.append(new MenuItem({ role: 'copy', label: 'Copiar (Copy)' }));
+    }
+
+    if (menu.items.length > 0) {
+      menu.popup();
     }
   });
 

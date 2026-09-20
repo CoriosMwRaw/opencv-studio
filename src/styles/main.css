@@ -611,6 +611,61 @@ body {
   --p-sidebar-bg: #fafafa;
 }
 
+.theme-crimson {
+  --p-primary: #800020;
+  --p-accent: #a51c30;
+  --p-accent-soft: #ffe4e6;
+  --p-badge: #991b1b;
+  --p-grad: linear-gradient(135deg, #4c0519 0%, #800020 50%, #a51c30 100%);
+  --p-sidebar-bg: #fff1f2;
+}
+
+.theme-oxford {
+  --p-primary: #002147;
+  --p-accent: #1d4ed8;
+  --p-accent-soft: #eff6ff;
+  --p-badge: #1e40af;
+  --p-grad: linear-gradient(135deg, #021124 0%, #002147 50%, #173b6c 100%);
+  --p-sidebar-bg: #f8fafc;
+}
+
+.theme-slate {
+  --p-primary: #1e293b;
+  --p-accent: #475569;
+  --p-accent-soft: #f1f5f9;
+  --p-badge: #334155;
+  --p-grad: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  --p-sidebar-bg: #f8fafc;
+}
+
+.theme-emerald {
+  --p-primary: #064e3b;
+  --p-accent: #059669;
+  --p-accent-soft: #ecfdf5;
+  --p-badge: #047857;
+  --p-grad: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #059669 100%);
+  --p-sidebar-bg: #f0fdf4;
+}
+
+.theme-amber {
+  --p-primary: #78350f;
+  --p-accent: #b45309;
+  --p-accent-soft: #fef3c7;
+  --p-badge: #92400e;
+  --p-grad: linear-gradient(135deg, #451a03 0%, #78350f 50%, #b45309 100%);
+  --p-sidebar-bg: #fffbeb;
+}
+
+.theme-plum {
+  --p-primary: #581c87;
+  --p-accent: #7e22ce;
+  --p-accent-soft: #faf5ff;
+  --p-badge: #6b21a8;
+  --p-grad: linear-gradient(135deg, #3b0764 0%, #581c87 50%, #7e22ce 100%);
+  --p-sidebar-bg: #fdf4ff;
+}
+
+
 /* ==========================================================================
    PLANTILLA 1: TECH & DEVELOPER
    ========================================================================== */
@@ -1972,3 +2027,351 @@ body {
 
 
 
+
+
+/* ==========================================================================
+   ESTILOS COMPLEMENTARIOS ANTI-SATURACIÓN TECH TEMPLATE
+   ========================================================================== */
+.t-tech .main-content {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.t-tech .main-sec-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--p-primary);
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3px;
+  margin: 0 0 8px 0;
+}
+
+.t-tech .summary-text {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #334155;
+  margin: 0;
+  text-align: justify;
+}
+
+.t-tech .edu-card-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.t-tech .edu-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.t-tech .edu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+
+.t-tech .edu-degree {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--p-primary);
+}
+
+.t-tech .edu-period {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--p-badge);
+  background: var(--p-accent-soft);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.t-tech .edu-school {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.t-tech .edu-meta {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   PLANTILLA 5: HARVARD CLASSIC (IVY LEAGUE ATS PURO)
+   ========================================================================== */
+.t-harvard {
+  font-family: 'Times New Roman', Times, 'Georgia', serif;
+  color: #111827;
+  padding: 34px 40px;
+  line-height: 1.4;
+  background: #ffffff;
+}
+
+.t-harvard a {
+  color: #111827;
+  text-decoration: none;
+}
+
+.t-harvard a:hover {
+  text-decoration: underline;
+}
+
+.t-harvard .harvard-header {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.t-harvard .harvard-name {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--p-primary);
+  margin: 0 0 3px 0;
+}
+
+.t-harvard .harvard-headline {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #4b5563;
+  margin-bottom: 5px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.t-harvard .harvard-contact {
+  font-size: 11px;
+  color: #374151;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  line-height: 1.4;
+}
+
+.t-harvard .harvard-section {
+  margin-bottom: 12px;
+}
+
+.t-harvard .harvard-sec-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--p-primary);
+  margin: 0 0 3px 0;
+  font-family: 'Plus Jakarta Sans', 'Times New Roman', sans-serif;
+}
+
+.t-harvard .harvard-rule {
+  height: 1.5px;
+  background-color: var(--p-primary);
+  margin-bottom: 7px;
+}
+
+.t-harvard .harvard-summary-text {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #1f2937;
+  text-align: justify;
+  margin: 0;
+}
+
+.t-harvard .harvard-entry {
+  margin-bottom: 8px;
+}
+
+.t-harvard .harvard-entry-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11.5px;
+  line-height: 1.35;
+}
+
+.t-harvard .harvard-subrow {
+  font-style: italic;
+  color: #374151;
+  margin-bottom: 2px;
+}
+
+.t-harvard .harvard-org {
+  font-weight: 700;
+  color: #111827;
+}
+
+.t-harvard .harvard-loc-date {
+  font-size: 11px;
+  font-weight: 600;
+  color: #4b5563;
+  white-space: nowrap;
+}
+
+.t-harvard .harvard-role {
+  font-weight: 600;
+}
+
+.t-harvard .harvard-note {
+  font-size: 11px;
+  color: #4b5563;
+  margin-top: 1px;
+}
+
+.t-harvard .harvard-desc {
+  font-size: 11px;
+  color: #374151;
+  margin: 2px 0 0 0;
+  line-height: 1.4;
+}
+
+.t-harvard .harvard-link {
+  font-size: 10.5px;
+  color: var(--p-accent);
+  margin-top: 1px;
+}
+
+.t-harvard .harvard-bullet-list {
+  margin: 2px 0 0 0;
+  padding-left: 18px;
+  list-style-type: disc;
+}
+
+.t-harvard .harvard-bullet-list li {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #1f2937;
+  margin-bottom: 2px;
+}
+
+.t-harvard .harvard-skills-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.t-harvard .harvard-skill-line {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #1f2937;
+}
+
+.t-harvard .harvard-cert-item {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #1f2937;
+}
+
+/* ==========================================================================
+   PLANTILLA 6: COMPACT EXECUTIVE (1 PÁGINA)
+   ========================================================================== */
+.t-compact {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #0f172a;
+  padding: 24px 28px;
+  line-height: 1.35;
+  background: #ffffff;
+}
+
+.t-compact .compact-header {
+  border-bottom: 2px solid var(--p-primary);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.t-compact .compact-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--p-primary);
+  margin: 0 0 2px 0;
+  letter-spacing: -0.3px;
+}
+
+.t-compact .compact-headline {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--p-accent);
+  margin-bottom: 4px;
+}
+
+.t-compact .compact-contact {
+  font-size: 10.5px;
+  color: #475569;
+}
+
+.t-compact .compact-sec {
+  margin-bottom: 10px;
+}
+
+.t-compact .compact-sec-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--p-primary);
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 2px;
+  margin: 0 0 6px 0;
+}
+
+.t-compact .compact-summary-text {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #334155;
+  margin: 0;
+}
+
+.t-compact .compact-job, .t-compact .compact-proj {
+  margin-bottom: 6px;
+}
+
+.t-compact .compact-head, .t-compact .compact-edu-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11.5px;
+}
+
+.t-compact .compact-role {
+  color: #0f172a;
+}
+
+.t-compact .compact-date {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.t-compact .compact-list {
+  margin: 2px 0 0 0;
+  padding-left: 14px;
+  list-style-type: disc;
+}
+
+.t-compact .compact-list li {
+  font-size: 10.5px;
+  color: #334155;
+  line-height: 1.35;
+  margin-bottom: 1px;
+}
+
+.t-compact .compact-subtext {
+  font-size: 10px;
+  color: #64748b;
+}
+
+.t-compact .compact-skills-text, .t-compact .compact-certs-text {
+  font-size: 10.5px;
+  line-height: 1.4;
+  color: #334155;
+}

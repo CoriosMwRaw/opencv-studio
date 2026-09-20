@@ -291,9 +291,11 @@
           <label style="font-size:12px; color:#cbd5e1; font-weight:600;" data-i18n="settings.template">Plantilla:</label>
           <select id="select_template" class="form-select" style="padding: 4px 8px; font-size: 12.5px;">
             <option value="tech" data-i18n="tmpl.tech">💻 Tech & Desarrollador (Sistemas)</option>
+            <option value="harvard" data-i18n="tmpl.harvard">🎓 Harvard Classic (Ivy League ATS)</option>
             <option value="data" data-i18n="tmpl.data">📊 Industrial & Data Analyst (Operaciones)</option>
             <option value="ats" data-i18n="tmpl.ats">🤖 ATS Minimalista Clásico (Filtros)</option>
             <option value="modern" data-i18n="tmpl.modern">👔 Moderna Ejecutiva (Doble Columna)</option>
+            <option value="compact" data-i18n="tmpl.compact">📄 Elegante Compacta (1 Página ATS)</option>
           </select>
         </div>
 
@@ -301,7 +303,13 @@
           <label style="font-size:12px; color:#cbd5e1; font-weight:600;" data-i18n="settings.theme">Color:</label>
           <select id="select_theme" class="form-select" style="padding: 4px 8px; font-size: 12.5px;">
             <option value="navy" data-i18n="theme.navy">Azul Ejecutivo / Tech</option>
+            <option value="crimson" data-i18n="theme.crimson">Harvard Crimson / Burdeos</option>
+            <option value="oxford" data-i18n="theme.oxford">Azul Oxford / Royal Navy</option>
+            <option value="slate" data-i18n="theme.slate">Pizarra / Charcoal Moderno</option>
             <option value="teal" data-i18n="theme.teal">Esmeralda Data / BI</option>
+            <option value="emerald" data-i18n="theme.emerald">Verde Bosque / Corporativo</option>
+            <option value="amber" data-i18n="theme.amber">Ámbar / Bronce Ejecutivo</option>
+            <option value="plum" data-i18n="theme.plum">Borgoña / Ciruela Elegante</option>
             <option value="indigo" data-i18n="theme.indigo">Índigo Moderno</option>
             <option value="graphite" data-i18n="theme.graphite">Grafito Minimalista</option>
           </select>
@@ -626,9 +634,11 @@
   
   <!-- Plantillas -->
   <script src="src/templates/techTemplate.js"></script>
+  <script src="src/templates/harvardTemplate.js"></script>
   <script src="src/templates/dataTemplate.js"></script>
   <script src="src/templates/atsTemplate.js"></script>
   <script src="src/templates/modernTemplate.js"></script>
+  <script src="src/templates/compactTemplate.js"></script>
   
   <!-- Controlador -->
   <script src="src/app.js"></script>
