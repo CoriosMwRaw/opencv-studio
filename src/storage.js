@@ -22,7 +22,7 @@ class CVStorage {
     if (!profiles || profiles['cesar_perfil'] || Object.keys(profiles).length === 0) {
       localStorage.removeItem('opencv_studio_profiles_v1');
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(sampleProfiles));
-      localStorage.setItem(this.ACTIVE_KEY, 'estudiante_sistemas');
+      localStorage.setItem(this.ACTIVE_KEY, 'cesar_alberto_maestro');
     } else {
       // Asegurar que perfiles nuevos de muestra (ej. Harvard Executive) aparezcan disponibles
       let updated = false;
@@ -49,7 +49,7 @@ class CVStorage {
   }
 
   getActiveProfileId() {
-    return localStorage.getItem(this.ACTIVE_KEY) || 'estudiante_sistemas';
+    return localStorage.getItem(this.ACTIVE_KEY) || 'cesar_alberto_maestro';
   }
 
   getActiveProfile() {
