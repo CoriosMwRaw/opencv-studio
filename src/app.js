@@ -1505,7 +1505,8 @@ async function extractDirectlyFromPdfDialog() {
         } else {
           setExtractorStatus('✓ Texto digital extraído al instante.', '✓');
         }
-        analyzePastedCvText();
+        const resolvedName = res.filePath ? res.filePath.replace(/^.*[\\\/]/, '') : '';
+        analyzePastedCvText(resolvedName);
       } else {
         setExtractorStatus('Error al leer el archivo PDF: ' + (res.error || 'Archivo ilegible.'), '❌', null, true);
       }
@@ -1642,7 +1643,20 @@ function analyzePastedCvText(optionalFilename = '') {
     const eduCount = parsed.education?.length || 0;
     tagsContainer.innerHTML += `<span class="preview-tag">🎓 <strong>Educación:</strong> ${eduCount} detectada(s)</span>`;
 
-    const skillsCount = (parsed.skills || []).reduce((acc, cat) => acc + (cat.items?.length || 0), 0);
+    let skillsCount = 0;
+    if (parsed.skills) {
+      if (Array.isArray(parsed.skills)) {
+        skillsCount = parsed.skills.reduce((acc, cat) => {
+          if (typeof cat === 'string') return acc + 1;
+          if (cat && Array.isArray(cat.items)) return acc + cat.items.length;
+          return acc + 1;
+        }, 0);
+      } else if (typeof parsed.skills === 'object') {
+        skillsCount = Object.values(parsed.skills).reduce((acc, list) => {
+          return acc + (Array.isArray(list) ? list.length : (list ? 1 : 0));
+        }, 0);
+      }
+    }
     tagsContainer.innerHTML += `<span class="preview-tag">🛠️ <strong>Habilidades:</strong> ${skillsCount} extraída(s)</span>`;
 
     const projCount = parsed.projects?.length || 0;
@@ -1650,8 +1664,15 @@ function analyzePastedCvText(optionalFilename = '') {
       tagsContainer.innerHTML += `<span class="preview-tag">🚀 <strong>Proyectos:</strong> ${projCount} detectado(s)</span>`;
     }
 
+    const certCount = parsed.certifications?.length || 0;
+    if (certCount > 0) {
+      tagsContainer.innerHTML += `<span class="preview-tag">📜 <strong>Certificaciones:</strong> ${certCount} detectada(s)</span>`;
+    }
+
     const langCount = parsed.languages?.length || 0;
-    tagsContainer.innerHTML += `<span class="preview-tag">🌐 <strong>Idiomas:</strong> ${langCount} detectado(s)</span>`;
+    if (langCount > 0) {
+      tagsContainer.innerHTML += `<span class="preview-tag">🌐 <strong>Idiomas:</strong> ${langCount} detectado(s)</span>`;
+    }
 
     previewBox.appendChild(tagsContainer);
 

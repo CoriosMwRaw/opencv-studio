@@ -711,11 +711,14 @@
     const certifications = parseCertifications(sections.certifications, text);
     const kpis = extractKPIs(text);
 
+    const resolvedName = fullName || (filename ? extractNameFromFilename(filename) : '') || 'Candidato Profesional';
+    const resolvedHeadline = headline || 'Especialista Profesional';
+
     return {
-      name: fullName ? `CV - ${fullName}` : 'Nuevo Currículum',
+      name: `CV - ${resolvedName}`,
       personal: {
-        fullName: fullName || 'César Alberto López Martínez',
-        headline: headline || 'ANALISTA DE DATOS',
+        fullName: resolvedName,
+        headline: resolvedHeadline,
         email: contact.email || '',
         phone: contact.phone || '',
         location: contact.location || 'México',
@@ -724,8 +727,8 @@
         website: contact.website || '',
         photoUrl: 'assets/default_avatar.svg',
         badges: [
-          `🎯 ${headline || 'ANALISTA DE DATOS'}`,
-          '💼 Experiencia en Análisis & Automatización',
+          `🎯 ${resolvedHeadline}`,
+          '💼 Experiencia & Trayectoria Profesional',
           '⚡ Innovación & Buenas Prácticas'
         ]
       },

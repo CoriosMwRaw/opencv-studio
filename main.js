@@ -330,64 +330,79 @@ ipcMain.handle('extract-pdf-text', async (event, filePath) => {
 
 // IPC: Abrir diálogo para seleccionar y extraer texto de un PDF
 
+// Función auxiliar: Extracción nativa de texto de documentos Word (.docx)
+function extractDocxTextInternal(filePath) {
+  const yauzl = require('yauzl');
+  return new Promise((resolve) => {
+    yauzl.open(filePath, { lazyEntries: true }, (err, zipfile) => {
+      if (err) return resolve({ success: false, error: 'No se pudo abrir el archivo Word: ' + err.message });
+      let found = false;
+      zipfile.readEntry();
+      zipfile.on('entry', (entry) => {
+        if (entry.fileName === 'word/document.xml') {
+          found = true;
+          zipfile.openReadStream(entry, (err, stream) => {
+            if (err) return resolve({ success: false, error: err.message });
+            const chunks = [];
+            stream.on('data', c => chunks.push(c));
+            stream.on('end', () => {
+              const xml = Buffer.concat(chunks).toString('utf8');
+              const text = xml
+                .replace(/<w:tab[^>]*\/>/g, '\t')
+                .replace(/<w:br[^>]*\/>/g, '\n')
+                .replace(/<\/w:p>/g, '\n')
+                .replace(/<[^>]+>/g, '')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&amp;/g, '&')
+                .replace(/&quot;/g, '"')
+                .replace(/&apos;/g, "'")
+                .trim();
+              resolve({ success: true, text, filePath, method: 'docx' });
+            });
+          });
+        } else {
+          zipfile.readEntry();
+        }
+      });
+      zipfile.on('end', () => {
+        if (!found) resolve({ success: false, error: 'No se encontró contenido de texto en el archivo Word' });
+      });
+      zipfile.on('error', (zErr) => resolve({ success: false, error: zErr.message }));
+    });
+  });
+}
+
 // IPC: Extraer texto de un archivo DOCX (.docx de Microsoft Word)
 ipcMain.handle('extract-docx-text', async (event, filePath) => {
   try {
-    const yauzl = require('yauzl');
-    return new Promise((resolve) => {
-      yauzl.open(filePath, { lazyEntries: true }, (err, zipfile) => {
-        if (err) return resolve({ success: false, error: 'No se pudo abrir el archivo Word: ' + err.message });
-        let found = false;
-        zipfile.readEntry();
-        zipfile.on('entry', (entry) => {
-          if (entry.fileName === 'word/document.xml') {
-            found = true;
-            zipfile.openReadStream(entry, (err, stream) => {
-              if (err) return resolve({ success: false, error: err.message });
-              const chunks = [];
-              stream.on('data', c => chunks.push(c));
-              stream.on('end', () => {
-                const xml = Buffer.concat(chunks).toString('utf8');
-                const text = xml
-                  .replace(/<w:tab[^>]*\/>/g, '\t')
-                  .replace(/<w:br[^>]*\/>/g, '\n')
-                  .replace(/<\/w:p>/g, '\n')
-                  .replace(/<[^>]+>/g, '')
-                  .replace(/&lt;/g, '<')
-                  .replace(/&gt;/g, '>')
-                  .replace(/&amp;/g, '&')
-                  .replace(/&quot;/g, '"')
-                  .replace(/&apos;/g, "'")
-                  .trim();
-                resolve({ success: true, text, filePath, method: 'docx' });
-              });
-            });
-          } else {
-            zipfile.readEntry();
-          }
-        });
-        zipfile.on('end', () => {
-          if (!found) resolve({ success: false, error: 'No se encontró contenido de texto en el archivo Word' });
-        });
-        zipfile.on('error', (zErr) => resolve({ success: false, error: zErr.message }));
-      });
-    });
+    return await extractDocxTextInternal(filePath);
   } catch (err) {
     return { success: false, error: err.message };
   }
 });
 
+// IPC: Abrir diálogo para seleccionar y extraer texto de un archivo (PDF, Word, Texto)
 ipcMain.handle('select-and-extract-pdf', async () => {
   try {
     const { filePaths } = await dialog.showOpenDialog(mainWindow, {
-      title: 'Seleccionar Currículum en Formato PDF',
+      title: 'Seleccionar Currículum en Formato PDF, Word o Texto',
       filters: [{ name: 'Currículums (PDF, Word, Texto)', extensions: ['pdf', 'docx', 'txt', 'md'] }],
       properties: ['openFile']
     });
 
     if (!filePaths || filePaths.length === 0) return { success: false, canceled: true };
+    const p = filePaths[0];
+    const ext = path.extname(p).toLowerCase();
 
-    return await extractPdfTextWithOcrFallback(filePaths[0]);
+    if (ext === '.docx') {
+      return await extractDocxTextInternal(p);
+    } else if (ext === '.txt' || ext === '.md') {
+      const text = fs.readFileSync(p, 'utf8');
+      return { success: true, text, filePath: p, method: 'direct' };
+    } else {
+      return await extractPdfTextWithOcrFallback(p);
+    }
   } catch (err) {
     console.error('Error en select-and-extract-pdf:', err);
     return { success: false, error: err.message };
