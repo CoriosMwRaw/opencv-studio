@@ -4,12 +4,20 @@
 
 class CVStorage {
   constructor() {
-    this.STORAGE_KEY = 'opencv_studio_profiles_v2';
-    this.ACTIVE_KEY = 'opencv_studio_active_id_v2';
+    this.STORAGE_KEY = 'opencv_studio_profiles_v3';
+    this.ACTIVE_KEY = 'opencv_studio_active_id_v3';
     this.init();
   }
 
   init() {
+    // Purga proactiva de almacenamiento legacy para proteger datos privados
+    try {
+      localStorage.removeItem('opencv_studio_profiles_v1');
+      localStorage.removeItem('opencv_studio_active_id_v1');
+      localStorage.removeItem('opencv_studio_profiles_v2');
+      localStorage.removeItem('opencv_studio_active_id_v2');
+    } catch (e) {}
+
     let profiles = null;
     try {
       const raw = localStorage.getItem(this.STORAGE_KEY);
@@ -18,12 +26,15 @@ class CVStorage {
       console.error('Error al inicializar perfiles:', e);
     }
 
-    // Limpiar caché anterior si tenía el perfil privado o si está vacío
-    if (!profiles || profiles['cesar_perfil'] || Object.keys(profiles).length === 0) {
-      localStorage.removeItem('opencv_studio_profiles_v1');
+    // Si no hay perfiles o está vacío, cargar sampleProfiles genéricos
+    if (!profiles || Object.keys(profiles).length === 0) {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(sampleProfiles));
-      localStorage.setItem(this.ACTIVE_KEY, 'cesar_alberto_maestro');
+      localStorage.setItem(this.ACTIVE_KEY, 'estudiante_sistemas');
     } else {
+      // Purgar cualquier clave privada residual si existiera
+      if (profiles['cesar_perfil']) delete profiles['cesar_perfil'];
+      if (profiles['cesar_alberto_maestro']) delete profiles['cesar_alberto_maestro'];
+
       // Asegurar que perfiles nuevos de muestra (ej. Harvard Executive) aparezcan disponibles
       let updated = false;
       for (const [key, profile] of Object.entries(sampleProfiles)) {
@@ -32,8 +43,11 @@ class CVStorage {
           updated = true;
         }
       }
-      if (updated) {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(profiles));
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(profiles));
+
+      const activeId = localStorage.getItem(this.ACTIVE_KEY);
+      if (!activeId || activeId === 'cesar_alberto_maestro' || activeId === 'cesar_perfil' || !profiles[activeId]) {
+        localStorage.setItem(this.ACTIVE_KEY, 'estudiante_sistemas');
       }
     }
   }
@@ -49,7 +63,8 @@ class CVStorage {
   }
 
   getActiveProfileId() {
-    return localStorage.getItem(this.ACTIVE_KEY) || 'cesar_alberto_maestro';
+    const active = localStorage.getItem(this.ACTIVE_KEY);
+    return (active && active !== 'cesar_alberto_maestro' && active !== 'cesar_perfil') ? active : 'estudiante_sistemas';
   }
 
   getActiveProfile() {

@@ -214,7 +214,7 @@
           break;
         }
 
-        // Comprobar si dos líneas consecutivas forman el nombre (ej. César Alberto en línea i y López Martínez en línea i+1)
+        // Comprobar si dos líneas consecutivas forman el nombre (ej. Juan Carlos en línea i y Pérez Gómez en línea i+1)
         if (i + 1 < lines.length) {
           const nextLine = lines[i + 1].trim();
           const w1 = line.split(/\s+/);
@@ -251,7 +251,7 @@
       }
     }
 
-    return { fullName: fullName || 'César Alberto López Martínez', headline: headline || 'ANALISTA DE DATOS' };
+    return { fullName: fullName || '', headline: headline || '' };
   }
 
   function segmentSections(rawText) {
@@ -384,10 +384,10 @@
 
         currentEntry = {
           id: 'exp_' + (entries.length + 1),
-          role: role || 'Analista de Información',
-          company: company || 'Anguiplast',
-          period: period || 'Agosto 2023 – Presente',
-          location: 'México',
+          role: role || 'Especialista Profesional',
+          company: company || 'Empresa / Organización',
+          period: period || 'Periodo',
+          location: 'Ubicación',
           bullets: []
         };
       }
