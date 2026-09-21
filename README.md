@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/CoriosMwRaw/opencv-studio/releases/latest"><img src="https://img.shields.io/badge/Release-v1.3.3-blue.svg?style=for-the-badge&logo=github" alt="Latest Release"></a>
+  <a href="https://github.com/CoriosMwRaw/opencv-studio/releases/latest"><img src="https://img.shields.io/badge/Release-v1.3.4-blue.svg?style=for-the-badge&logo=github" alt="Latest Release"></a>
   <img src="https://img.shields.io/badge/Platform-Windows%20x64-0078D6.svg?style=for-the-badge&logo=windows" alt="Platform Windows">
   <img src="https://img.shields.io/badge/Privacy-100%25%20Offline-success.svg?style=for-the-badge" alt="100% Offline">
   <img src="https://img.shields.io/badge/License-MIT-emerald.svg?style=for-the-badge" alt="License MIT">
@@ -19,16 +19,17 @@
 
 ---
 
-## ⚡ Novedades de la Versión v1.3.3
+## ⚡ Novedades de la Versión v1.3.4
 
-* 📥 **Extractor Exhaustivo de CVs (PDF y Word `.docx`)**: Motor heurístico de ultra-alta fidelidad capaz de importar currículums existentes en PDF, Word nativo o texto plano sin requerir dependencias externas de internet. Extrae automáticamente nombres en Title Case, datos de contacto, experiencia laboral completa con viñetas de logros, formación académica limpia (sin fallos de `undefined`), stack técnico en 4 categorías y proyectos destacados con métricas cuantificadas.
-* 🛡️ **Auditoría ATS Animada con Radar HUD**: Sistema de diagnóstico interactivo con escaneo cinemático tipo radar. Evalúa **48 parámetros críticos de compatibilidad** con los algoritmos más exigentes del mercado (*Workday, Taleo, Greenhouse y SAP SuccessFactors*), medidor radial dinámico en SVG y 4 pestañas interactivas de diagnóstico (Resumen, Auditoría de 48 Puntos, Palabras Clave y Acciones Rápidas).
-* ⏳ **Nueva Plantilla "Timeline Ejecutivo"**: Diseño contemporáneo estructurado en hitos cronológicos para perfiles con trayectoria comprobada, liderazgo o puestos de coordinación.
-* 🎓 **Plantilla "Harvard Classic (Ivy League ATS)"**: Formato académico estándar de Harvard University con tipografía clásica, líneas divisorias sobrias y fechas justificadas a la derecha para un puntaje de compatibilidad ATS insuperable.
-* 🎨 **10 Esquemas Cromáticos Ejecutivos**: Selecciona entre *Azul Ejecutivo, Harvard Crimson, Azul Oxford, Pizarra Charcoal, Esmeralda Data, Verde Bosque, Ámbar, Borgoña, Índigo* y *Grafito Minimalista*.
-* ✍️ **Corrector Ortográfico Nativo con Clic Derecho**: Corrección ortográfica contextual en tiempo real con menú contextual nativo en español e inglés, sugerencias automáticas y capacidad de agregar palabras al diccionario personal.
-* ⚙️ **Gestor de Perfiles Permanente**: Barra de perfiles optimizada con botón `⚙️ Configurar` protegido contra desbordamientos, permitiendo crear, duplicar, seleccionar y eliminar perfiles con total seguridad.
-* 💡 **Banco de Frases de Impacto & Verbos de Acción**: Asistente integrado con cientos de frases redactadas bajo el estándar de Silicon Valley (fórmula Google XYZ) clasificadas por área técnica (*Desarrollo, Datos, Mantenimiento, Redes, Proyectos Universitarios*).
+* 🚀 **Instalador Oficial de Windows (.exe Setup)**: Nueva distribución instalable mediante asistente interactivo en español. Permite elegir carpeta de instalación personalizada, crea accesos directos automáticos en el Escritorio y Menú Inicio (`CoriosTech \ OpenCV Studio`), e integra desinstalador limpio registrado en el Panel de Control y Configuración de Windows.
+* 🔐 **Firma Digital Oficial CoriosTech**: Tanto el ejecutable principal como el instalador de Setup cuentan con firma digital SHA256 y sellado de tiempo oficial de DigiCert, garantizando autenticidad y compatibilidad con Windows SmartScreen.
+* 🛠️ **Corrección Integral en el Extractor de CVs**: Resuelto el error en el procesamiento de habilidades categorizadas, implementando un cálculo polimórfico robusto que previene excepciones. Soporte directo para archivos PDF (con OCR de respaldo offline), documentos Word (.docx) y texto plano.
+* ⚡ **Herramienta de Compilación en 1 Clic**: Nuevo script de automatización (`Generar_Instalador.bat` y `Generar_Instalador_OpenCV.ps1`) para empaquetar, compilar con Inno Setup y firmar la suite en un solo paso.
+* 📥 **Extractor Exhaustivo de CVs (PDF y Word `.docx`)**: Motor heurístico de ultra-alta fidelidad capaz de importar currículums existentes en PDF, Word nativo o texto plano sin dependencias de internet. Extrae automáticamente nombres en Title Case, datos de contacto, experiencia laboral con viñetas de logros, formación académica limpia, stack técnico en 4 categorías y proyectos destacados.
+* 🛡️ **Auditoría ATS Animada con Radar HUD**: Sistema de diagnóstico interactivo con escaneo tipo radar que evalúa **48 parámetros críticos de compatibilidad** (*Workday, Taleo, Greenhouse y SAP SuccessFactors*), medidor radial SVG y 4 pestañas de diagnóstico.
+* ⏳ **Plantillas de Alto Nivel**: Incluye *Timeline Ejecutivo*, *Harvard Classic (Ivy League ATS)*, *Tech Developer*, *Moderna Elegante*, *Ingeniería de Datos* y *Compacta Ejecutiva*.
+* 🎨 **10 Esquemas Cromáticos Ejecutivos**: Diseños en *Azul Ejecutivo, Harvard Crimson, Azul Oxford, Pizarra Charcoal, Esmeralda Data, Verde Bosque, Ámbar, Borgoña, Índigo* y *Grafito Minimalista*.
+* ✍️ **Corrector Ortográfico Nativo con Clic Derecho**: Corrección ortográfica contextual en tiempo real con menú contextual nativo en español e inglés y sugerencias automáticas.
 
 ---
 

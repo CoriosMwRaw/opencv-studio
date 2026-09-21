@@ -2,7 +2,7 @@
 ; Creado por CoriosTech
 
 #define MyAppName "OpenCV Studio"
-#define MyAppVersion "1.3.3"
+#define MyAppVersion "1.3.4"
 #define MyAppPublisher "CoriosTech"
 #define MyAppURL "https://github.com/CoriosMwRaw/opencv-studio"
 #define MyAppExeName "OpenCV Studio.exe"

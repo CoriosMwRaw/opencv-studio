@@ -1,11 +1,11 @@
 {
   "name": "opencv-studio",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Herramienta de escritorio para crear currículums profesionales 100% libre y sin suscripciones",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . \"OpenCV Studio\" --platform=win32 --arch=x64 --out=dist --overwrite --prune=true --ignore=\"^/(dist|\\.git)\" --icon=assets/icon.ico --win32metadata.CompanyName=\"OpenCV Studio\" --win32metadata.FileDescription=\"OpenCV Studio - Creador Profesional de CV\" --win32metadata.ProductName=\"OpenCV Studio\" --win32metadata.ProductVersion=\"1.3.3\" --win32metadata.FileVersion=\"1.3.3\" --win32metadata.InternalName=\"OpenCV Studio\" --win32metadata.OriginalFilename=\"OpenCV Studio.exe\"",
+    "build": "electron-packager . \"OpenCV Studio\" --platform=win32 --arch=x64 --out=dist --overwrite --prune=true --ignore=\"^/(dist|\\.git)\" --icon=assets/icon.ico --win32metadata.CompanyName=\"OpenCV Studio\" --win32metadata.FileDescription=\"OpenCV Studio - Creador Profesional de CV\" --win32metadata.ProductName=\"OpenCV Studio\" --win32metadata.ProductVersion=\"1.3.4\" --win32metadata.FileVersion=\"1.3.4\" --win32metadata.InternalName=\"OpenCV Studio\" --win32metadata.OriginalFilename=\"OpenCV Studio.exe\"",
     "installer": "innosetup installer.iss",
     "dist:all": "npm run build && npm run installer"
   },
