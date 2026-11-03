@@ -160,22 +160,23 @@ ipcMain.handle('export-pdf', async (event, options = {}) => {
 
     if (!filePath) return { success: false, canceled: true };
 
+    // Establecer fondo blanco en la ventana durante la exportación para evitar marcos/bordes oscuros de Chromium
+    if (mainWindow) mainWindow.setBackgroundColor('#ffffff');
+
     const pdfData = await mainWindow.webContents.printToPDF({
       pageSize: options.pageSize || 'Letter',
       printBackground: true,
-      margins: {
-        marginType: 'custom',
-        top: 0.3,
-        bottom: 0.3,
-        left: 0.3,
-        right: 0.3
-      },
+      margins: { marginType: 'none' },
       preferCSSPageSize: true
     });
+
+    // Restaurar el tema oscuro de la aplicación
+    if (mainWindow) mainWindow.setBackgroundColor('#0f172a');
 
     fs.writeFileSync(filePath, pdfData);
     return { success: true, filePath };
   } catch (err) {
+    if (mainWindow) mainWindow.setBackgroundColor('#0f172a');
     console.error('Error al exportar PDF:', err);
     return { success: false, error: err.message };
   }

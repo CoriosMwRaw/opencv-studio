@@ -2,6 +2,15 @@
 
 Todas las versiones notables de este proyecto se documentan en este archivo.
 
+## [1.3.5] - 2026-11-03
+
+### 🖨️ Correcciones y Mejoras en Exportación PDF
+- **Paginación Inteligente y Fluida**: Corrección de bloqueos de sección que generaban saltos de página prematuros con grandes espacios vacíos en la plantilla Harvard y Compacta. Ahora la división se realiza por entradas individuales preservando la integridad del contenido.
+- **Eliminación del Fondo Azul en PDF**: Forzado de fondo blanco 100% de borde a borde y ajuste dinámico del fondo de ventana en Chromium para evitar marcos o bordes oscuros en el PDF generado.
+- **Márgenes y Centrado Canónico**: Estandarización de márgenes y espaciados simétricos para un formato Harvard de 2 páginas con proporciones limpias y profesionales.
+
+---
+
 ## [1.2.0] - 2026-09-19
 
 ### 🚀 Novedades y Características Principales

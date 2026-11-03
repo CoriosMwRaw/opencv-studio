@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/CoriosMwRaw/opencv-studio/releases/latest"><img src="https://img.shields.io/badge/Release-v1.3.4-blue.svg?style=for-the-badge&logo=github" alt="Latest Release"></a>
+  <a href="https://github.com/CoriosMwRaw/opencv-studio/releases/latest"><img src="https://img.shields.io/badge/Release-v1.3.5-blue.svg?style=for-the-badge&logo=github" alt="Latest Release"></a>
   <img src="https://img.shields.io/badge/Platform-Windows%20x64-0078D6.svg?style=for-the-badge&logo=windows" alt="Platform Windows">
   <img src="https://img.shields.io/badge/Privacy-100%25%20Offline-success.svg?style=for-the-badge" alt="100% Offline">
   <img src="https://img.shields.io/badge/License-MIT-emerald.svg?style=for-the-badge" alt="License MIT">
@@ -19,7 +19,15 @@
 
 ---
 
-## ⚡ Novedades de la Versión v1.3.4
+## ⚡ Novedades de la Versión v1.3.5
+
+* 🖨️ **Exportación PDF Pixel-Perfect y Multi-página**: Solución definitiva al salto de página en la plantilla *Harvard Classic (Ivy League ATS)* y demás formatos. Eliminación de bloqueos de sección que generaban páginas semivacías, permitiendo ahora una división fluida e inteligente entre entradas para aprovechar al 100% el espacio.
+* ⚪ **Lienzo 100% Blanco de Borde a Borde**: Eliminación total del marco/borde azul oscuro residual de Chromium en el PDF exportado. La exportación ahora genera una hoja blanca pura de extremo a extremo con márgenes simétricos idénticos a los del editor.
+* 📐 **Márgenes y Centrado Canónico Harvard**: Ajuste milimétrico de padding y alineación para garantizar un acabado ejecutivo limpio, encabezados y divisores centrados y distribución compacta en exactamente 2 páginas.
+
+---
+
+## ⚡ Versiones Anteriores (v1.3.4)
 
 * 🚀 **Instalador Oficial de Windows (.exe Setup)**: Nueva distribución instalable mediante asistente interactivo en español. Permite elegir carpeta de instalación personalizada, crea accesos directos automáticos en el Escritorio y Menú Inicio (`CoriosTech \ OpenCV Studio`), e integra desinstalador limpio registrado en el Panel de Control y Configuración de Windows.
 * 🔐 **Firma Digital Oficial CoriosTech**: Tanto el ejecutable principal como el instalador de Setup cuentan con firma digital SHA256 y sellado de tiempo oficial de DigiCert, garantizando autenticidad y compatibilidad con Windows SmartScreen.

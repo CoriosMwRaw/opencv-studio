@@ -3,13 +3,16 @@
    ========================================================================== */
 
 @media print {
+  html,
   body {
-    background: transparent !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
     padding: 0 !important;
     margin: 0 !important;
-    color: #000000 !important;
-    overflow: visible !important;
+    width: 100% !important;
     height: auto !important;
+    overflow: visible !important;
   }
 
   .app-topbar,
@@ -19,21 +22,16 @@
     display: none !important;
   }
 
-  .split-workspace {
-    display: block !important;
-    height: auto !important;
-  }
-
-  .preview-pane {
-    background: transparent !important;
-    display: block !important;
-    height: auto !important;
-  }
-
+  .split-workspace,
+  .preview-pane,
   .preview-canvas-container {
-    background: transparent !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
     padding: 0 !important;
+    margin: 0 !important;
     display: block !important;
+    width: 100% !important;
+    height: auto !important;
     overflow: visible !important;
   }
 
@@ -45,6 +43,33 @@
     transform: none !important;
     margin: 0 !important;
     padding: 0 !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+  }
+
+  /* Márgenes limpios, equilibrados y elegantes para plantillas */
+  .cv-document.t-harvard {
+    padding: 10mm 15mm !important;
+    background: #ffffff !important;
+    box-sizing: border-box !important;
+  }
+
+  .cv-document.t-compact {
+    padding: 10mm 14mm !important;
+    background: #ffffff !important;
+    box-sizing: border-box !important;
+  }
+
+  .cv-document.t-ats {
+    padding: 10mm 15mm !important;
+    background: #ffffff !important;
+    box-sizing: border-box !important;
+  }
+
+  .cv-document.t-timeline {
+    padding: 10mm 14mm !important;
+    background: #ffffff !important;
+    box-sizing: border-box !important;
   }
 
   /* Mantener colores de fondo exactos */
@@ -61,19 +86,48 @@
     print-color-adjust: exact !important;
   }
 
+  /* Evitar saltos de página dentro de elementos individuales (sin bloquear secciones enteras) */
   .job-card,
   .project-card,
   .edu-item,
   .harvard-entry,
   .compact-job,
   .compact-proj,
-  .harvard-section,
-  .compact-sec {
+  .compact-edu-row,
+  .tl-event,
+  .tl-project-card,
+  .tl-skill-card,
+  .tl-cert-chip,
+  .exp-industrial-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Evitar que los títulos de sección queden huérfanos al final de una página */
+  .harvard-sec-title,
+  .harvard-rule,
+  .compact-sec-title,
+  .tl-sec-heading,
+  .modern-sec-heading,
+  .main-sec-title,
+  .data-sec-title {
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  /* Evitar corte abrupto en elementos de listas y habilidades */
+  .harvard-bullet-list li,
+  .compact-list li,
+  .bullet-list li,
+  .tl-bullet-list li,
+  .harvard-skill-line,
+  .harvard-cert-item {
+    break-inside: avoid;
     page-break-inside: avoid;
   }
 
   @page {
     size: letter;
-    margin: 8mm 8mm;
+    margin: 0;
   }
 }
